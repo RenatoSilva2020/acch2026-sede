@@ -31,7 +31,9 @@
     
     .navbar-brand { font-weight: 700; letter-spacing: -0.5px; }
     
-    .nav-pills .nav-link { border-radius: 10px; font-weight: 500; transition: all 0.2s;}
+    /* Ajuste da cor da fonte das abas */
+    .nav-pills .nav-link { border-radius: 10px; font-weight: 500; transition: all 0.2s; color: #64748b; }
+    .nav-pills .nav-link.active { color: #ffffff !important; }
     
     .btn { border-radius: 10px; font-weight: 600; transition: all 0.2s; }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
@@ -42,13 +44,17 @@
     .text-taxado { text-decoration: line-through; color: #94a3b8 !important; opacity: 0.65; }
     .text-taxado input { background-color: #e2e8f0 !important; pointer-events: none; }
     
-    /* Loader Moderno com Efeito Glassmorphism */
+    /* Linhas interativas para auditoria */
+    .table-auditavel tbody tr { cursor: pointer; transition: background-color 0.15s ease-in-out; }
+    .table-auditavel tbody tr:hover { background-color: #f8fafc !important; }
+
+    /* Loader Moderno com Efeito Glassmorphism e Z-Index corrigido */
     #loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(255, 255, 255, 0.6); 
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
+      z-index: 1050; /* Reduzido para ficar atrás dos alertas do SweetAlert (1060) */
       display: flex; justify-content: center; align-items: center;
     }
     .modern-loader { display: flex; gap: 8px; justify-content: center; }
@@ -92,7 +98,7 @@
           </button>
         </li>
         <li class="nav-item">
-          <button class="nav-link text-secondary" id="tab-coord-btn" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button">
+          <button class="nav-link" id="tab-coord-btn" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button">
             <i class="fa-solid fa-user-gear me-2"></i>Coordenação
           </button>
         </li>
@@ -218,13 +224,16 @@
           <div class="col-md-9">
             
             <div id="coordAbaRelatorios" class="card p-4 bg-white">
-              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary"></i> Monitoramento de Preenchimento</h5>
+              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary"></i> Monitoramento de Preenchimento</h5>
+              <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
+              
               <div class="mb-4">
                 <label class="form-label small fw-semibold text-muted text-uppercase">Selecione uma Turma para Auditar</label>
                 <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select form-select-lg fs-6"></select>
               </div>
-              <div class="table-responsive border rounded-3">
-                <table class="table table-hover align-middle m-0 text-center border-0">
+              
+              <div class="table-responsive border rounded-3 mb-2">
+                <table class="table align-middle m-0 text-center border-0 table-auditavel">
                   <thead class="table-light">
                     <tr>
                       <th class="text-start py-3 text-secondary">Componente Curricular</th>
@@ -238,6 +247,42 @@
                   </tbody>
                 </table>
               </div>
+
+              <div id="cardDiarioCoord" class="card mt-4 bg-white overflow-hidden d-none border-primary border-top border-3">
+                <div class="card-header bg-light p-4 d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="badge bg-primary text-uppercase mb-1">Modo Supervisor</span>
+                    <h5 id="tituloDiarioCoord" class="m-0 fw-bold text-dark"></h5>
+                  </div>
+                  <button onclick="document.getElementById('cardDiarioCoord').classList.add('d-none')" class="btn btn-sm btn-secondary rounded-circle"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="table-responsive p-0">
+                  <table class="table table-hover align-middle m-0 text-nowrap">
+                    <thead class="table-light align-middle text-center" style="border-bottom: 2px solid #e2e8f0;">
+                      <tr>
+                        <th rowspan="2" width="5%" class="text-secondary pb-3">Nº</th>
+                        <th rowspan="2" width="35%" class="text-start text-secondary pb-3">Nome Completo do Estudante</th>
+                        <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+                        <th colspan="3" class="text-success border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+                        <th rowspan="2" width="10%" class="text-secondary pb-3">Ações</th>
+                      </tr>
+                      <tr>
+                        <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">1° TRIM</th>
+                        <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">2° TRIM</th>
+                        <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">3° TRIM</th>
+                        <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">1° TRIM</th>
+                        <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">2° TRIM</th>
+                        <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">3° TRIM</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabelaAlunosCorpoCoord" class="border-top-0"></tbody>
+                  </table>
+                </div>
+                <div class="card-footer bg-light text-end p-4 border-top">
+                  <button onclick="salvarDiarioCoord()" class="btn btn-primary px-4 py-2 shadow-sm"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar como Coordenador</button>
+                </div>
+              </div>
+
             </div>
 
             <div id="coordAbaAluno" class="card p-4 d-none bg-white">
@@ -288,16 +333,17 @@
   </div>
 
   <script>
+    // MANTENHA AQUI A SUA URL DA API DO GOOGLE APPS SCRIPT
     const API_URL = "https://script.google.com/macros/s/AKfycbwU6AfJs5O5VrOuKDCEM0AcpcC__BjfRjhaJfAyWPN4eg5bPxOM6BwKhzsJ5LCzvasD/exec"; 
 
     function notificar(mensagem, sucesso = false, tituloAlternativo = null) {
       Swal.fire({
         title: tituloAlternativo ? tituloAlternativo : (sucesso ? 'Tudo certo!' : 'Atenção'),
-        text: mensagem,
+        text: message = mensagem,
         icon: sucesso ? 'success' : 'warning',
         confirmButtonColor: '#0d6efd',
         confirmButtonText: 'OK',
-        customClass: { popup: 'rounded-4' } // Arredonda o modal do alerta para combinar
+        customClass: { popup: 'rounded-4' }
       });
     }
 
@@ -319,6 +365,8 @@
 
     let dadosUsuarioLogado = {};
     let cacheAlunosAtuais = [];
+    let cacheAlunosCoord = [];
+    let disciplinaAuditadaAtual = "";
 
     async function efetuarLogin(perfil) {
       let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : document.getElementById("adminUser").value;
@@ -447,7 +495,7 @@
     async function alternarStatusEstudante(linha, statusTaxado) {
       let turma = document.getElementById("profTurma").value;
       exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: inline = linha, excluir: !statusTaxado });
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
@@ -479,6 +527,7 @@
       }
     }
 
+    // PROCEDIMENTOS DO COORDENADOR
     function popularSelectsCoordenador(turmas) {
       ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
         let el = document.getElementById(id);
@@ -490,6 +539,8 @@
     async function carregarRelatorioPreenchimento() {
       let turma = document.getElementById("coordSelectTurma").value;
       let tbody = document.getElementById("tabelaRelatorioCorpo");
+      document.getElementById("cardDiarioCoord").classList.add("d-none"); 
+      
       if(!turma) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma.</td></tr>'; return; }
 
       exibirLoader(true);
@@ -501,14 +552,102 @@
         dados.forEach(linha => {
           let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning text-dark" : "bg-danger");
           tbody.innerHTML += `
-            <tr>
-              <td class="fw-bold text-start">${linha.disciplina}</td>
+            <tr onclick="auditarDisciplina('${linha.disciplina}')">
+              <td class="fw-bold text-start text-dark">
+                <i class="fa-solid fa-magnifying-glass small text-primary me-2 opacity-75"></i>${linha.disciplina}
+              </td>
               <td><span class="badge rounded-pill ${badgeColor(linha.t1)} px-3 py-2">${linha.t1}</span></td>
               <td><span class="badge rounded-pill ${badgeColor(linha.t2)} px-3 py-2">${linha.t2}</span></td>
               <td><span class="badge rounded-pill ${badgeColor(linha.t3)} px-3 py-2">${linha.t3}</span></td>
             </tr>
           `;
         });
+      }
+    }
+
+    /* SISTEMA DE AUDITORIA DE DIÁRIO PARA A COORDENAÇÃO */
+    async function auditarDisciplina(disciplina) {
+      let turma = document.getElementById("coordSelectTurma").value;
+      if (!turma || !disciplina) return;
+      disciplinaAuditadaAtual = disciplina;
+
+      exibirLoader(true);
+      let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
+      exibirLoader(false);
+
+      if (lista && Array.isArray(lista)) {
+        lista.sort((a, b) => {
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
+          return a.taxado ? 1 : -1; 
+        });
+        
+        cacheAlunosCoord = lista;
+        desenharTabelaDiarioCoord();
+        document.getElementById("tituloDiarioCoord").innerText = `${disciplina} — Turma ${turma}`;
+        
+        let painelCoord = document.getElementById("cardDiarioCoord");
+        painelCoord.classList.remove("d-none");
+        painelCoord.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function desenharTabelaDiarioCoord() {
+      let tbody = document.getElementById("tabelaAlunosCorpoCoord");
+      tbody.innerHTML = "";
+
+      if(cacheAlunosCoord.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        return;
+      }
+
+      cacheAlunosCoord.forEach((aluno, i) => {
+        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let disabledInput = aluno.taxado ? 'disabled' : '';
+        
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary">${i + 1}</td>
+            <td class="fw-medium">${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center">
+              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function atualizarCacheNotaCoord(index, trimestre, valor) { cacheAlunosCoord[index]['nota' + trimestre] = valor; }
+    function atualizarCacheCHCoord(index, trimestre, checked) { cacheAlunosCoord[index]['ch' + trimestre] = checked; }
+
+    async function salvarDiarioCoord() {
+      let turma = document.getElementById("coordSelectTurma").value;
+      let disciplina = disciplinaAuditadaAtual;
+      
+      exibirLoader(true);
+      let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosCoord });
+      exibirLoader(false);
+      if(res) {
+        notificar(res.mensagem, res.sucesso);
+        carregarRelatorioPreenchimento(); // Atualiza os badges de pendência automaticamente
+      }
+    }
+
+    async function alternarStatusEstudanteCoord(linha, statusTaxado) {
+      let turma = document.getElementById("coordSelectTurma").value;
+      exibirLoader(true);
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      exibirLoader(false);
+      if(res) { 
+        notificar(res.mensagem, res.sucesso); 
+        auditarDisciplina(disciplinaAuditadaAtual); 
       }
     }
 
@@ -563,6 +702,7 @@
         btn.classList.remove("active");
         btn.classList.replace("text-white", "text-dark");
       });
+      document.getElementById("cardDiarioCoord").classList.add("d-none");
       document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`).classList.remove("d-none");
       let activeBtn = document.getElementById(`btn-menu-${aba.substring(0,4)}`);
       activeBtn.classList.add("active");
