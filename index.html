@@ -413,7 +413,8 @@
       document.getElementById("nomeAlunoProfInput").value = "";
     }
 
-    async function ejecutarCadastroEstudanteProf() {
+    // CORREÇÃO: "ejecutar" alterado para "executar" para corresponder ao botão do HTML
+    async function executarCadastroEstudanteProf() {
       let turma = document.getElementById("profTurma").value;
       let nome = document.getElementById("nomeAlunoProfInput").value;
       if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
