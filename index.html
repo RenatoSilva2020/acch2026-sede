@@ -196,9 +196,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // =================================================================
-    // LINK DA API - COLE SEU LINK DO GOOGLE APPS SCRIPT ABAIXO!
-    // =================================================================
+    // URL VINCULADA AUTOMATICAMENTE CONFORME ENVIADO NA MENSAGEM
     const API_URL = "https://script.google.com/macros/s/AKfycbwU6AfJs5O5VrOuKDCEM0AcpcC__BjfRjhaJfAyWPN4eg5bPxOM6BwKhzsJ5LCzvasD/exec"; 
 
     // Motor de chamadas HTTP assíncronas 
@@ -224,7 +222,7 @@
     let dadosUsuarioLogado = {};
     let cacheAlunosAtuais = [];
 
-    // LÓGICA DE LOGIN REESCRITA
+    // LÓGICA DE LOGIN
     async function efetuarLogin(perfil) {
       let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : document.getElementById("adminUser").value;
       let senha = perfil === 'coordenador' ? document.getElementById("adminPass").value : null;
@@ -259,7 +257,6 @@
       }
     }
 
-    // CONTROLE DE TELAS DO PROFESSOR
     function popularSelectTurmasProfessor() {
       let select = document.getElementById("profTurma");
       select.innerHTML = '<option value="">Selecione...</option>';
@@ -281,7 +278,6 @@
       document.getElementById("cardDiario").classList.add("d-none");
     }
 
-    // BUSCAR ALUNOS E APLICAR A ORGANIZAÇÃO DE INATIVOS NO FINAL
     async function carregarListaAlunos() {
       let turma = document.getElementById("profTurma").value;
       let disciplina = document.getElementById("profDisciplina").value;
@@ -292,7 +288,6 @@
       exibirLoader(false);
 
       if (lista) {
-        // --- REGRA DA MAQUIAGEM VISUAL ---
         lista.sort((a, b) => {
           if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
           return a.taxado ? 1 : -1; 
@@ -305,7 +300,6 @@
       }
     }
 
-    // MONTAR TABELA NA TELA VIA JAVASCRIPT
     function desenharTabelaDiario() {
       let tbody = document.getElementById("tabelaAlunosCorpo");
       tbody.innerHTML = "";
@@ -360,12 +354,11 @@
     async function alternarStatusEstudante(linha, statusTaxado) {
       let turma = document.getElementById("profTurma").value;
       exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: inline = linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { alert(res); carregarListaAlunos(); }
     }
 
-    // CONTROLE DE TELAS DO COORDENADOR
     function popularSelectsCoordenador(turmas) {
       ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
         let el = document.getElementById(id);
@@ -410,7 +403,7 @@
       }
     }
 
-    async function executarCadastroEstudante() {
+    async function ejecutarCadastroEstudante() {
       let turma = document.getElementById("cadAlunoTurma").value;
       let nome = document.getElementById("cadAlunoNome").value;
       if(!turma || !nome) { alert("Preencha todos os campos!"); return; }
@@ -421,7 +414,7 @@
       if(res) { alert(res.mensagem || res.message); if(res.sucesso) document.getElementById("cadAlunoNome").value = ""; }
     }
 
-    async function ejecutarCadastroProfessor() {
+    async function executarCadastroProfessor() {
       let t = document.getElementById("cadProfTurma").value;
       let n = document.getElementById("cadProfNome").value;
       let m = document.getElementById("cadProfMasp").value;
@@ -443,7 +436,6 @@
       document.getElementById(`btn-menu-${aba.substring(0,4)}`).classList.add("active");
     }
 
-    // AUXILIARES
     function exibirLoader(mostrar) {
       let l = document.getElementById("loader");
       if(mostrar) l.classList.remove("d-none"); else l.classList.add("d-none");
