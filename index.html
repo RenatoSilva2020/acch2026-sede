@@ -39,7 +39,7 @@
         <span class="p-3 bg-primary bg-opacity-10 rounded-circle d-inline-block mb-3">
           <i class="fa-solid fa-school fa-2x text-primary"></i>
         </span>
-        <h3 class="fw-bold m-0">Portal do Diário Oficial</h3>
+        <h3 class="fw-bold m-0">Portal - Atividades Complementares</h3>
         <p class="text-muted small">Selecione seu perfil de acesso para continuar</p>
       </div>
 
@@ -65,19 +65,19 @@
               <input type="text" id="maspInput" class="form-control" placeholder="Apenas números">
             </div>
           </div>
-          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100 py-2 fw-semibold">Acessar Diários</button>
+          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100 py-2 fw-semibold">Acessar Portal</button>
         </div>
 
         <div class="tab-pane fade" id="loginCoord">
           <div class="mb-3">
             <label class="form-label fw-semibold">Usuário</label>
-            <input type="text" id="adminUser" class="form-control" placeholder="admin">
+            <input type="text" id="adminUser" class="form-control" placeholder="nome de usuário">
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Senha de Acesso</label>
             <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
           </div>
-          <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100 py-2 fw-semibold">Entrar como Gestor</button>
+          <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100 py-2 fw-semibold">Entrar como Coordenador</button>
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
         <div id="cardDiario" class="card shadow-sm border-0 d-none bg-white">
           <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
             <h5 id="tituloDiario" class="m-0 fw-bold text-dark"></h5>
-            <button onclick="toggleFormAlunoProf(true)" class="btn btn-sm btn-primary"><i class="fa-solid fa-user-plus me-1"></i> Matricular Aluno</button>
+            <button onclick="toggleFormAlunoProf(true)" class="btn btn-sm btn-primary"><i class="fa-solid fa-user-plus me-1"></i> Cadastrar Aluno</button>
           </div>
 
           <div id="formRapidoAlunoProf" class="card-body bg-light border-bottom d-none">
@@ -137,12 +137,12 @@
                 <tr>
                   <th width="5%" class="text-center">Nº</th>
                   <th width="40%">Nome Completo do Estudante</th>
-                  <th width="10%" class="text-center">Nota T1</th>
-                  <th width="10%" class="text-center">Nota T2</th>
-                  <th width="10%" class="text-center">Nota T3</th>
-                  <th width="7%" class="text-center">CH1</th>
-                  <th width="7%" class="text-center">CH2</th>
-                  <th width="7%" class="text-center">CH3</th>
+                  <th width="10%" class="text-center">Nota 1° TRIM</th>
+                  <th width="10%" class="text-center">Nota 2° TRIM</th>
+                  <th width="10%" class="text-center">Nota 3° TRIM</th>
+                  <th width="7%" class="text-center">CH 1° TRIM</th>
+                  <th width="7%" class="text-center">CH 2° TRIM</th>
+                  <th width="7%" class="text-center">CH 3° TRIM</th>
                   <th width="4%" class="text-center">Ações</th>
                 </tr>
               </thead>
@@ -160,7 +160,7 @@
         <div class="row g-3">
           <div class="col-md-3">
             <div class="list-group shadow-sm">
-              <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active"><i class="fa-solid fa-chart-pie me-2"></i>Status das Notas</button>
+              <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active"><i class="fa-solid fa-chart-pie me-2"></i>Status do Preenchimento</button>
               <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-plus me-2"></i>Cadastrar Estudante</button>
               <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-tie me-2"></i>Vincular Professor</button>
             </div>
@@ -222,7 +222,7 @@
                   <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select"></select>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label small fw-semibold">Componente Letivo</label>
+                  <label class="form-label small fw-semibold">Atividade Complementar</label>
                   <select id="cadProfDisciplina" class="form-select">
                     <option value="">Selecione a turma...</option>
                   </select>
