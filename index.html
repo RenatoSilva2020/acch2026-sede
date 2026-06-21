@@ -3,204 +3,232 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal Acadêmico | Gestão Escolar Profissional</title>
+  <title>Portal Escolar Integrado</title>
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
-    body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .card { border: none; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .loader-overlay {
+    body { background-color: #f4f6f9; font-family: system-ui, -apple-system, sans-serif; }
+    .card-login { max-width: 450px; border: none; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .navbar-brand { font-weight: 700; letter-spacing: -0.5px; }
+    .text-taxado { text-decoration: line-through; color: #a0a6b2 !important; opacity: 0.65; }
+    .text-taxado input { background-color: #e9ecef !important; pointer-events: none; }
+    
+    /* Loader centralizado */
+    #loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255,255,255,0.8); z-index: 9999;
+      background: rgba(255, 255, 255, 0.8); z-index: 9999;
       display: flex; justify-content: center; align-items: center;
     }
-    .text-taxado { text-decoration: line-through !important; color: #adb5bd !important; background-color: #f8f9fa; }
   </style>
 </head>
 <body>
 
-  <div id="loader" class="loader-overlay d-none">
-    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+  <div id="loader" class="d-none">
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-2 fw-semibold text-secondary">Processando requisição...</p>
+    </div>
   </div>
 
-  <div id="telaLogin" class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-5">
-        <div class="text-center mb-4">
-          <h2 class="fw-bold text-primary"><i class="fa-solid fa-graduation-cap"></i> Portal Acadêmico</h2>
-          <p class="text-muted">Acesse seu diário de classe eletrônico</p>
-        </div>
-        <div class="card p-4">
-          <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item">
-              <button class="nav-link active" id="tab-prof" data-bs-toggle="pill" data-bs-target="#loginProf" type="button"><i class="fa-solid fa-chalkboard-user"></i> Professor</button>
-            </li>
-            <li class="nav-item">
-              <button class="nav-link" id="tab-coord" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button"><i class="fa-solid fa-user-gear"></i> Coordenador</button>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane fade show active" id="loginProf">
-              <div class="mb-3">
-                <label class="form-label">Número do MASP</label>
-                <input type="text" id="maspInput" class="form-control form-control-lg" placeholder="Digite seu MASP">
-              </div>
-              <button onclick="efetuarLogin('professor')" class="btn btn-primary btn-lg w-100">Entrar no Sistema</button>
-            </div>
-            <div class="tab-pane fade" id="loginCoord">
-              <div class="mb-3">
-                <label class="form-label">Usuário Administrador</label>
-                <input type="text" id="adminUser" class="form-control" placeholder="admin">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Senha de Acesso</label>
-                <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
-              </div>
-              <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100">Autenticar Gestão</button>
+  <div id="telaLogin" class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card card-login w-100 p-4 bg-white">
+      <div class="text-center mb-4">
+        <span class="p-3 bg-primary bg-opacity-10 rounded-circle d-inline-block mb-3">
+          <i class="fa-solid fa-school fa-2x text-primary"></i>
+        </span>
+        <h3 class="fw-bold m-0">Portal do Diário Oficial</h3>
+        <p class="text-muted small">Selecione seu perfil de acesso para continuar</p>
+      </div>
+
+      <ul class="nav nav-pills nav-justified mb-4" id="loginTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" id="tab-prof-btn" data-bs-toggle="pill" data-bs-target="#loginProf" type="button">
+            <i class="fa-solid fa-chalkboard-user me-2"></i>Professor
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-coord-btn" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button">
+            <i class="fa-solid fa-user-gear me-2"></i>Coordenação
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="loginTabsContent">
+        <div class="tab-pane fade show active" id="loginProf">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Número de MASP</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light text-muted"><i class="fa-solid fa-id-card"></i></span>
+              <input type="text" id="maspInput" class="form-control" placeholder="Apenas números">
             </div>
           </div>
+          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100 py-2 fw-semibold">Acessar Diários</button>
+        </div>
+
+        <div class="tab-pane fade" id="loginCoord">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Usuário</label>
+            <input type="text" id="adminUser" class="form-control" placeholder="admin">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Senha de Acesso</label>
+            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
+          </div>
+          <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100 py-2 fw-semibold">Entrar como Gestor</button>
         </div>
       </div>
     </div>
   </div>
 
   <div id="painelSistema" class="d-none">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div class="container">
-        <span class="navbar-brand fw-bold"><i class="fa-solid fa-school"></i> Ambiente Escolar</span>
-        <div class="d-flex align-items-center text-white">
-          <span class="me-3" id="nomeUsuarioLogado"></span>
-          <button onclick="logout()" class="btn btn-sm btn-light text-danger fw-bold"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+        <a class="navbar-brand" href="#"><i class="fa-solid fa-graduation-cap me-2"></i>DIÁRIO CLOUD</a>
+        <div class="d-flex align-items-center gap-3">
+          <span id="nomeUsuarioLogado" class="text-white-50 small fw-medium"></span>
+          <button onclick="logout()" class="btn btn-sm btn-outline-light"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
         </div>
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container my-4">
       
       <div id="interfaceProfessor" class="d-none">
-        <div class="card p-3 mb-4">
-          <h5 class="fw-bold mb-3 text-secondary"><i class="fa-solid fa-filter"></i> Filtros de Acesso</h5>
+        <div class="card p-3 mb-4 shadow-sm border-0 bg-white">
+          <h5 class="fw-bold mb-3"><i class="fa-solid fa-filter text-primary me-2"></i>Selecione o Diário de Classe</h5>
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label fw-bold">Selecione a Turma</label>
-              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select"><option value="">Selecione...</option></select>
+              <label class="form-label small fw-semibold text-muted">Turma</label>
+              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select"></select>
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-bold">Selecione a Disciplina</label>
-              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select"><option value="">Selecione a turma primeiro...</option></select>
+              <label class="form-label small fw-semibold text-muted">Disciplina / Aba</label>
+              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select">
+                <option value="">Selecione a turma primeiro...</option>
+              </select>
             </div>
           </div>
         </div>
 
-        <div id="cardDiario" class="card p-4 d-none">
-          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-            <h4 id="tituloDiario" class="fw-bold text-primary m-0"></h4>
-            <div class="d-flex gap-2">
-              <button onclick="toggleFormAlunoProf(true)" class="btn btn-outline-primary fw-bold"><i class="fa-solid fa-user-plus"></i> Adicionar Estudante</button>
-              <button onclick="salvarDiario()" class="btn btn-success fw-bold"><i class="fa-solid fa-floppy-disk"></i> Salvar Alterações</button>
-            </div>
+        <div id="cardDiario" class="card shadow-sm border-0 d-none bg-white">
+          <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <h5 id="tituloDiario" class="m-0 fw-bold text-dark"></h5>
+            <button onclick="toggleFormAlunoProf(true)" class="btn btn-sm btn-primary"><i class="fa-solid fa-user-plus me-1"></i> Matricular Aluno</button>
           </div>
 
-          <div id="formRapidoAlunoProf" class="card p-3 mb-3 bg-light border d-none">
-            <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-user-plus"></i> Matricular Estudante nesta Turma</h6>
-            <div class="row g-2">
-              <div class="col-md-9">
-                <input type="text" id="nomeAlunoProfInput" class="form-control" placeholder="Nome Completo do Estudante (EX: PEDRO SILVA)">
+          <div id="formRapidoAlunoProf" class="card-body bg-light border-bottom d-none">
+            <div class="row g-2 align-items-center">
+              <div class="col-sm-8">
+                <input type="text" id="nomeAlunoProfInput" class="form-control text-uppercase" placeholder="NOME COMPLETO DO ESTUDANTE">
               </div>
-              <div class="col-md-3 d-flex gap-2">
-                <button onclick="executarCadastroEstudanteProf()" class="btn btn-primary w-100 fw-bold">Confirmar</button>
-                <button onclick="toggleFormAlunoProf(false)" class="btn btn-secondary">Cancelar</button>
+              <div class="col-sm-4 d-flex gap-2">
+                <button onclick="executarCadastroEstudanteProf()" class="btn btn-success w-100">Confirmar</button>
+                <button onclick="toggleFormAlunoProf(false)" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i></button>
               </div>
             </div>
           </div>
 
           <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle">
-              <thead class="table-dark text-center">
+            <table class="table table-hover align-middle m-0 text-nowrap">
+              <thead class="table-light">
                 <tr>
-                  <th width="5%">Nº</th>
+                  <th width="5%" class="text-center">Nº</th>
                   <th width="40%">Nome Completo do Estudante</th>
-                  <th width="8%">Nota T1</th>
-                  <th width="8%">Nota T2</th>
-                  <th width="8%">Nota T3</th>
-                  <th width="6%">CH1</th>
-                  <th width="6%">CH2</th>
-                  <th width="6%">CH3</th>
-                  <th width="13%">Ações</th>
+                  <th width="10%" class="text-center">Nota T1</th>
+                  <th width="10%" class="text-center">Nota T2</th>
+                  <th width="10%" class="text-center">Nota T3</th>
+                  <th width="7%" class="text-center">CH1</th>
+                  <th width="7%" class="text-center">CH2</th>
+                  <th width="7%" class="text-center">CH3</th>
+                  <th width="4%" class="text-center">Ações</th>
                 </tr>
               </thead>
               <tbody id="tabelaAlunosCorpo"></tbody>
             </table>
           </div>
+          
+          <div class="card-footer bg-white text-end py-3 border-top">
+            <button onclick="salvarDiario()" class="btn btn-success px-4 fw-semibold"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Alterações</button>
+          </div>
         </div>
       </div>
 
       <div id="interfaceCoordenador" class="d-none">
-        <div class="row">
-          <div class="col-md-3 mb-4">
-            <div class="list-group card">
-              <button onclick="mudarAbaCoord('relatorios')" class="list-group-item list-group-item-action active" id="btn-menu-rel"><i class="fa-solid fa-chart-pie me-2"></i> Status de Preenchimento</button>
-              <button onclick="mudarAbaCoord('aluno')" class="list-group-item list-group-item-action" id="btn-menu-alu"><i class="fa-solid fa-user-plus me-2"></i> Matricular Estudante</button>
-              <button onclick="mudarAbaCoord('professor')" class="list-group-item list-group-item-action" id="btn-menu-prof"><i class="fa-solid fa-user-tie me-2"></i> Vincular Professor</button>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="list-group shadow-sm">
+              <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active"><i class="fa-solid fa-chart-pie me-2"></i>Status das Notas</button>
+              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-plus me-2"></i>Cadastrar Estudante</button>
+              <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action"><i class="fa-solid fa-user-tie me-2"></i>Vincular Professor</button>
             </div>
           </div>
+
           <div class="col-md-9">
-            <div id="coordAbaRelatorios" class="card p-4">
-              <h4 class="fw-bold text-dark mb-3">Acompanhamento de Diários</h4>
-              <div class="mb-3 col-md-6">
-                <label class="form-label fw-bold">Escolha a Turma para Auditoria</label>
+            
+            <div id="coordAbaRelatorios" class="card shadow-sm border-0 p-4 bg-white">
+              <h5 class="fw-bold mb-3"><i class="fa-solid fa-eye text-primary me-2"></i>Monitoramento de Preenchimento</h5>
+              <div class="mb-3">
+                <label class="form-label small fw-semibold text-muted">Selecione uma Turma para Auditar</label>
                 <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select"></select>
               </div>
               <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                  <thead class="table-dark">
+                <table class="table table-bordered table-hover align-middle m-0 text-center">
+                  <thead class="table-light">
                     <tr>
-                      <th>Componente Curricular (Aba)</th>
-                      <th>Trimestre 1</th>
-                      <th>Trimestre 2</th>
-                      <th>Trimestre 3</th>
+                      <th class="text-start">Componente Curricular</th>
+                      <th>1º Trimestre</th>
+                      <th>2º Trimestre</th>
+                      <th>3º Trimestre</th>
                     </tr>
                   </thead>
-                  <tbody id="tabelaRelatorioCorpo"><tr><td colspan="4" class="text-center text-muted">Selecione uma turma para carregar o relatório.</td></tr></tbody>
+                  <tbody id="tabelaRelatorioCorpo">
+                    <tr><td colspan="4" class="text-muted">Selecione uma turma para carregar o mapa.</td></tr>
+                  </tbody>
                 </table>
               </div>
             </div>
 
-            <div id="coordAbaAluno" class="card p-4 d-none">
-              <h4 class="fw-bold text-dark mb-3">Matricular Novo Estudante</h4>
+            <div id="coordAbaAluno" class="card shadow-sm border-0 p-4 d-none bg-white">
+              <h5 class="fw-bold mb-3"><i class="fa-solid fa-user-plus text-success me-2"></i>Cadastrar Novo Aluno na Matriz</h5>
               <div class="mb-3">
-                <label class="form-label fw-bold">Turma Alvo</label>
+                <label class="form-label small fw-semibold">Turma do Aluno</label>
                 <select id="cadAlunoTurma" class="form-select"></select>
               </div>
               <div class="mb-3">
-                <label class="form-label fw-bold">Nome Completo do Aluno</label>
-                <input type="text" id="cadAlunoNome" class="form-control" placeholder="EX: JOÃO SILVA PINTO">
+                <label class="form-label small fw-semibold">Nome Completo do Estudante</label>
+                <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
               </div>
-              <button onclick="executarCadastroEstudante()" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Confirmar Matrícula</button>
+              <button onclick="executarCadastroEstudante()" class="btn btn-success fw-semibold"><i class="fa-solid fa-check me-2"></i>Inserir na Aba Alunos</button>
             </div>
 
-            <div id="coordAbaProfessor" class="card p-4 d-none">
-              <h4 class="fw-bold text-dark mb-3">Vincular Professor a Componente</h4>
+            <div id="coordAbaProfessor" class="card shadow-sm border-0 p-4 d-none bg-white">
+              <h5 class="fw-bold mb-3"><i class="fa-solid fa-link text-dark me-2"></i>Vincular Professor ao Diário</h5>
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                  <label class="form-label fw-bold">Nome Completo do Docente</label>
-                  <input type="text" id="cadProfNome" class="form-control">
+                  <label class="form-label small fw-semibold">Nome do Docente</label>
+                  <input type="text" id="cadProfNome" class="form-control" placeholder="Nome Completo">
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label fw-bold">MASP (Apenas números)</label>
-                  <input type="text" id="cadProfMasp" class="form-control">
+                  <label class="form-label small fw-semibold">MASP</label>
+                  <input type="text" id="cadProfMasp" class="form-control" placeholder="Apenas números">
                 </div>
+              </div>
+              <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                  <label class="form-label fw-bold">Turma Designada</label>
+                  <label class="form-label small fw-semibold">Turma Vinculada</label>
                   <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select"></select>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label fw-bold">Disciplina / Cadeira</label>
-                  <select id="cadProfDisciplina" class="form-select"><option value="">Escolha a turma primeiro...</option></select>
+                  <label class="form-label small fw-semibold">Componente Letivo</label>
+                  <select id="cadProfDisciplina" class="form-select">
+                    <option value="">Selecione a turma...</option>
+                  </select>
                 </div>
               </div>
-              <button onclick="executarCadastroProfessor()" class="btn btn-dark"><i class="fa-solid fa-link"></i> Salvar Vínculo no Banco</button>
+              <button onclick="executarCadastroProfessor()" class="btn btn-primary fw-semibold"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Vínculo</button>
             </div>
 
           </div>
@@ -210,12 +238,20 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwU6AfJs5O5VrOuKDCEM0AcpcC__BjfRjhaJfAyWPN4eg5bPxOM6BwKhzsJ5LCzvasD/exec"; 
 
-    // Motor HTTP à prova de falhas com tratamento de objetos consistente
+    // Função centralizada para Popups Estilizados e Modernos (SweetAlert2)
+    function notificar(mensagem, sucesso = false, tituloAlternativo = null) {
+      Swal.fire({
+        title: tituloAlternativo ? tituloAlternativo : (sucesso ? 'Tudo certo!' : 'Atenção'),
+        text: mensagem,
+        icon: sucesso ? 'success' : 'warning',
+        confirmButtonColor: '#0d6efd',
+        confirmButtonText: 'OK'
+      });
+    }
+
     async function chamarServidor(acao, parametros = {}) {
       try {
         const resposta = await fetch(API_URL, {
@@ -225,23 +261,22 @@
         });
         
         if (!resposta.ok) throw new Error("Resposta com status inválido.");
-        const dados = await resposta.json();
-        return dados;
+        return await resposta.json();
       } catch (erro) {
         console.error("Falha na API:", erro);
-        return { sucesso: false, mensagem: "Erro de comunicação com o servidor Apps Script." };
+        return { sucesso: false, mensagem: "Erro de comunicação com o servidor." };
       }
     }
 
     let dadosUsuarioLogado = {};
     let cacheAlunosAtuais = [];
 
-    // AUTENTICAÇÃO
+    // SISTEMA DE LOGINS
     async function efetuarLogin(perfil) {
       let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : document.getElementById("adminUser").value;
       let senha = perfil === 'coordenador' ? document.getElementById("adminPass").value : null;
 
-      if(!usuario) { alert("Por favor, preencha os dados de acesso."); return; }
+      if(!usuario) { notificar("Por favor, preencha os dados de acesso.", false); return; }
 
       exibirLoader(true);
       let res = await chamarServidor("autenticarLogin", { perfil: perfil, usuario: usuario, senha: senha });
@@ -267,7 +302,7 @@
           if(listaTurmas && Array.isArray(listaTurmas)) popularSelectsCoordenador(listaTurmas);
         }
       } else {
-        alert(res ? res.mensagem : "Credenciais inválidas ou erro no servidor.");
+        notificar(res ? res.mensagem : "Credenciais inválidas.", false, "Falha no Login");
       }
     }
 
@@ -320,7 +355,7 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosAtuais.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Nenhum estudante nesta disciplina.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-3">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
         return;
       }
 
@@ -331,16 +366,16 @@
         tbody.innerHTML += `
           <tr ${classeLinha}>
             <td class="text-center fw-bold">${i + 1}</td>
-            <td>${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control text-center p-1"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control text-center p-1"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control text-center p-1"></td>
+            <td class="fw-medium">${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control text-center p-1 mx-auto" style="max-width:70px;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input"></td>
             <td class="text-center">
-              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-0 px-2">
-                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Reativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-0 px-2 small">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
               </button>
             </td>
           </tr>
@@ -358,43 +393,45 @@
       exibirLoader(true);
       let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosAtuais });
       exibirLoader(false);
-      if(res) alert(res.mensagem);
+      if(res) notificar(res.mensagem, res.sucesso);
     }
 
     async function alternarStatusEstudante(linha, statusTaxado) {
       let turma = document.getElementById("profTurma").value;
       exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: inline = linha, excluir: !statusTaxado });
       exibirLoader(false);
-      if(res) { alert(res.mensagem); carregarListaAlunos(); }
+      if(res) { 
+        notificar(res.mensagem, res.sucesso); 
+        carregarListaAlunos(); 
+      }
     }
 
-    // CONTROLE DE SUB-FORM DO PROFESSOR (NOVA ADIÇÃO)
     function toggleFormAlunoProf(mostrar) {
       let form = document.getElementById("formRapidoAlunoProf");
       if(mostrar) form.classList.remove("d-none"); else form.classList.add("d-none");
       document.getElementById("nomeAlunoProfInput").value = "";
     }
 
-    async function executarCadastroEstudanteProf() {
+    async function ejecutarCadastroEstudanteProf() {
       let turma = document.getElementById("profTurma").value;
       let nome = document.getElementById("nomeAlunoProfInput").value;
-      if(!nome) { alert("Informe o nome completo do estudante."); return; }
+      if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
 
       exibirLoader(true);
       let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
       exibirLoader(false);
 
       if(res) {
-        alert(res.mensagem);
+        notificar(res.mensagem, res.sucesso);
         if(res.sucesso) {
           toggleFormAlunoProf(false);
-          carregarListaAlunos(); // Atualiza em tempo real para o professor!
+          carregarListaAlunos(); 
         }
       }
     }
 
-    // GESTÃO COORDENADOR
+    // PROCEDIMENTOS DO COORDENADOR
     function popularSelectsCoordenador(turmas) {
       ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
         let el = document.getElementById(id);
@@ -406,7 +443,7 @@
     async function carregarRelatorioPreenchimento() {
       let turma = document.getElementById("coordSelectTurma").value;
       let tbody = document.getElementById("tabelaRelatorioCorpo");
-      if(!turma) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Selecione uma turma para carregar.</td></tr>'; return; }
+      if(!turma) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Selecione uma turma.</td></tr>'; return; }
 
       exibirLoader(true);
       let dados = await chamarServidor("getStatusPreenchimento", { turma: turma });
@@ -418,10 +455,10 @@
           let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning text-dark" : "bg-danger");
           tbody.innerHTML += `
             <tr>
-              <td class="fw-bold">${linha.disciplina}</td>
-              <td class="text-center"><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
-              <td class="text-center"><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
-              <td class="text-center"><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
+              <td class="fw-bold text-start">${linha.disciplina}</td>
+              <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+              <td><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
+              <td><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
             </tr>
           `;
         });
@@ -442,13 +479,13 @@
     async function executarCadastroEstudante() {
       let turma = document.getElementById("cadAlunoTurma").value;
       let nome = document.getElementById("cadAlunoNome").value;
-      if(!turma || !nome) { alert("Preencha todos os campos!"); return; }
+      if(!turma || !nome) { notificar("Preencha todos os campos!", false); return; }
 
       exibirLoader(true);
       let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
       exibirLoader(false);
       if(res) { 
-        alert(res.mensagem); 
+        notificar(res.mensagem, res.sucesso); 
         if(res.sucesso) document.getElementById("cadAlunoNome").value = ""; 
       }
     }
@@ -458,13 +495,13 @@
       let n = document.getElementById("cadProfNome").value;
       let m = document.getElementById("cadProfMasp").value;
       let d = document.getElementById("cadProfDisciplina").value;
-      if(!t || !n || !m || !d) { alert("Preencha todos os campos!"); return; }
+      if(!t || !n || !m || !d) { notificar("Preencha todos os campos!", false); return; }
 
       exibirLoader(true);
       let res = await chamarServidor("cadastrarProfessor", { turma: t, nomeProf: n, maspProf: m, disciplinaProf: d });
       exibirLoader(false);
       if(res) { 
-        alert(res.mensagem); 
+        notificar(res.mensagem, res.sucesso); 
         if(res.sucesso) {
           document.getElementById("cadProfNome").value = ""; 
           document.getElementById("cadProfMasp").value = ""; 
@@ -494,5 +531,7 @@
       document.getElementById("adminPass").value = "";
     }
   </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
