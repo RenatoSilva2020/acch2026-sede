@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Acadêmico | Gestão Escolar Profissional</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .card { border: none; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .loader-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.8); z-index: 9999;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .text-taxado { text-decoration: line-through !important; color: #adb5bd !important; background-color: #f8f9fa; }
+  </style>
+</head>
+<body>
+
+  <div id="loader" class="loader-overlay d-none">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+  </div>
+
+  <div id="telaLogin" class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-5">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold text-primary"><i class="fa-solid fa-graduation-cap"></i> Portal Acadêmico</h2>
+          <p class="text-muted">Acesse seu diário de classe eletrônico</p>
+        </div>
+        <div class="card p-4">
+          <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <button class="nav-link active" id="tab-prof" data-bs-toggle="pill" data-bs-target="#loginProf" type="button"><i class="fa-solid fa-chalkboard-user"></i> Professor</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" id="tab-coord" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button"><i class="fa-solid fa-user-gear"></i> Coordenador</button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="loginProf">
+              <div class="mb-3">
+                <label class="form-label">Número do MASP</label>
+                <input type="text" id="maspInput" class="form-control form-control-lg" placeholder="Digite seu MASP">
+              </div>
+              <button onclick="efetuarLogin('professor')" class="btn btn-primary btn-lg w-100">Entrar no Sistema</button>
+            </div>
+            <div class="tab-pane fade" id="loginCoord">
+              <div class="mb-3">
+                <label class="form-label">Usuário Administrador</label>
+                <input type="text" id="adminUser" class="form-control" placeholder="admin">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Senha de Acesso</label>
+                <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
+              </div>
+              <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100">Autenticar Gestão</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="painelSistema" class="d-none">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+      <div class="container">
+        <span class="navbar-brand fw-bold"><i class="fa-solid fa-school"></i> Ambiente Escolar</span>
+        <div class="d-flex align-items-center text-white">
+          <span class="me-3" id="nomeUsuarioLogado"></span>
+          <button onclick="logout()" class="btn btn-sm btn-light text-danger fw-bold"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      
+      <div id="interfaceProfessor" class="d-none">
+        <div class="card p-3 mb-4">
+          <h5 class="fw-bold mb-3 text-secondary"><i class="fa-solid fa-filter"></i> Filtros de Acesso</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Selecione a Turma</label>
+              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select"><option value="">Selecione...</option></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Selecione a Disciplina</label>
+              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select"><option value="">Selecione a turma primeiro...</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div id="cardDiario" class="card p-4 d-none">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 id="tituloDiario" class="fw-bold text-primary m-0"></h4>
+            <button onclick="salvarDiario()" class="btn btn-success fw-bold"><i class="fa-solid fa-floppy-disk"></i> Salvar Alterações</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+              <thead class="table-dark text-center">
+                <tr>
+                  <th width="5%">Nº</th>
+                  <th width="40%">Nome Completo do Estudante</th>
+                  <th width="8%">Nota T1</th>
+                  <th width="8%">Nota T2</th>
+                  <th width="8%">Nota T3</th>
+                  <th width="6%">CH1</th>
+                  <th width="6%">CH2</th>
+                  <th width="6%">CH3</th>
+                  <th width="13%">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaAlunosCorpo"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="interfaceCoordenador" class="d-none">
+        <div class="row">
+          <div class="col-md-3 mb-4">
+            <div class="list-group card">
+              <button onclick="mudarAbaCoord('relatorios')" class="list-group-item list-group-item-action active" id="btn-menu-rel"><i class="fa-solid fa-chart-pie me-2"></i> Status de Preenchimento</button>
+              <button onclick="mudarAbaCoord('aluno')" class="list-group-item list-group-item-action" id="btn-menu-alu"><i class="fa-solid fa-user-plus me-2"></i> Matricular Estudante</button>
+              <button onclick="mudarAbaCoord('professor')" class="list-group-item list-group-item-action" id="btn-menu-prof"><i class="fa-solid fa-user-tie me-2"></i> Vincular Professor</button>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div id="coordAbaRelatorios" class="card p-4">
+              <h4 class="fw-bold text-dark mb-3">Acompanhamento de Diários</h4>
+              <div class="mb-3 col-md-6">
+                <label class="form-label fw-bold">Escolha a Turma para Auditoria</label>
+                <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select"></select>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Componente Curricular (Aba)</th>
+                      <th>Trimestre 1</th>
+                      <th>Trimestre 2</th>
+                      <th>Trimestre 3</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabelaRelatorioCorpo"><tr><td colspan="4" class="text-center text-muted">Selecione uma turma para carregar o relatório.</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="coordAbaAluno" class="card p-4 d-none">
+              <h4 class="fw-bold text-dark mb-3">Matricular Novo Estudante</h4>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Turma Alvo</label>
+                <select id="cadAlunoTurma" class="form-select"></select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Nome Completo do Aluno</label>
+                <input type="text" id="cadAlunoNome" class="form-control" placeholder="EX: JOÃO SILVA PINTO">
+              </div>
+              <button onclick="executarCadastroEstudante()" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> Confirmar Matrícula</button>
+            </div>
+
+            <div id="coordAbaProfessor" class="card p-4 d-none">
+              <h4 class="fw-bold text-dark mb-3">Vincular Professor a Componente</h4>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">Nome Completo do Docente</label>
+                  <input type="text" id="cadProfNome" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">MASP (Apenas números)</label>
+                  <input type="text" id="cadProfMasp" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">Turma Designada</label>
+                  <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select"></select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold">Disciplina / Cadeira</label>
+                  <select id="cadProfDisciplina" class="form-select"><option value="">Escolha a turma primeiro...</option></select>
+                </div>
+              </div>
+              <button onclick="executarCadastroProfessor()" class="btn btn-dark"><i class="fa-solid fa-link"></i> Salvar Vínculo no Banco</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // =================================================================
+    // LINK DA API - COLE SEU LINK DO GOOGLE APPS SCRIPT ABAIXO!
+    // =================================================================
+    const API_URL = "https://script.google.com/macros/s/AKfycbwU6AfJs5O5VrOuKDCEM0AcpcC__BjfRjhaJfAyWPN4eg5bPxOM6BwKhzsJ5LCzvasD/exec"; 
+
+    // Motor de chamadas HTTP assíncronas 
+    async function chamarServidor(acao, parametros = {}) {
+      try {
+        const resposta = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ acao: acao, parametros: parametros }),
+          headers: { "Content-Type": "text/plain;charset=utf-8" } 
+        });
+        
+        const dados = await resposta.json();
+        if (dados && dados.erro) throw new Error(dados.erro);
+        return dados;
+      } catch (erro) {
+        console.error("Falha na API:", erro);
+        alert("Erro crítico de conexão com o banco de dados. Verifique a URL da API.");
+        return null;
+      }
+    }
+
+    // Variáveis Globais de Sessão
+    let dadosUsuarioLogado = {};
+    let cacheAlunosAtuais = [];
+
+    // LÓGICA DE LOGIN REESCRITA
+    async function efetuarLogin(perfil) {
+      let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : document.getElementById("adminUser").value;
+      let senha = perfil === 'coordenador' ? document.getElementById("adminPass").value : null;
+
+      if(!usuario) { alert("Por favor, preencha os dados de acesso."); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("autenticarLogin", { perfil: perfil, usuario: usuario, senha: senha });
+      exibirLoader(false);
+
+      if (res && res.sucesso) {
+        dadosUsuarioLogado = { papel: perfil, nome: res.nome, turmas: res.turmasVinculadas || {} };
+        
+        document.getElementById("telaLogin").classList.add("d-none");
+        document.getElementById("painelSistema").classList.remove("d-none");
+        document.getElementById("nomeUsuarioLogado").innerText = `Olá, ${res.nome} (${perfil.toUpperCase()})`;
+
+        if (perfil === 'professor') {
+          document.getElementById("interfaceProfessor").classList.remove("d-none");
+          document.getElementById("interfaceCoordenador").classList.add("d-none");
+          popularSelectTurmasProfessor();
+        } else {
+          document.getElementById("interfaceCoordenador").classList.remove("d-none");
+          document.getElementById("interfaceProfessor").classList.add("d-none");
+          exibirLoader(true);
+          let listaTurmas = await chamarServidor("getTurmas");
+          exibirLoader(false);
+          if(listaTurmas) popularSelectsCoordenador(listaTurmas);
+        }
+      } else {
+        alert(res ? res.mensagem : "Credenciais inválidas ou erro no servidor.");
+      }
+    }
+
+    // CONTROLE DE TELAS DO PROFESSOR
+    function popularSelectTurmasProfessor() {
+      let select = document.getElementById("profTurma");
+      select.innerHTML = '<option value="">Selecione...</option>';
+      Object.keys(dadosUsuarioLogado.turmas).forEach(turma => {
+        select.innerHTML += `<option value="${turma}">${turma}</option>`;
+      });
+    }
+
+    function atualizarDisciplinasProfessor() {
+      let turmaSel = document.getElementById("profTurma").value;
+      let selectDisc = document.getElementById("profDisciplina");
+      selectDisc.innerHTML = '<option value="">Selecione...</option>';
+      
+      if (!turmaSel) return;
+      let disciplinas = dadosUsuarioLogado.turmas[turmaSel] || [];
+      disciplinas.forEach(d => {
+        selectDisc.innerHTML += `<option value="${d}">${d}</option>`;
+      });
+      document.getElementById("cardDiario").classList.add("d-none");
+    }
+
+    // BUSCAR ALUNOS E APLICAR A ORGANIZAÇÃO DE INATIVOS NO FINAL
+    async function carregarListaAlunos() {
+      let turma = document.getElementById("profTurma").value;
+      let disciplina = document.getElementById("profDisciplina").value;
+      if (!turma || !disciplina) return;
+
+      exibirLoader(true);
+      let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
+      exibirLoader(false);
+
+      if (lista) {
+        // --- REGRA DA MAQUIAGEM VISUAL ---
+        lista.sort((a, b) => {
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
+          return a.taxado ? 1 : -1; 
+        });
+        
+        cacheAlunosAtuais = lista;
+        desenharTabelaDiario();
+        document.getElementById("tituloDiario").innerText = `Alunos Matriculados - ${disciplina}`;
+        document.getElementById("cardDiario").classList.remove("d-none");
+      }
+    }
+
+    // MONTAR TABELA NA TELA VIA JAVASCRIPT
+    function desenharTabelaDiario() {
+      let tbody = document.getElementById("tabelaAlunosCorpo");
+      tbody.innerHTML = "";
+
+      if(cacheAlunosAtuais.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Nenhum estudante nesta disciplina.</td></tr>';
+        return;
+      }
+
+      cacheAlunosAtuais.forEach((aluno, i) => {
+        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let disabledInput = aluno.taxado ? 'disabled' : '';
+        
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold">${i + 1}</td>
+            <td>${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control text-center p-1"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control text-center p-1"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control text-center p-1"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input"></td>
+            <td class="text-center">
+              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-0 px-2">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Reativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function atualizarCacheNota(index, trimestre, valor) {
+      cacheAlunosAtuais[index]['nota' + trimestre] = valor;
+    }
+
+    function atualizarCacheCH(index, trimestre, checked) {
+      cacheAlunosAtuais[index]['ch' + trimestre] = checked;
+    }
+
+    async function salvarDiario() {
+      let turma = document.getElementById("profTurma").value;
+      let disciplina = document.getElementById("profDisciplina").value;
+      
+      exibirLoader(true);
+      let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosAtuais });
+      exibirLoader(false);
+      if(res) alert(res);
+    }
+
+    async function alternarStatusEstudante(linha, statusTaxado) {
+      let turma = document.getElementById("profTurma").value;
+      exibirLoader(true);
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      exibirLoader(false);
+      if(res) { alert(res); carregarListaAlunos(); }
+    }
+
+    // CONTROLE DE TELAS DO COORDENADOR
+    function popularSelectsCoordenador(turmas) {
+      ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
+        let el = document.getElementById(id);
+        el.innerHTML = '<option value="">Selecione...</option>';
+        turmas.forEach(t => el.innerHTML += `<option value="${t}">${t}</option>`);
+      });
+    }
+
+    async function carregarRelatorioPreenchimento() {
+      let turma = document.getElementById("coordSelectTurma").value;
+      let tbody = document.getElementById("tabelaRelatorioCorpo");
+      if(!turma) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Selecione uma turma para carregar.</td></tr>'; return; }
+
+      exibirLoader(true);
+      let dados = await chamarServidor("getStatusPreenchimento", { turma: turma });
+      exibirLoader(false);
+
+      if(dados) {
+        tbody.innerHTML = "";
+        dados.forEach(linha => {
+          let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning text-dark" : "bg-danger");
+          tbody.innerHTML += `
+            <tr>
+              <td class="fw-bold">${linha.disciplina}</td>
+              <td class="text-center"><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+              <td class="text-center"><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
+              <td class="text-center"><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    async function carregarDisciplinasCadastroProf(turma) {
+      let select = document.getElementById("cadProfDisciplina");
+      select.innerHTML = '<option value="">Carregando...</option>';
+      if(!turma) return;
+      let disc = await chamarServidor("getDisciplinasTodas", { turma: turma });
+      if(disc) {
+        select.innerHTML = '<option value="">Selecione...</option>';
+        disc.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
+      }
+    }
+
+    async function executarCadastroEstudante() {
+      let turma = document.getElementById("cadAlunoTurma").value;
+      let nome = document.getElementById("cadAlunoNome").value;
+      if(!turma || !nome) { alert("Preencha todos os campos!"); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
+      exibirLoader(false);
+      if(res) { alert(res.mensagem || res.message); if(res.sucesso) document.getElementById("cadAlunoNome").value = ""; }
+    }
+
+    async function ejecutarCadastroProfessor() {
+      let t = document.getElementById("cadProfTurma").value;
+      let n = document.getElementById("cadProfNome").value;
+      let m = document.getElementById("cadProfMasp").value;
+      let d = document.getElementById("cadProfDisciplina").value;
+      if(!t || !n || !m || !d) { alert("Preencha todos os campos!"); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("cadastrarProfessor", { turma: t, nomeProf: n, maspProf: m, disciplinaProf: d });
+      exibirLoader(false);
+      if(res) { alert(res); document.getElementById("cadProfNome").value = ""; document.getElementById("cadProfMasp").value = ""; }
+    }
+
+    function mudarAbaCoord(aba) {
+      ['relatorios', 'aluno', 'professor'].forEach(a => {
+        document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`).classList.add("d-none");
+        document.getElementById(`btn-menu-${a.substring(0,4)}`).classList.remove("active");
+      });
+      document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`).classList.remove("d-none");
+      document.getElementById(`btn-menu-${aba.substring(0,4)}`).classList.add("active");
+    }
+
+    // AUXILIARES
+    function exibirLoader(mostrar) {
+      let l = document.getElementById("loader");
+      if(mostrar) l.classList.remove("d-none"); else l.classList.add("d-none");
+    }
+
+    function logout() {
+      dadosUsuarioLogado = {};
+      document.getElementById("painelSistema").classList.add("d-none");
+      document.getElementById("telaLogin").classList.remove("d-none");
+      document.getElementById("maspInput").value = "";
+      document.getElementById("adminPass").value = "";
+    }
+  </script>
+</body>
+</html>
