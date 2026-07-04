@@ -3,495 +3,726 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal de Atividades Complementares</title>
+  <title>Portal Escolar Integrado</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
-    :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --success: #10b981;
-      --error: #ef4444;
+    /* Estilos Modernizados */
+    body { 
+      background-color: #f0f2f5; 
+      font-family: 'Inter', system-ui, sans-serif; 
+      color: #334155;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background-color: var(--primary);
-      color: white;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      flex: 1;
-      width: 100%;
-    }
-
+    
     .card {
-      background-color: var(--card-bg);
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--border);
-      margin-bottom: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+      border: 1px solid rgba(255, 255, 255, 0.8) !important;
     }
+    
+    .card-login { max-width: 450px; }
+    
+    .navbar-brand { font-weight: 700; letter-spacing: -0.5px; }
+    
+    /* Ajuste da cor da fonte das abas */
+    .nav-pills .nav-link { border-radius: 10px; font-weight: 500; transition: all 0.2s; color: #64748b; }
+    .nav-pills .nav-link.active { color: #ffffff !important; }
+    
+    .btn { border-radius: 10px; font-weight: 600; transition: all 0.2s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    
+    .form-control, .form-select { border-radius: 10px; border: 1px solid #cbd5e1; box-shadow: none !important; }
+    .form-control:focus, .form-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.15) !important; }
 
-    .hidden {
-      display: none !important;
+    .text-taxado { text-decoration: line-through; color: #94a3b8 !important; opacity: 0.65; }
+    .text-taxado input { background-color: #e2e8f0 !important; pointer-events: none; }
+    
+    /* Linhas interativas para auditoria */
+    .table-auditavel tbody tr { cursor: pointer; transition: background-color 0.15s ease-in-out; }
+    .table-auditavel tbody tr:hover { background-color: #f8fafc !important; }
+
+    /* Loader Moderno com Efeito Glassmorphism e Z-Index corrigido */
+    #loader {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.6); 
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1050; /* Reduzido para ficar atrás dos alertas do SweetAlert (1060) */
+      display: flex; justify-content: center; align-items: center;
     }
-
-    .form-group {
-      margin-bottom: 1.25rem;
+    .modern-loader { display: flex; gap: 8px; justify-content: center; }
+    .modern-loader div {
+      width: 14px; height: 14px; background-color: #0d6efd; border-radius: 50%;
+      animation: bounce 0.5s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
     }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    button {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      width: 100%;
-    }
-
-    button:hover {
-      background-color: var(--primary-hover);
-    }
-
-    button:disabled {
-      background-color: var(--text-muted);
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--primary);
-      border: 1px solid var(--primary);
-      margin-top: 0.5rem;
-    }
-
-    .btn-secondary:hover {
-      background-color: #f1f5f9;
-    }
-
-    .alert {
-      padding: 0.75rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .alert-error {
-      background-color: #fee2e2;
-      color: var(--error);
-      border: 1px solid #fecaca;
-    }
-
-    .alert-success {
-      background-color: #d1fae5;
-      color: var(--success);
-      border: 1px solid #a7f3d0;
-    }
-
-    .user-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #e0e7ff;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-bottom: 1.5rem;
-      color: #3730a3;
-    }
-
-    .user-bar button {
-      width: auto;
-      padding: 0.5rem 1rem;
-      background-color: #ef4444;
-    }
-
-    .user-bar button:hover {
-      background-color: #dc2626;
-    }
-
-    .table-container {
-      overflow-x: auto;
-      margin-top: 1rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    th, td {
-      padding: 0.75rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th {
-      background-color: #f8fafc;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    tr:hover {
-      background-color: #f1f5f9;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr 2fr;
-      }
+    .modern-loader div:nth-child(2) { animation-delay: 0.15s; background-color: #3b82f6;}
+    .modern-loader div:nth-child(3) { animation-delay: 0.3s; background-color: #60a5fa;}
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-12px); }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Portal de Atividades Complementares</h1>
-  </header>
-
-  <div class="container">
-    
-    <div id="login-section" class="card" style="max-width: 450px; margin: 2rem auto;">
-      <h2 style="margin-bottom: 1.5rem; text-align: center;">Acesso ao Sistema</h2>
-      
-      <div id="login-alert" class="alert hidden"></div>
-
-      <form id="login-form" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label for="userType">Tipo de Acesso</label>
-          <select id="userType" onchange="toggleLoginFields()" required>
-            <option value="Professor">Professor(a)</option>
-            <option value="Coordenação">Coordenação</option>
-          </select>
-        </div>
-
-        <div class="form-group" id="group-masp">
-          <label for="masp">MASP</label>
-          <input type="text" id="masp" placeholder="Digite seu número de MASP">
-        </div>
-
-        <div class="form-group hidden" id="group-username">
-          <label for="username">Usuário</label>
-          <input type="text" id="username" placeholder="Digite seu usuário">
-        </div>
-
-        <div class="form-group hidden" id="group-password">
-          <label for="password">Senha</label>
-          <input type="password" id="password" placeholder="Digite sua senha">
-        </div>
-
-        <button type="submit" id="btn-login">Entrar</button>
-      </form>
+  <div id="loader" class="d-none">
+    <div class="text-center d-flex flex-column align-items-center bg-white p-4 rounded-4 shadow-sm border">
+      <div class="modern-loader mb-3">
+        <div></div><div></div><div></div>
+      </div>
+      <p class="mt-2 mb-0 fw-bold text-primary" style="letter-spacing: 1px;">SINCRONIZANDO</p>
     </div>
+  </div>
 
-    <div id="dashboard-section" class="hidden">
-      
-      <div class="user-bar">
-        <div>
-          <strong>Identificação:</strong> <span id="display-user">...</span> 
-          (<span id="display-type">...</span>)
-        </div>
-        <button onclick="logout()">Sair</button>
+  <div id="telaLogin" class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card card-login w-100 p-4 bg-white">
+      <div class="text-center mb-4">
+        <span class="p-3 bg-primary bg-opacity-10 rounded-circle d-inline-block mb-3">
+          <i class="fa-solid fa-school fa-2x text-primary"></i>
+        </span>
+        <h3 class="fw-bold m-0">Portal - Atividades Complementares</h3>
+        <p class="text-muted small mt-1">Selecione seu perfil de acesso para continuar</p>
       </div>
 
-      <div class="dashboard-grid">
-        
-        <div class="card">
-          <h3 style="margin-bottom: 1rem;">Inserir Novo Estudante</h3>
-          
-          <div id="student-alert" class="alert hidden"></div>
+      <ul class="nav nav-pills nav-justified mb-4 bg-light p-1 rounded-3" id="loginTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" id="tab-prof-btn" data-bs-toggle="pill" data-bs-target="#loginProf" type="button">
+            <i class="fa-solid fa-chalkboard-user me-2"></i>Professor
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="tab-coord-btn" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button">
+            <i class="fa-solid fa-user-gear me-2"></i>Coordenação
+          </button>
+        </li>
+      </ul>
 
-          <form id="student-form" onsubmit="handleAddStudent(event)">
-            <div class="form-group">
-              <label for="studentName">Nome Completo do Estudante</label>
-              <input type="text" id="studentName" placeholder="Ex: Maria Oliveira" required>
+      <div class="tab-content" id="loginTabsContent">
+        <div class="tab-pane fade show active" id="loginProf">
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-secondary small text-uppercase">Número de MASP</label>
+            <div class="input-group">
+              <span class="input-group-text bg-white text-muted border-end-0"><i class="fa-solid fa-id-card"></i></span>
+              <input type="text" id="maspInput" class="form-control border-start-0 ps-0" placeholder="Apenas números">
             </div>
-
-            <div class="form-group">
-              <label for="turma">Turma / Série</label>
-              <input type="text" id="turma" placeholder="Ex: 3º Ano B" required>
-            </div>
-
-            <button type="submit" id="btn-student">Cadastrar Estudante</button>
-          </form>
+          </div>
+          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100 py-2 pt-3 pb-3 shadow-sm">Acessar Portal</button>
         </div>
 
-        <div class="card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h3>Dados de Monitoramento</h3>
-            <button onclick="loadDashboardData()" class="btn-secondary" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.85rem; margin-top:0;">Atualizar Dados</button>
+        <div class="tab-pane fade" id="loginCoord">
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary small text-uppercase">Usuário</label>
+            <input type="text" id="adminUser" class="form-control" placeholder="nome de usuário">
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-secondary small text-uppercase">Senha de Acesso</label>
+            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
+          </div>
+          <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100 py-2 pt-3 pb-3 shadow-sm">Entrar como Coordenador</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="painelSistema" class="d-none">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+      <div class="container py-1">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+          <span class="bg-white bg-opacity-10 p-2 rounded"><i class="fa-solid fa-graduation-cap text-info"></i></span>
+          DIÁRIO CLOUD
+        </a>
+        <div class="d-flex align-items-center gap-3">
+          <span id="nomeUsuarioLogado" class="text-white small fw-medium opacity-75"></span>
+          <button onclick="logout()" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-4">
+      
+      <div id="interfaceProfessor" class="d-none">
+        <div class="card p-4 mb-4 bg-white">
+          <h5 class="fw-bold mb-3 d-flex align-items-center gap-2"><i class="fa-solid fa-filter text-primary"></i> Selecione o Diário de Classe</h5>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold text-muted text-uppercase">Turma</label>
+              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select form-select-lg fs-6"></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold text-muted text-uppercase">Disciplina / Aba</label>
+              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select form-select-lg fs-6">
+                <option value="">Selecione a turma primeiro...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="cardDiario" class="card d-none bg-white overflow-hidden">
+          <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
+            <h5 id="tituloDiario" class="m-0 fw-bold text-dark"></h5>
+            <button onclick="toggleFormAlunoProf(true)" class="btn btn-sm btn-primary px-3 rounded-pill"><i class="fa-solid fa-user-plus me-1"></i> Cadastrar Aluno</button>
           </div>
 
-          <div id="dashboard-alert" class="alert hidden"></div>
-          
-          <div class="table-container">
-            <table id="dashboard-table">
-              <thead>
-                <tr id="table-headers">
-                  <th>Carregando...</th>
+          <div id="formRapidoAlunoProf" class="card-body bg-light border-bottom d-none p-4">
+            <div class="row g-2 align-items-center">
+              <div class="col-sm-8">
+                <input type="text" id="nomeAlunoProfInput" class="form-control text-uppercase" placeholder="NOME COMPLETO DO ESTUDANTE">
+              </div>
+              <div class="col-sm-4 d-flex gap-2">
+                <button onclick="executarCadastroEstudanteProf()" class="btn btn-success w-100"><i class="fa-solid fa-check me-1"></i> Confirmar</button>
+                <button onclick="toggleFormAlunoProf(false)" class="btn btn-secondary px-3"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive p-0">
+            <table class="table table-hover align-middle m-0 text-nowrap">
+              <thead class="table-light align-middle text-center" style="border-bottom: 2px solid #e2e8f0;">
+                <tr>
+                  <th rowspan="2" width="5%" class="text-secondary pb-3">Nº</th>
+                  <th rowspan="2" width="35%" class="text-start text-secondary pb-3">Nome Completo do Estudante</th>
+                  <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+                  <th colspan="3" class="text-success border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+                  <th rowspan="2" width="10%" class="text-secondary pb-3">Ações</th>
+                </tr>
+                <tr>
+                  <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">1° TRIM</th>
+                  <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">2° TRIM</th>
+                  <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">3° TRIM</th>
+                  <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">1° TRIM</th>
+                  <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">2° TRIM</th>
+                  <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">3° TRIM</th>
                 </tr>
               </thead>
-              <tbody id="table-body">
-                <tr><td>Aguarde o carregamento...</td></tr>
-              </tbody>
+              <tbody id="tabelaAlunosCorpo" class="border-top-0"></tbody>
             </table>
           </div>
+          
+          <div class="card-footer bg-light text-end p-4 border-top">
+            <button onclick="salvarDiario()" class="btn btn-success px-4 py-2"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Alterações</button>
+          </div>
         </div>
+      </div>
 
+      <div id="interfaceCoordenador" class="d-none">
+        <div class="row g-4">
+          <div class="col-md-3">
+            <div class="list-group shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+              <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active border-0 py-3"><i class="fa-solid fa-chart-pie me-2 w-20px text-center"></i>Status Preenchimento</button>
+              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
+              <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            
+            <div id="coordAbaRelatorios" class="card p-4 bg-white">
+              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary"></i> Monitoramento de Preenchimento</h5>
+              <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
+              
+              <div class="mb-4">
+                <label class="form-label small fw-semibold text-muted text-uppercase">Selecione uma Turma para Auditar</label>
+                <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select form-select-lg fs-6"></select>
+              </div>
+              
+              <div class="table-responsive border rounded-3 mb-2">
+                <table class="table align-middle m-0 text-center border-0 table-auditavel">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="text-start py-3 text-secondary">Componente Curricular</th>
+                      <th class="py-3 text-secondary">1º Trimestre</th>
+                      <th class="py-3 text-secondary">2º Trimestre</th>
+                      <th class="py-3 text-secondary">3º Trimestre</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabelaRelatorioCorpo">
+                    <tr><td colspan="4" class="text-muted py-4">Selecione uma turma para carregar o mapa.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div id="cardDiarioCoord" class="card mt-4 bg-white overflow-hidden d-none border-primary border-top border-3">
+                <div class="card-header bg-light p-4 d-flex justify-content-between align-items-center">
+                  <div>
+                    <span class="badge bg-primary text-uppercase mb-1">Modo Supervisor</span>
+                    <h5 id="tituloDiarioCoord" class="m-0 fw-bold text-dark"></h5>
+                  </div>
+                  <button onclick="document.getElementById('cardDiarioCoord').classList.add('d-none')" class="btn btn-sm btn-secondary rounded-circle"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="table-responsive p-0">
+                  <table class="table table-hover align-middle m-0 text-nowrap">
+                    <thead class="table-light align-middle text-center" style="border-bottom: 2px solid #e2e8f0;">
+                      <tr>
+                        <th rowspan="2" width="5%" class="text-secondary pb-3">Nº</th>
+                        <th rowspan="2" width="35%" class="text-start text-secondary pb-3">Nome Completo do Estudante</th>
+                        <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+                        <th colspan="3" class="text-success border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+                        <th rowspan="2" width="10%" class="text-secondary pb-3">Ações</th>
+                      </tr>
+                      <tr>
+                        <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">1° TRIM</th>
+                        <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">2° TRIM</th>
+                        <th width="10%" class="pt-0 pb-2 text-muted small fw-semibold">3° TRIM</th>
+                        <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">1° TRIM</th>
+                        <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">2° TRIM</th>
+                        <th width="7%" class="pt-0 pb-2 text-muted small fw-semibold">3° TRIM</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabelaAlunosCorpoCoord" class="border-top-0"></tbody>
+                  </table>
+                </div>
+                <div class="card-footer bg-light text-end p-4 border-top">
+                  <button onclick="salvarDiarioCoord()" class="btn btn-primary px-4 py-2 shadow-sm"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar como Coordenador</button>
+                </div>
+              </div>
+
+            </div>
+
+            <div id="coordAbaAluno" class="card p-4 d-none bg-white">
+              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-user-plus text-success"></i> Cadastrar Novo Aluno na Matriz</h5>
+              <div class="mb-3">
+                <label class="form-label small fw-semibold text-muted text-uppercase">Turma do Aluno</label>
+                <select id="cadAlunoTurma" class="form-select form-select-lg fs-6"></select>
+              </div>
+              <div class="mb-4">
+                <label class="form-label small fw-semibold text-muted text-uppercase">Nome Completo do Estudante</label>
+                <input type="text" id="cadAlunoNome" class="form-control form-control-lg fs-6 text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
+              </div>
+              <button onclick="executarCadastroEstudante()" class="btn btn-success py-2"><i class="fa-solid fa-check me-2"></i>Inserir na Aba Alunos</button>
+            </div>
+
+            <div id="coordAbaProfessor" class="card p-4 d-none bg-white">
+              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-link text-dark"></i> Vincular Professor ao Diário</h5>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">Nome do Docente</label>
+                  <input type="text" id="cadProfNome" class="form-control form-control-lg fs-6" placeholder="Nome Completo">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">MASP</label>
+                  <input type="text" id="cadProfMasp" class="form-control form-control-lg fs-6" placeholder="Apenas números">
+                </div>
+              </div>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">Turma Vinculada</label>
+                  <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select form-select-lg fs-6"></select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">Atividade Complementar</label>
+                  <select id="cadProfDisciplina" class="form-select form-select-lg fs-6">
+                    <option value="">Selecione a turma...</option>
+                  </select>
+                </div>
+              </div>
+              <button onclick="executarCadastroProfessor()" class="btn btn-primary py-2"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Vínculo</button>
+            </div>
+
+          </div>
+        </div>
       </div>
 
     </div>
-
   </div>
 
   <script>
-    // URL DA API ATUALIZADA
-    const URL_API = "https://script.google.com/macros/s/AKfycbwH05ljgulHD7jF4VsyAZ27PYdSUdC7XBUSTP6wLtOzKMSnqw6687UckmVCoPGHsklG/exec";
+    // MANTENHA AQUI A SUA URL DA API DO GOOGLE APPS SCRIPT
+    const API_URL = "https://script.google.com/macros/s/AKfycbxN4htiF3u1GbrVY7CJyr6YLTFkpsxsLfsSVSx5BOH7MCN11GnNxiIvH4SMAu2vT9m1/exec"; 
 
-    // Altera os campos visíveis baseados na seleção (Professor/Coordenação)
-    function toggleLoginFields() {
-      const userType = document.getElementById('userType').value;
-      const groupMasp = document.getElementById('group-masp');
-      const groupUser = document.getElementById('group-username');
-      const groupPass = document.getElementById('group-password');
-
-      const inputMasp = document.getElementById('masp');
-      const inputUser = document.getElementById('username');
-      const inputPass = document.getElementById('password');
-
-      if (userType === "Professor") {
-        groupMasp.classList.remove('hidden');
-        groupUser.classList.add('hidden');
-        groupPass.classList.add('hidden');
-        
-        inputMasp.required = true;
-        inputUser.required = false;
-        inputPass.required = false;
-      } else {
-        groupMasp.classList.add('hidden');
-        groupUser.classList.remove('hidden');
-        groupPass.classList.remove('hidden');
-        
-        inputMasp.required = false;
-        inputUser.required = true;
-        inputPass.required = true;
-      }
+    function notificar(mensagem, sucesso = false, tituloAlternativo = null) {
+      Swal.fire({
+        title: tituloAlternativo ? tituloAlternativo : (sucesso ? 'Tudo certo!' : 'Atenção'),
+        text: message = mensagem,
+        icon: sucesso ? 'success' : 'warning',
+        confirmButtonColor: '#0d6efd',
+        confirmButtonText: 'OK',
+        customClass: { popup: 'rounded-4' }
+      });
     }
 
-    // Garante o estado inicial do formulário ao carregar a página
-    toggleLoginFields();
-
-    // Comunicação com o backend usando text/plain para evitar erros de CORS do Google
-    async function callApi(payload) {
+    async function chamarServidor(acao, parametros = {}) {
       try {
-        const response = await fetch(URL_API, {
+        const resposta = await fetch(API_URL, {
           method: "POST",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ acao: acao, parametros: parametros }),
+          headers: { "Content-Type": "text/plain;charset=utf-8" } 
         });
-        return await response.json();
-      } catch (error) {
-        console.error("Erro na API:", error);
-        throw new Error("Erro ao conectar ao servidor do Google. Verifique a URL ou sua internet.");
-      }
-    }
-
-    function showAlert(elementId, message, isSuccess = false) {
-      const el = document.getElementById(elementId);
-      el.textContent = message;
-      el.className = `alert ${isSuccess ? 'alert-success' : 'alert-error'}`;
-      el.classList.remove('hidden');
-    }
-
-    function hideAlert(elementId) {
-      document.getElementById(elementId).classList.add('hidden');
-    }
-
-    // ================= LOGIN =================
-    async function handleLogin(event) {
-      event.preventDefault();
-      hideAlert('login-alert');
-
-      const btn = document.getElementById('btn-login');
-      btn.disabled = true;
-      btn.textContent = "Verificando...";
-
-      const userType = document.getElementById('userType').value;
-      
-      let payload = {
-        action: "login",
-        userType: userType
-      };
-
-      if (userType === "Professor") {
-        payload.masp = document.getElementById('masp').value;
-      } else {
-        payload.username = document.getElementById('username').value;
-        payload.password = document.getElementById('password').value;
-      }
-
-      try {
-        const result = await callApi(payload);
-
-        if (result.success) {
-          document.getElementById('login-section').classList.add('hidden');
-          document.getElementById('dashboard-section').classList.remove('hidden');
-          
-          document.getElementById('display-user').textContent = userType === "Professor" ? payload.masp : payload.username;
-          document.getElementById('display-type').textContent = userType;
-
-          document.getElementById('password').value = "";
-          document.getElementById('masp').value = "";
-          
-          loadDashboardData();
-        } else {
-          showAlert('login-alert', result.message || "Dados de acesso incorretos.");
-        }
+        
+        if (!resposta.ok) throw new Error("Resposta com status inválido.");
+        return await resposta.json();
       } catch (erro) {
-        showAlert('login-alert', erro.message);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Entrar";
+        console.error("Falha na API:", erro);
+        return { sucesso: false, mensagem: "Erro de comunicação com o servidor." };
       }
+    }
+
+    let dadosUsuarioLogado = {};
+    let cacheAlunosAtuais = [];
+    let cacheAlunosCoord = [];
+    let disciplinaAuditadaAtual = "";
+
+    async function efetuarLogin(perfil) {
+      let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : document.getElementById("adminUser").value;
+      let senha = perfil === 'coordenador' ? document.getElementById("adminPass").value : null;
+
+      if(!usuario) { notificar("Por favor, preencha os dados de acesso.", false); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("autenticarLogin", { perfil: perfil, usuario: usuario, senha: senha });
+      exibirLoader(false);
+
+      if (res && res.sucesso) {
+        dadosUsuarioLogado = { papel: perfil, nome: res.nome, turmas: res.turmasVinculadas || {} };
+        
+        document.getElementById("telaLogin").classList.add("d-none");
+        document.getElementById("painelSistema").classList.remove("d-none");
+        document.getElementById("nomeUsuarioLogado").innerText = `Olá, ${res.nome} (${perfil.toUpperCase()})`;
+
+        if (perfil === 'professor') {
+          document.getElementById("interfaceProfessor").classList.remove("d-none");
+          document.getElementById("interfaceCoordenador").classList.add("d-none");
+          popularSelectTurmasProfessor();
+        } else {
+          document.getElementById("interfaceCoordenador").classList.remove("d-none");
+          document.getElementById("interfaceProfessor").classList.add("d-none");
+          exibirLoader(true);
+          let listaTurmas = await chamarServidor("getTurmas");
+          exibirLoader(false);
+          if(listaTurmas && Array.isArray(listaTurmas)) popularSelectsCoordenador(listaTurmas);
+        }
+      } else {
+        notificar(res ? res.mensagem : "Credenciais inválidas.", false, "Falha no Login");
+      }
+    }
+
+    function popularSelectTurmasProfessor() {
+      let select = document.getElementById("profTurma");
+      select.innerHTML = '<option value="">Selecione...</option>';
+      Object.keys(dadosUsuarioLogado.turmas).forEach(turma => {
+        select.innerHTML += `<option value="${turma}">${turma}</option>`;
+      });
+    }
+
+    function atualizarDisciplinasProfessor() {
+      let turmaSel = document.getElementById("profTurma").value;
+      let selectDisc = document.getElementById("profDisciplina");
+      selectDisc.innerHTML = '<option value="">Selecione...</option>';
+      
+      if (!turmaSel) return;
+      let disciplinas = dadosUsuarioLogado.turmas[turmaSel] || [];
+      disciplinas.forEach(d => {
+        selectDisc.innerHTML += `<option value="${d}">${d}</option>`;
+      });
+      document.getElementById("cardDiario").classList.add("d-none");
+      toggleFormAlunoProf(false);
+    }
+
+    async function carregarListaAlunos() {
+      let turma = document.getElementById("profTurma").value;
+      let disciplina = document.getElementById("profDisciplina").value;
+      if (!turma || !disciplina) return;
+
+      exibirLoader(true);
+      let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
+      exibirLoader(false);
+
+      if (lista && Array.isArray(lista)) {
+        lista.sort((a, b) => {
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
+          return a.taxado ? 1 : -1; 
+        });
+        
+        cacheAlunosAtuais = lista;
+        desenharTabelaDiario();
+        document.getElementById("tituloDiario").innerText = `Alunos Matriculados - ${disciplina}`;
+        document.getElementById("cardDiario").classList.remove("d-none");
+      }
+    }
+
+    function desenharTabelaDiario() {
+      let tbody = document.getElementById("tabelaAlunosCorpo");
+      tbody.innerHTML = "";
+
+      if(cacheAlunosAtuais.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        return;
+      }
+
+      cacheAlunosAtuais.forEach((aluno, i) => {
+        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let disabledInput = aluno.taxado ? 'disabled' : '';
+        
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary">${i + 1}</td>
+            <td class="fw-medium">${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center">
+              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function atualizarCacheNota(index, trimestre, valor) { cacheAlunosAtuais[index]['nota' + trimestre] = valor; }
+    function atualizarCacheCH(index, trimestre, checked) { cacheAlunosAtuais[index]['ch' + trimestre] = checked; }
+
+    async function salvarDiario() {
+      let turma = document.getElementById("profTurma").value;
+      let disciplina = document.getElementById("profDisciplina").value;
+      
+      exibirLoader(true);
+      let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosAtuais });
+      exibirLoader(false);
+      if(res) notificar(res.mensagem, res.sucesso);
+    }
+
+    async function alternarStatusEstudante(linha, statusTaxado) {
+      let turma = document.getElementById("profTurma").value;
+      exibirLoader(true);
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      exibirLoader(false);
+      if(res) { 
+        notificar(res.mensagem, res.sucesso); 
+        carregarListaAlunos(); 
+      }
+    }
+
+    function toggleFormAlunoProf(mostrar) {
+      let form = document.getElementById("formRapidoAlunoProf");
+      if(mostrar) form.classList.remove("d-none"); else form.classList.add("d-none");
+      document.getElementById("nomeAlunoProfInput").value = "";
+    }
+
+    async function executarCadastroEstudanteProf() {
+      let turma = document.getElementById("profTurma").value;
+      let nome = document.getElementById("nomeAlunoProfInput").value;
+      if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
+      exibirLoader(false);
+
+      if(res) {
+        notificar(res.mensagem, res.sucesso);
+        if(res.sucesso) {
+          toggleFormAlunoProf(false);
+          carregarListaAlunos(); 
+        }
+      }
+    }
+
+    // PROCEDIMENTOS DO COORDENADOR
+    function popularSelectsCoordenador(turmas) {
+      ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
+        let el = document.getElementById(id);
+        el.innerHTML = '<option value="">Selecione...</option>';
+        turmas.forEach(t => el.innerHTML += `<option value="${t}">${t}</option>`);
+      });
+    }
+
+    async function carregarRelatorioPreenchimento() {
+      let turma = document.getElementById("coordSelectTurma").value;
+      let tbody = document.getElementById("tabelaRelatorioCorpo");
+      document.getElementById("cardDiarioCoord").classList.add("d-none"); 
+      
+      if(!turma) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma.</td></tr>'; return; }
+
+      exibirLoader(true);
+      let dados = await chamarServidor("getStatusPreenchimento", { turma: turma });
+      exibirLoader(false);
+
+      if(dados && Array.isArray(dados)) {
+        tbody.innerHTML = "";
+        dados.forEach(linha => {
+          let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning text-dark" : "bg-danger");
+          tbody.innerHTML += `
+            <tr onclick="auditarDisciplina('${linha.disciplina}')">
+              <td class="fw-bold text-start text-dark">
+                <i class="fa-solid fa-magnifying-glass small text-primary me-2 opacity-75"></i>${linha.disciplina}
+              </td>
+              <td><span class="badge rounded-pill ${badgeColor(linha.t1)} px-3 py-2">${linha.t1}</span></td>
+              <td><span class="badge rounded-pill ${badgeColor(linha.t2)} px-3 py-2">${linha.t2}</span></td>
+              <td><span class="badge rounded-pill ${badgeColor(linha.t3)} px-3 py-2">${linha.t3}</span></td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    /* SISTEMA DE AUDITORIA DE DIÁRIO PARA A COORDENAÇÃO */
+    async function auditarDisciplina(disciplina) {
+      let turma = document.getElementById("coordSelectTurma").value;
+      if (!turma || !disciplina) return;
+      disciplinaAuditadaAtual = disciplina;
+
+      exibirLoader(true);
+      let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
+      exibirLoader(false);
+
+      if (lista && Array.isArray(lista)) {
+        lista.sort((a, b) => {
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
+          return a.taxado ? 1 : -1; 
+        });
+        
+        cacheAlunosCoord = lista;
+        desenharTabelaDiarioCoord();
+        document.getElementById("tituloDiarioCoord").innerText = `${disciplina} — Turma ${turma}`;
+        
+        let painelCoord = document.getElementById("cardDiarioCoord");
+        painelCoord.classList.remove("d-none");
+        painelCoord.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function desenharTabelaDiarioCoord() {
+      let tbody = document.getElementById("tabelaAlunosCorpoCoord");
+      tbody.innerHTML = "";
+
+      if(cacheAlunosCoord.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        return;
+      }
+
+      cacheAlunosCoord.forEach((aluno, i) => {
+        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let disabledInput = aluno.taxado ? 'disabled' : '';
+        
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary">${i + 1}</td>
+            <td class="fw-medium">${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
+            <td class="text-center">
+              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function atualizarCacheNotaCoord(index, trimestre, valor) { cacheAlunosCoord[index]['nota' + trimestre] = valor; }
+    function atualizarCacheCHCoord(index, trimestre, checked) { cacheAlunosCoord[index]['ch' + trimestre] = checked; }
+
+    async function salvarDiarioCoord() {
+      let turma = document.getElementById("coordSelectTurma").value;
+      let disciplina = disciplinaAuditadaAtual;
+      
+      exibirLoader(true);
+      let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosCoord });
+      exibirLoader(false);
+      if(res) {
+        notificar(res.mensagem, res.sucesso);
+        carregarRelatorioPreenchimento(); // Atualiza os badges de pendência automaticamente
+      }
+    }
+
+    async function alternarStatusEstudanteCoord(linha, statusTaxado) {
+      let turma = document.getElementById("coordSelectTurma").value;
+      exibirLoader(true);
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      exibirLoader(false);
+      if(res) { 
+        notificar(res.mensagem, res.sucesso); 
+        auditarDisciplina(disciplinaAuditadaAtual); 
+      }
+    }
+
+    async function carregarDisciplinasCadastroProf(turma) {
+      let select = document.getElementById("cadProfDisciplina");
+      select.innerHTML = '<option value="">Carregando...</option>';
+      if(!turma) return;
+      let disc = await chamarServidor("getDisciplinasTodas", { turma: turma });
+      if(disc && Array.isArray(disc)) {
+        select.innerHTML = '<option value="">Selecione...</option>';
+        disc.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
+      }
+    }
+
+    async function executarCadastroEstudante() {
+      let turma = document.getElementById("cadAlunoTurma").value;
+      let nome = document.getElementById("cadAlunoNome").value;
+      if(!turma || !nome) { notificar("Preencha todos os campos!", false); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
+      exibirLoader(false);
+      if(res) { 
+        notificar(res.mensagem, res.sucesso); 
+        if(res.sucesso) document.getElementById("cadAlunoNome").value = ""; 
+      }
+    }
+
+    async function executarCadastroProfessor() {
+      let t = document.getElementById("cadProfTurma").value;
+      let n = document.getElementById("cadProfNome").value;
+      let m = document.getElementById("cadProfMasp").value;
+      let d = document.getElementById("cadProfDisciplina").value;
+      if(!t || !n || !m || !d) { notificar("Preencha todos os campos!", false); return; }
+
+      exibirLoader(true);
+      let res = await chamarServidor("cadastrarProfessor", { turma: t, nomeProf: n, maspProf: m, disciplinaProf: d });
+      exibirLoader(false);
+      if(res) { 
+        notificar(res.mensagem, res.sucesso); 
+        if(res.sucesso) {
+          document.getElementById("cadProfNome").value = ""; 
+          document.getElementById("cadProfMasp").value = ""; 
+        }
+      }
+    }
+
+    function mudarAbaCoord(aba) {
+      ['relatorios', 'aluno', 'professor'].forEach(a => {
+        document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`).classList.add("d-none");
+        let btn = document.getElementById(`btn-menu-${a.substring(0,4)}`);
+        btn.classList.remove("active");
+        btn.classList.replace("text-white", "text-dark");
+      });
+      document.getElementById("cardDiarioCoord").classList.add("d-none");
+      document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`).classList.remove("d-none");
+      let activeBtn = document.getElementById(`btn-menu-${aba.substring(0,4)}`);
+      activeBtn.classList.add("active");
+      activeBtn.classList.add("text-white");
+    }
+
+    function exibirLoader(mostrar) {
+      let l = document.getElementById("loader");
+      if(mostrar) l.classList.remove("d-none"); else l.classList.add("d-none");
     }
 
     function logout() {
-      document.getElementById('dashboard-section').classList.add('hidden');
-      document.getElementById('login-section').classList.remove('hidden');
-      hideAlert('login-alert');
-      hideAlert('student-alert');
-      document.getElementById('login-form').reset();
-      toggleLoginFields();
-    }
-
-    // ================= CADASTRO DE ALUNOS =================
-    async function handleAddStudent(event) {
-      event.preventDefault();
-      hideAlert('student-alert');
-
-      const btn = document.getElementById('btn-student');
-      btn.disabled = true;
-      btn.textContent = "Enviando...";
-
-      const studentName = document.getElementById('studentName').value;
-      const turma = document.getElementById('turma').value;
-
-      try {
-        const result = await callApi({
-          action: "addStudent",
-          studentName: studentName,
-          turma: turma
-        });
-
-        if (result.success) {
-          showAlert('student-alert', result.message, true);
-          document.getElementById('student-form').reset();
-        } else {
-          showAlert('student-alert', result.message || "Erro ao inserir aluno.");
-        }
-      } catch (erro) {
-        showAlert('student-alert', erro.message);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Cadastrar Estudante";
-      }
-    }
-
-    // ================= CARREGAR DADOS DA PLANILHA =================
-    async function loadDashboardData() {
-      hideAlert('dashboard-alert');
-      const tableHeaders = document.getElementById('table-headers');
-      const tableBody = document.getElementById('table-body');
-      
-      tableBody.innerHTML = "<tr><td colspan='5'>Carregando dados...</td></tr>";
-
-      try {
-        const result = await callApi({ action: "getDashboard" });
-
-        if (result.success && result.data && result.data.length > 0) {
-          const dados = result.data;
-          const headers = dados[0];
-          tableHeaders.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
-
-          const linhas = dados.slice(1);
-          if (linhas.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="${headers.length}">Nenhum registro encontrado.</td></tr>`;
-          } else {
-            tableBody.innerHTML = linhas.map(row => {
-              return "<tr>" + row.map(cell => `<td>${cell !== "" ? cell : "-"}</td>`).join('') + "</tr>";
-            }).join('');
-          }
-        } else {
-          showAlert('dashboard-alert', result.message || "Não foi possível carregar os dados.");
-          tableBody.innerHTML = "<tr><td>Tabela vazia ou inacessível.</td></tr>";
-        }
-      } catch (erro) {
-        showAlert('dashboard-alert', erro.message);
-        tableBody.innerHTML = "<tr><td>Erro ao processar dados da tabela.</td></tr>";
-      }
+      dadosUsuarioLogado = {};
+      document.getElementById("painelSistema").classList.add("d-none");
+      document.getElementById("telaLogin").classList.remove("d-none");
+      document.getElementById("maspInput").value = "";
+      document.getElementById("adminPass").value = "";
     }
   </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
