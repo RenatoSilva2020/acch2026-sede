@@ -305,7 +305,7 @@
   </div>
 
   <script>
-    // NOVA URL DA API ENVIADA POR VOCÊ
+    // URL DA API ATUALIZADA
     const URL_API = "https://script.google.com/macros/s/AKfycbwH05ljgulHD7jF4VsyAZ27PYdSUdC7XBUSTP6wLtOzKMSnqw6687UckmVCoPGHsklG/exec";
 
     // Altera os campos visíveis baseados na seleção (Professor/Coordenação)
@@ -338,16 +338,16 @@
       }
     }
 
-    // Executa a função uma vez no início para garantir o estado inicial padrão (Professor)
+    // Garante o estado inicial do formulário ao carregar a página
     toggleLoginFields();
 
-    // Comunicação com o backend
+    // Comunicação com o backend usando text/plain para evitar erros de CORS do Google
     async function callApi(payload) {
       try {
         const response = await fetch(URL_API, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "text/plain;charset=utf-8"
           },
           body: JSON.stringify(payload)
         });
@@ -369,7 +369,7 @@
       document.getElementById(elementId).classList.add('hidden');
     }
 
-    // ================= LOGIN COM AS REGRAS CORRETAS =================
+    // ================= LOGIN =================
     async function handleLogin(event) {
       event.preventDefault();
       hideAlert('login-alert');
@@ -385,7 +385,6 @@
         userType: userType
       };
 
-      // Define os dados a enviar com base no tipo selecionado
       if (userType === "Professor") {
         payload.masp = document.getElementById('masp').value;
       } else {
@@ -400,11 +399,9 @@
           document.getElementById('login-section').classList.add('hidden');
           document.getElementById('dashboard-section').classList.remove('hidden');
           
-          // Exibe o MASP ou o Nome de Usuário na barra superior do painel
           document.getElementById('display-user').textContent = userType === "Professor" ? payload.masp : payload.username;
           document.getElementById('display-type').textContent = userType;
 
-          // Limpa as senhas informadas
           document.getElementById('password').value = "";
           document.getElementById('masp').value = "";
           
