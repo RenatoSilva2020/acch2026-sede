@@ -54,7 +54,7 @@
       background: rgba(255, 255, 255, 0.6); 
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 1050; /* Reduzido para ficar atrás dos alertas do SweetAlert (1060) */
+      z-index: 1050; 
       display: flex; justify-content: center; align-items: center;
     }
     .modern-loader { display: flex; gap: 8px; justify-content: center; }
@@ -88,7 +88,7 @@
           <i class="fa-solid fa-school fa-2x text-primary"></i>
         </span>
         <h3 class="fw-bold m-0">Portal - Atividades Complementares</h3>
-        <p class="text-muted small mt-1">Selecione seu perfil de acesso para continuar</p>
+        <p class="text-muted small mt-1">Selecione seu perfil de acesso para continuing</p>
       </div>
 
       <ul class="nav nav-pills nav-justified mb-4 bg-light p-1 rounded-3" id="loginTabs" role="tablist">
@@ -227,23 +227,31 @@
               <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary"></i> Monitoramento de Preenchimento</h5>
               <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
               
-              <!-- Painel Integrado com Seleção de Turma e Preenchimento Automático -->
+              <!-- Painel Integrado de Parametrização e Preenchimento Automático Dinâmico -->
               <div class="row g-3 mb-4 p-3 bg-light rounded-3 border">
-                <div class="col-md-4">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">1. Selecione a Turma</label>
-                  <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select form-select-lg fs-6"></select>
+                <div class="col-md-3">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">1. Turma</label>
+                  <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select"></select>
                 </div>
-                <div class="col-md-4">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">2. Trimestre Automático</label>
-                  <select id="coordSelectTrimestreAuto" class="form-select form-select-lg fs-6">
-                    <option value="">Escolha o trimestre...</option>
+                <div class="col-md-3">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">2. Trimestre</label>
+                  <select id="coordSelectTrimestreAuto" class="form-select">
+                    <option value="">Escolha...</option>
                     <option value="1">1º Trimestre</option>
                     <option value="2">2º Trimestre</option>
                     <option value="3">3º Trimestre</option>
                   </select>
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
-                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-warning text-dark w-100 py-2 fw-bold"><i class="fa-solid fa-wand-magic-sparkles me-2"></i>Preenchimento Rápido</button>
+                <div class="col-md-2">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">Nota Mín.</label>
+                  <input type="number" id="coordNotaMinAuto" class="form-control" step="0.5" min="0" max="100" value="18.0">
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">Nota Máx.</label>
+                  <input type="number" id="coordNotaMaxAuto" class="form-control" step="0.5" min="0" max="100" value="21.0">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-warning text-dark w-100 py-2 fw-bold" title="Preenchimento rápido em lote"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerar</button>
                 </div>
               </div>
               
@@ -348,13 +356,12 @@
   </div>
 
   <script>
-    // MANTENHA AQUI A SUA URL DA API DO GOOGLE APPS SCRIPT
     const API_URL = "https://script.google.com/macros/s/AKfycbxN4htiF3u1GbrVY7CJyr6YLTFkpsxsLfsSVSx5BOH7MCN11GnNxiIvH4SMAu2vT9m1/exec"; 
 
     function notificar(mensagem, sucesso = false, tituloAlternativo = null) {
       Swal.fire({
         title: tituloAlternativo ? tituloAlternativo : (sucesso ? 'Tudo certo!' : 'Atenção'),
-        text: message = mensagem,
+        text: mensagem,
         icon: sucesso ? 'success' : 'warning',
         confirmButtonColor: '#0d6efd',
         confirmButtonText: 'OK',
@@ -374,7 +381,7 @@
         return await resposta.json();
       } catch (erro) {
         console.error("Falha na API:", erro);
-        return { sucesso: false, mensagem: "Erro de comunicação com o servidor." };
+        return { sucesso: false, message: "Erro de comunicação com o servidor.", mensagem: "Erro de comunicação com o servidor." };
       }
     }
 
@@ -510,7 +517,7 @@
     async function alternarStatusEstudante(linha, statusTaxado) {
       let turma = document.getElementById("profTurma").value;
       exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, Earquivo: null, linhaPlanilha: inline = linha, excluir: !statusTaxado });
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
@@ -524,7 +531,7 @@
       document.getElementById("nomeAlunoProfInput").value = "";
     }
 
-    async function ejecutarCadastroEstudanteProf() {
+    async function executarCadastroEstudanteProf() {
       let turma = document.getElementById("profTurma").value;
       let nome = document.getElementById("nomeAlunoProfInput").value;
       if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
@@ -542,7 +549,6 @@
       }
     }
 
-    // PROCEDIMENTOS DO COORDENADOR
     function popularSelectsCoordenador(turmas) {
       ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
         let el = document.getElementById(id);
@@ -580,17 +586,21 @@
       }
     }
 
-    /* SISTEMA DE PREENCHIMENTO AUTOMÁTICO EM LOTE PARA A COORDENAÇÃO */
+    /* SISTEMA DE PREENCHIMENTO AUTOMÁTICO PARAMETRIZADO EM LOTE */
     async function executarPreenchimentoAutomatico() {
       let turma = document.getElementById("coordSelectTurma").value;
       let trimestre = document.getElementById("coordSelectTrimestreAuto").value;
+      let notaMin = parseFloat(document.getElementById("coordNotaMinAuto").value);
+      let notaMax = parseFloat(document.getElementById("coordNotaMaxAuto").value);
 
       if (!turma) { notificar("Por favor, selecione uma turma primeiro.", false); return; }
-      if (!trimestre) { notificar("Por favor, selecione o trimestre para o preenchimento automático.", false); return; }
+      if (!trimestre) { notificar("Por favor, selecione o trimestre para o preenchimento.", false); return; }
+      if (isNaN(notaMin) || isNaN(notaMax)) { notificar("Por favor, preencha as notas mínima e máxima.", false); return; }
+      if (notaMin > notaMax) { notificar("A nota mínima não pode ser maior que a nota máxima.", false); return; }
 
       Swal.fire({
-        title: 'Confirmar Preenchimento Rápido?',
-        text: `Esta ação vai preencher a carga horária e gerar notas aleatórias (de 18,0 a 21,0) para TODOS os alunos ativos em TODOS os diários da turma ${turma} no ${trimestre}º trimestre. Deseja prosseguir?`,
+        title: 'Confirmar Preenchimento Dinâmico?',
+        text: `Esta ação vai preencher a carga horária e gerar notas aleatórias (de ${notaMin.toFixed(1)} a ${notaMax.toFixed(1)}, múltiplos de 0.5) para TODOS os alunos ativos da turma ${turma} no ${trimestre}º trimestre. Deseja continuar?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#ffc107',
@@ -601,21 +611,25 @@
       }).then(async (result) => {
         if (result.isConfirmed) {
           exibirLoader(true);
-          let res = await chamarServidor("preencherAutomaticoTurma", { turma: turma, trimestre: trimestre });
+          let res = await chamarServidor("preencherAutomaticoTurma", { 
+            turma: turma, 
+            trimestre: trimestre,
+            notaMin: notaMin,
+            notaMax: notaMax
+          });
           exibirLoader(false);
           
           if(res) {
             notificar(res.mensagem, res.sucesso);
             if(res.sucesso) {
-              carregarRelatorioPreenchimento(); // Atualiza os badges na tela
-              document.getElementById("cardDiarioCoord").classList.add("d-none"); // Fecha auditoria aberta para evitar conflitos
+              carregarRelatorioPreenchimento(); 
+              document.getElementById("cardDiarioCoord").classList.add("d-none"); 
             }
           }
         }
       });
     }
 
-    /* SISTEMA DE AUDITORIA DE DIÁRIO PARA A COORDENAÇÃO */
     async function auditarDisciplina(disciplina) {
       let turma = document.getElementById("coordSelectTurma").value;
       if (!turma || !disciplina) return;
@@ -686,7 +700,7 @@
       exibirLoader(false);
       if(res) {
         notificar(res.mensagem, res.sucesso);
-        carregarRelatorioPreenchimento(); // Atualiza os badges de pendência automaticamente
+        carregarRelatorioPreenchimento(); 
       }
     }
 
@@ -712,7 +726,7 @@
       }
     }
 
-    async function executarCadastroEstudante() {
+    async function ejecutarCadastroEstudante() {
       let turma = document.getElementById("cadAlunoTurma").value;
       let nome = document.getElementById("cadAlunoNome").value;
       if(!turma || !nome) { notificar("Preencha todos os campos!", false); return; }
