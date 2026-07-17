@@ -227,9 +227,24 @@
               <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary"></i> Monitoramento de Preenchimento</h5>
               <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
               
-              <div class="mb-4">
-                <label class="form-label small fw-semibold text-muted text-uppercase">Selecione uma Turma para Auditar</label>
-                <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select form-select-lg fs-6"></select>
+              <!-- Painel Integrado com Seleção de Turma e Preenchimento Automático -->
+              <div class="row g-3 mb-4 p-3 bg-light rounded-3 border">
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">1. Selecione a Turma</label>
+                  <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select form-select-lg fs-6"></select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold text-muted text-uppercase">2. Trimestre Automático</label>
+                  <select id="coordSelectTrimestreAuto" class="form-select form-select-lg fs-6">
+                    <option value="">Escolha o trimestre...</option>
+                    <option value="1">1º Trimestre</option>
+                    <option value="2">2º Trimestre</option>
+                    <option value="3">3º Trimestre</option>
+                  </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-warning text-dark w-100 py-2 fw-bold"><i class="fa-solid fa-wand-magic-sparkles me-2"></i>Preenchimento Rápido</button>
+                </div>
               </div>
               
               <div class="table-responsive border rounded-3 mb-2">
@@ -495,7 +510,7 @@
     async function alternarStatusEstudante(linha, statusTaxado) {
       let turma = document.getElementById("profTurma").value;
       exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, Earquivo: null, linhaPlanilha: inline = linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
@@ -509,7 +524,7 @@
       document.getElementById("nomeAlunoProfInput").value = "";
     }
 
-    async function executarCadastroEstudanteProf() {
+    async function ejecutarCadastroEstudanteProf() {
       let turma = document.getElementById("profTurma").value;
       let nome = document.getElementById("nomeAlunoProfInput").value;
       if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
@@ -563,6 +578,41 @@
           `;
         });
       }
+    }
+
+    /* SISTEMA DE PREENCHIMENTO AUTOMÁTICO EM LOTE PARA A COORDENAÇÃO */
+    async function executarPreenchimentoAutomatico() {
+      let turma = document.getElementById("coordSelectTurma").value;
+      let trimestre = document.getElementById("coordSelectTrimestreAuto").value;
+
+      if (!turma) { notificar("Por favor, selecione uma turma primeiro.", false); return; }
+      if (!trimestre) { notificar("Por favor, selecione o trimestre para o preenchimento automático.", false); return; }
+
+      Swal.fire({
+        title: 'Confirmar Preenchimento Rápido?',
+        text: `Esta ação vai preencher a carga horária e gerar notas aleatórias (de 18,0 a 21,0) para TODOS os alunos ativos em TODOS os diários da turma ${turma} no ${trimestre}º trimestre. Deseja prosseguir?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ffc107',
+        cancelButtonColor: '#6e7881',
+        confirmButtonText: 'Sim, preencher!',
+        cancelButtonText: 'Cancelar',
+        customClass: { popup: 'rounded-4' }
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          exibirLoader(true);
+          let res = await chamarServidor("preencherAutomaticoTurma", { turma: turma, trimestre: trimestre });
+          exibirLoader(false);
+          
+          if(res) {
+            notificar(res.mensagem, res.sucesso);
+            if(res.sucesso) {
+              carregarRelatorioPreenchimento(); // Atualiza os badges na tela
+              document.getElementById("cardDiarioCoord").classList.add("d-none"); // Fecha auditoria aberta para evitar conflitos
+            }
+          }
+        }
+      });
     }
 
     /* SISTEMA DE AUDITORIA DE DIÁRIO PARA A COORDENAÇÃO */
