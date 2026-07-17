@@ -14,33 +14,129 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    /* Estilos Modernizados */
+    /* Esquema de Cores e Fontes Baseado no Print */
     body { 
-      background-color: #f0f2f5; 
-      font-family: 'Inter', system-ui, sans-serif; 
-      color: #334155;
+      background-color: #f4f6fa; 
+      font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+      color: #1e293b;
     }
     
+    /* Cartões Modernizados com Bordas Suaves */
     .card {
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
-      border: 1px solid rgba(255, 255, 255, 0.8) !important;
+      border-radius: 24px !important;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04) !important;
+      border: 1px solid #e2e8f0 !important;
+      background-color: #ffffff;
     }
     
-    .card-login { max-width: 450px; }
+    .card-login { 
+      max-width: 460px; 
+      padding: 40px 32px !important;
+    }
+    
+    /* Tipografia Fiel ao Print */
+    h3, .fw-bold { 
+      color: #0f172a !important; 
+      font-weight: 700 !important;
+      letter-spacing: -0.5px;
+    }
+    
+    .text-muted {
+      color: #64748b !important;
+      font-size: 0.95rem;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    /* Inputs Arredondados do Print */
+    .form-control, .form-select, .input-group-text { 
+      border-radius: 16px !important; 
+      border: 1px solid #e2e8f0 !important; 
+      background-color: #ffffff;
+      padding: 14px 18px;
+      font-size: 1rem;
+      color: #0f172a;
+      box-shadow: none !important;
+      transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus { 
+      border-color: #583ef2 !important; 
+      box-shadow: 0 0 0 4px rgba(88, 62, 242, 0.1) !important; 
+    }
+    
+    /* Ajuste para inputs com ícone lateral */
+    .input-group .form-control {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+    .input-group .input-group-text {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      background-color: #ffffff;
+      color: #94a3b8;
+    }
+    
+    /* Botões com o Gradiente Violeta/Purple do Print */
+    .btn-primary { 
+      background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important;
+      border: none !important;
+      border-radius: 16px !important;
+      font-weight: 600 !important;
+      font-size: 1rem;
+      padding: 14px 24px !important;
+      box-shadow: 0 10px 25px rgba(88, 62, 242, 0.25) !important;
+      transition: all 0.25s ease;
+    }
+    
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 14px 30px rgba(88, 62, 242, 0.35) !important;
+      opacity: 0.95;
+    }
+    
+    /* Padronização dos Demais Botões */
+    .btn { 
+      border-radius: 16px !important; 
+      font-weight: 600; 
+      padding: 12px 20px;
+      transition: all 0.2s; 
+    }
+    .btn:hover { transform: translateY(-2px); }
+    
+    .btn-dark { background-color: #0f172a !important; border: none !important; }
+    .btn-success { background-color: #10b981 !important; border: none !important; }
+    .btn-secondary { background-color: #64748b !important; border: none !important; }
+    
+    /* Abas de Seleção de Perfil (Nav Pills) */
+    .nav-pills {
+      background-color: #f1f5f9 !important;
+      border-radius: 16px;
+      padding: 6px !important;
+    }
+    
+    .nav-pills .nav-link { 
+      border-radius: 12px !important; 
+      font-weight: 600; 
+      color: #64748b !important;
+      padding: 10px 20px;
+      transition: all 0.2s;
+    }
+    
+    .nav-pills .nav-link.active { 
+      background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important;
+      color: #ffffff !important; 
+      box-shadow: 0 4px 12px rgba(88, 62, 242, 0.15);
+    }
     
     .navbar-brand { font-weight: 700; letter-spacing: -0.5px; }
-    
-    /* Ajuste da cor da fonte das abas */
-    .nav-pills .nav-link { border-radius: 10px; font-weight: 500; transition: all 0.2s; color: #64748b; }
-    .nav-pills .nav-link.active { color: #ffffff !important; }
-    
-    .btn { border-radius: 10px; font-weight: 600; transition: all 0.2s; }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    
-    .form-control, .form-select { border-radius: 10px; border: 1px solid #cbd5e1; box-shadow: none !important; }
-    .form-control:focus, .form-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.15) !important; }
-
     .text-taxado { text-decoration: line-through; color: #94a3b8 !important; opacity: 0.65; }
     .text-taxado input { background-color: #e2e8f0 !important; pointer-events: none; }
     
@@ -48,10 +144,10 @@
     .table-auditavel tbody tr { cursor: pointer; transition: background-color 0.15s ease-in-out; }
     .table-auditavel tbody tr:hover { background-color: #f8fafc !important; }
 
-    /* Loader Moderno com Efeito Glassmorphism e Z-Index corrigido */
+    /* Loader Moderno com Efeito Glassmorphism */
     #loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.6); 
+      background: rgba(244, 246, 2fa, 0.7); 
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 1050; 
@@ -59,11 +155,11 @@
     }
     .modern-loader { display: flex; gap: 8px; justify-content: center; }
     .modern-loader div {
-      width: 14px; height: 14px; background-color: #0d6efd; border-radius: 50%;
+      width: 14px; height: 14px; background-color: #583ef2; border-radius: 50%;
       animation: bounce 0.5s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
     }
-    .modern-loader div:nth-child(2) { animation-delay: 0.15s; background-color: #3b82f6;}
-    .modern-loader div:nth-child(3) { animation-delay: 0.3s; background-color: #60a5fa;}
+    .modern-loader div:nth-child(2) { animation-delay: 0.15s; background-color: #7c3aed;}
+    .modern-loader div:nth-child(3) { animation-delay: 0.3s; background-color: #a124f1;}
     @keyframes bounce {
       from { transform: translateY(0); }
       to { transform: translateY(-12px); }
@@ -77,19 +173,19 @@
       <div class="modern-loader mb-3">
         <div></div><div></div><div></div>
       </div>
-      <p class="mt-2 mb-0 fw-bold text-primary" style="letter-spacing: 1px;">SINCRONIZANDO</p>
+      <p class="mt-2 mb-0 fw-bold text-primary" style="letter-spacing: 1px; color: #583ef2 !important;">SINCRONIZANDO</p>
     </div>
   </div>
 
   <div id="telaLogin" class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card card-login w-100 p-4 bg-white">
+    <div class="card card-login w-100 bg-white">
       <div class="text-center mb-4">
-        <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" class="mb-3" style="max-height: 80px; object-fit: contain;">
-        <h3 class="fw-bold m-0">Portal - Atividades Complementares</h3>
-        <p class="text-muted small mt-1">Selecione seu perfil de acesso para continuing</p>
+        <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" class="mb-3" style="max-height: 90px; object-fit: contain;">
+        <h3 class="fw-bold m-0">Portal Escolar</h3>
+        <p class="text-muted small mt-2">Selecione seu perfil de acesso para continuar</p>
       </div>
 
-      <ul class="nav nav-pills nav-justified mb-4 bg-light p-1 rounded-3" id="loginTabs" role="tablist">
+      <ul class="nav nav-pills nav-justified mb-4" id="loginTabs" role="tablist">
         <li class="nav-item">
           <button class="nav-link active" id="tab-prof-btn" data-bs-toggle="pill" data-bs-target="#loginProf" type="button">
             <i class="fa-solid fa-chalkboard-user me-2"></i>Professor
@@ -105,25 +201,25 @@
       <div class="tab-content" id="loginTabsContent">
         <div class="tab-pane fade show active" id="loginProf">
           <div class="mb-4">
-            <label class="form-label fw-semibold text-secondary small text-uppercase">Número de MASP</label>
+            <label class="form-label">Número de MASP</label>
             <div class="input-group">
-              <span class="input-group-text bg-white text-muted border-end-0"><i class="fa-solid fa-id-card"></i></span>
+              <span class="input-group-text border-end-0"><i class="fa-solid fa-id-card"></i></span>
               <input type="text" id="maspInput" class="form-control border-start-0 ps-0" placeholder="Apenas números">
             </div>
           </div>
-          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100 py-2 pt-3 pb-3 shadow-sm">Acessar Portal</button>
+          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100">Acessar Portal <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
 
         <div class="tab-pane fade" id="loginCoord">
           <div class="mb-3">
-            <label class="form-label fw-semibold text-secondary small text-uppercase">Usuário</label>
+            <label class="form-label">Usuário</label>
             <input type="text" id="adminUser" class="form-control" placeholder="nome de usuário">
           </div>
           <div class="mb-4">
-            <label class="form-label fw-semibold text-secondary small text-uppercase">Senha de Acesso</label>
+            <label class="form-label">Senha de Acesso</label>
             <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
           </div>
-          <button onclick="efetuarLogin('coordenador')" class="btn btn-dark w-100 py-2 pt-3 pb-3 shadow-sm">Entrar como Coordenador</button>
+          <button onclick="efetuarLogin('coordenador')" class="btn btn-primary w-100">Entrar como Coordenador <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
       </div>
     </div>
@@ -131,14 +227,14 @@
 
   <div id="painelSistema" class="d-none">
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-      <div class="container py-1">
+      <div class="container py-2">
         <a class="navbar-brand d-flex align-items-center gap-2" href="#">
           <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" style="max-height: 35px; object-fit: contain;">
           DIÁRIO CLOUD
         </a>
         <div class="d-flex align-items-center gap-3">
           <span id="nomeUsuarioLogado" class="text-white small fw-medium opacity-75"></span>
-          <button onclick="logout()" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</button>
+          <button onclick="logout()" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fs-7"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</button>
         </div>
       </div>
     </nav>
@@ -147,15 +243,15 @@
       
       <div id="interfaceProfessor" class="d-none">
         <div class="card p-4 mb-4 bg-white">
-          <h5 class="fw-bold mb-3 d-flex align-items-center gap-2"><i class="fa-solid fa-filter text-primary"></i> Selecione o Diário de Classe</h5>
+          <h5 class="fw-bold mb-3 d-flex align-items-center gap-2"><i class="fa-solid fa-filter text-primary" style="color: #583ef2 !important;"></i> Selecione o Diário de Classe</h5>
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label small fw-semibold text-muted text-uppercase">Turma</label>
-              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select form-select-lg fs-6"></select>
+              <label class="form-label">Turma</label>
+              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select"></select>
             </div>
             <div class="col-md-6">
-              <label class="form-label small fw-semibold text-muted text-uppercase">Disciplina / Aba</label>
-              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select form-select-lg fs-6">
+              <label class="form-label">Disciplina / Aba</label>
+              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select">
                 <option value="">Selecione a turma primeiro...</option>
               </select>
             </div>
@@ -186,7 +282,7 @@
                 <tr>
                   <th rowspan="2" width="5%" class="text-secondary pb-3">Nº</th>
                   <th rowspan="2" width="35%" class="text-start text-secondary pb-3">Nome Completo do Estudante</th>
-                  <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+                  <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3" style="color: #583ef2 !important;"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
                   <th colspan="3" class="text-success border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
                   <th rowspan="2" width="10%" class="text-secondary pb-3">Ações</th>
                 </tr>
@@ -212,27 +308,26 @@
       <div id="interfaceCoordenador" class="d-none">
         <div class="row g-4">
           <div class="col-md-3">
-            <div class="list-group shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+            <div class="list-group shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
               <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active border-0 py-3"><i class="fa-solid fa-chart-pie me-2 w-20px text-center"></i>Status Preenchimento</button>
-              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
-              <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
+              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
+              <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
             </div>
           </div>
 
           <div class="col-md-9">
             
             <div id="coordAbaRelatorios" class="card p-4 bg-white">
-              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary"></i> Monitoramento de Preenchimento</h5>
-              <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar and preencher os dados.</p>
+              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary" style="color: #583ef2 !important;"></i> Monitoramento de Preenchimento</h5>
+              <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
               
-              <!-- Painel Integrado de Parametrização e Preenchimento Automático Dinâmico -->
-              <div class="row g-3 mb-4 p-3 bg-light rounded-3 border">
+              <div class="row g-3 mb-4 p-3 bg-light rounded-4 border">
                 <div class="col-md-3">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">1. Turma</label>
+                  <label class="form-label">1. Turma</label>
                   <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select"></select>
                 </div>
                 <div class="col-md-3">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">2. Trimestre</label>
+                  <label class="form-label">2. Trimestre</label>
                   <select id="coordSelectTrimestreAuto" class="form-select">
                     <option value="">Escolha...</option>
                     <option value="1">1º Trimestre</option>
@@ -241,19 +336,19 @@
                   </select>
                 </div>
                 <div class="col-md-2">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">Nota Mín.</label>
+                  <label class="form-label">Nota Mín.</label>
                   <input type="number" id="coordNotaMinAuto" class="form-control" step="0.5" min="0" max="100" value="18.0">
                 </div>
                 <div class="col-md-2">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">Nota Máx.</label>
+                  <label class="form-label">Nota Máx.</label>
                   <input type="number" id="coordNotaMaxAuto" class="form-control" step="0.5" min="0" max="100" value="21.0">
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-warning text-dark w-100 py-2 fw-bold" title="Preenchimento rápido em lote"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerar</button>
+                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-warning text-dark w-100 py-2 fw-bold" style="border-radius:16px !important;" title="Preenchimento rápido em lote"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerar</button>
                 </div>
               </div>
               
-              <div class="table-responsive border rounded-3 mb-2">
+              <div class="table-responsive border rounded-4 mb-2">
                 <table class="table align-middle m-0 text-center border-0 table-auditavel">
                   <thead class="table-light">
                     <tr>
@@ -269,13 +364,13 @@
                 </table>
               </div>
 
-              <div id="cardDiarioCoord" class="card mt-4 bg-white overflow-hidden d-none border-primary border-top border-3">
+              <div id="cardDiarioCoord" class="card mt-4 bg-white overflow-hidden d-none border-primary border-top border-3" style="border-top-color: #583ef2 !important;">
                 <div class="card-header bg-light p-4 d-flex justify-content-between align-items-center">
                   <div>
-                    <span class="badge bg-primary text-uppercase mb-1">Modo Supervisor</span>
+                    <span class="badge bg-primary text-uppercase mb-1" style="background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important;">Modo Supervisor</span>
                     <h5 id="tituloDiarioCoord" class="m-0 fw-bold text-dark"></h5>
                   </div>
-                  <button onclick="document.getElementById('cardDiarioCoord').classList.add('d-none')" class="btn btn-sm btn-secondary rounded-circle"><i class="fa-solid fa-xmark"></i></button>
+                  <button onclick="document.getElementById('cardDiarioCoord').classList.add('d-none')" class="btn btn-sm btn-secondary rounded-circle" style="padding: 5px 10px !important;"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="table-responsive p-0">
                   <table class="table table-hover align-middle m-0 text-nowrap">
@@ -283,7 +378,7 @@
                       <tr>
                         <th rowspan="2" width="5%" class="text-secondary pb-3">Nº</th>
                         <th rowspan="2" width="35%" class="text-start text-secondary pb-3">Nome Completo do Estudante</th>
-                        <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+                        <th colspan="3" class="text-primary border-bottom-0 pb-1 pt-3" style="color: #583ef2 !important;"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
                         <th colspan="3" class="text-success border-bottom-0 pb-1 pt-3"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
                         <th rowspan="2" width="10%" class="text-secondary pb-3">Ações</th>
                       </tr>
@@ -309,12 +404,12 @@
             <div id="coordAbaAluno" class="card p-4 d-none bg-white">
               <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-user-plus text-success"></i> Cadastrar Novo Aluno na Matriz</h5>
               <div class="mb-3">
-                <label class="form-label small fw-semibold text-muted text-uppercase">Turma do Aluno</label>
-                <select id="cadAlunoTurma" class="form-select form-select-lg fs-6"></select>
+                <label class="form-label">Turma do Aluno</label>
+                <select id="cadAlunoTurma" class="form-select"></select>
               </div>
               <div class="mb-4">
-                <label class="form-label small fw-semibold text-muted text-uppercase">Nome Completo do Estudante</label>
-                <input type="text" id="cadAlunoNome" class="form-control form-control-lg fs-6 text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
+                <label class="form-label">Nome Completo do Estudante</label>
+                <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
               </div>
               <button onclick="executarCadastroEstudante()" class="btn btn-success py-2"><i class="fa-solid fa-check me-2"></i>Inserir na Aba Alunos</button>
             </div>
@@ -323,22 +418,22 @@
               <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-link text-dark"></i> Vincular Professor ao Diário</h5>
               <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">Nome do Docente</label>
-                  <input type="text" id="cadProfNome" class="form-control form-control-lg fs-6" placeholder="Nome Completo">
+                  <label class="form-label">Nome do Docente</label>
+                  <input type="text" id="cadProfNome" class="form-control" placeholder="Nome Completo">
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">MASP</label>
-                  <input type="text" id="cadProfMasp" class="form-control form-control-lg fs-6" placeholder="Apenas números">
+                  <label class="form-label">MASP</label>
+                  <input type="text" id="cadProfMasp" class="form-control" placeholder="Apenas números">
                 </div>
               </div>
               <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">Turma Vinculada</label>
-                  <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select form-select-lg fs-6"></select>
+                  <label class="form-label">Turma Vinculada</label>
+                  <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select"></select>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label small fw-semibold text-muted text-uppercase">Atividade Complementar</label>
-                  <select id="cadProfDisciplina" class="form-select form-select-lg fs-6">
+                  <label class="form-label">Atividade Complementar</label>
+                  <select id="cadProfDisciplina" class="form-select">
                     <option value="">Selecione a turma...</option>
                   </select>
                 </div>
@@ -359,9 +454,9 @@
     function notificar(mensagem, sucesso = false, tituloAlternativo = null) {
       Swal.fire({
         title: tituloAlternativo ? tituloAlternativo : (sucesso ? 'Tudo certo!' : 'Atenção'),
-        text: mensagem,
+        text: message = mensagem,
         icon: sucesso ? 'success' : 'warning',
-        confirmButtonColor: '#0d6efd',
+        confirmButtonColor: '#583ef2',
         confirmButtonText: 'OK',
         customClass: { popup: 'rounded-4' }
       });
@@ -483,14 +578,14 @@
           <tr ${classeLinha}>
             <td class="text-center fw-bold text-secondary">${i + 1}</td>
             <td class="fw-medium">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
             <td class="text-center">
-              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3">
+              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3" style="border-radius: 10px !important; padding: 6px 12px !important;">
                 ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
               </button>
             </td>
@@ -529,7 +624,7 @@
       document.getElementById("nomeAlunoProfInput").value = "";
     }
 
-    async function executarCadastroEstudanteProf() {
+    async function ejecutarCadastroEstudanteProf() {
       let turma = document.getElementById("profTurma").value;
       let nome = document.getElementById("nomeAlunoProfInput").value;
       if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
@@ -572,8 +667,8 @@
           let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning text-dark" : "bg-danger");
           tbody.innerHTML += `
             <tr onclick="auditarDisciplina('${linha.disciplina}')">
-              <td class="fw-bold text-start text-dark">
-                <i class="fa-solid fa-magnifying-glass small text-primary me-2 opacity-75"></i>${linha.disciplina}
+              <td class="fw-bold text-start text-dark py-3">
+                <i class="fa-solid fa-magnifying-glass small text-primary me-2 opacity-75" style="color: #583ef2 !important;"></i>${linha.disciplina}
               </td>
               <td><span class="badge rounded-pill ${badgeColor(linha.t1)} px-3 py-2">${linha.t1}</span></td>
               <td><span class="badge rounded-pill ${badgeColor(linha.t2)} px-3 py-2">${linha.t2}</span></td>
@@ -584,7 +679,6 @@
       }
     }
 
-    /* SISTEMA DE PREENCHIMENTO AUTOMÁTICO PARAMETRIZADO EM LOTE */
     async function executarPreenchimentoAutomatico() {
       let turma = document.getElementById("coordSelectTurma").value;
       let trimestre = document.getElementById("coordSelectTrimestreAuto").value;
@@ -601,7 +695,7 @@
         text: `Esta ação vai preencher a carga horária e gerar notas aleatórias (de ${notaMin.toFixed(1)} a ${notaMax.toFixed(1)}, múltiplos de 0.5) para TODOS os alunos ativos da turma ${turma} no ${trimestre}º trimestre. Deseja continuar?`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#ffc107',
+        confirmButtonColor: '#583ef2',
         cancelButtonColor: '#6e7881',
         confirmButtonText: 'Sim, preencher!',
         cancelButtonText: 'Cancelar',
@@ -653,7 +747,7 @@
       }
     }
 
-    function desenhoTabelaDiarioCoord() {
+    function desenharTabelaDiarioCoord() {
       let tbody = document.getElementById("tabelaAlunosCorpoCoord");
       tbody.innerHTML = "";
 
@@ -670,14 +764,14 @@
           <tr ${classeLinha}>
             <td class="text-center fw-bold text-secondary">${i + 1}</td>
             <td class="fw-medium">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-2" style="transform: scale(1.2);"></td>
             <td class="text-center">
-              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3">
+              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small rounded-3" style="border-radius: 10px !important; padding: 6px 12px !important;">
                 ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
               </button>
             </td>
@@ -762,13 +856,13 @@
         document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`).classList.add("d-none");
         let btn = document.getElementById(`btn-menu-${a.substring(0,4)}`);
         btn.classList.remove("active");
-        btn.classList.replace("text-white", "text-dark");
+        btn.classList.add("text-dark");
       });
       document.getElementById("cardDiarioCoord").classList.add("d-none");
       document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`).classList.remove("d-none");
       let activeBtn = document.getElementById(`btn-menu-${aba.substring(0,4)}`);
       activeBtn.classList.add("active");
-      activeBtn.classList.add("text-white");
+      activeBtn.classList.remove("text-dark");
     }
 
     function exibirLoader(mostrar) {
