@@ -277,7 +277,7 @@
         <div class="tab-pane fade" id="loginCoord">
           <div class="mb-4">
             <label class="form-label">Senha de Acesso</label>
-            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
+            <input type="password" id="adminPass" class="form-control" placeholder="Digite a senha de acesso">
           </div>
           <button onclick="efetuarLogin('coordenador')" class="btn btn-primary w-100">Entrar como Coordenador <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
@@ -547,7 +547,7 @@
         }
       } else if (tipo === 'coordenador') {
         const pass = document.getElementById('adminPass').value;
-        if (pass === '123') { 
+        if (pass === 'portomario26') { 
           perfilAtual = 'coordenador';
           usuarioAtual = 'Coordenação';
           prepararInterfaceAdmin();
