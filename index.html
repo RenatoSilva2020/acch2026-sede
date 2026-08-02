@@ -161,17 +161,17 @@
       box-shadow: none !important;
     }
     
-    /* Cores exatas do print enviado */
+    /* Cores suavizadas para Concluído, Pendente e Parcial */
     .bg-success { 
-      background-color: #137e54 !important; 
+      background-color: #1fa76d !important; 
       color: #ffffff !important; 
     }
     .bg-danger { 
-      background-color: #ce2d3a !important; 
+      background-color: #e04856 !important; 
       color: #ffffff !important; 
     }
     .bg-warning { 
-      background-color: #f59e0b !important; 
+      background-color: #f5a623 !important; 
       color: #ffffff !important; 
     }
 
@@ -649,9 +649,9 @@
           <tr ${classeLinha}>
             <td class="text-center fw-bold text-secondary">${i + 1}</td>
             <td class="fw-bold text-dark">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota1 !== '' ? Number(aluno.nota1).toFixed(1) : ''}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2 !== '' ? Number(aluno.nota2).toFixed(1) : ''}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3 !== '' ? Number(aluno.nota3).toFixed(1) : ''}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
@@ -836,9 +836,9 @@
           <tr ${classeLinha}>
             <td class="text-center fw-bold text-secondary">${i + 1}</td>
             <td class="fw-bold text-dark">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota1 !== '' ? Number(aluno.nota1).toFixed(1) : ''}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2 !== '' ? Number(aluno.nota2).toFixed(1) : ''}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3 !== '' ? Number(aluno.nota3).toFixed(1) : ''}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
