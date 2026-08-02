@@ -83,7 +83,7 @@
       color: #94a3b8;
     }
     
-    /* Botões Baseados no Print Principal */
+    /* Botões Baseados no Visual Moderno */
     .btn { 
       border-radius: 14px !important; 
       font-weight: 600; 
@@ -96,17 +96,18 @@
       background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important;
       border: none !important;
       box-shadow: 0 8px 20px rgba(88, 62, 242, 0.2) !important;
+      color: #ffffff !important;
     }
     .btn-primary:hover {
       box-shadow: 0 12px 24px rgba(88, 62, 242, 0.3) !important;
       opacity: 0.95;
     }
     
-    .btn-dark { background-color: #0f172a !important; border: none !important; }
-    .btn-success { background-color: #10b981 !important; border: none !important; }
-    .btn-secondary { background-color: #64748b !important; border: none !important; }
+    .btn-dark { background-color: #0f172a !important; border: none !important; color: #fff !important; }
+    .btn-success { background-color: #10b981 !important; border: none !important; color: #fff !important; }
+    .btn-secondary { background-color: #64748b !important; border: none !important; color: #fff !important; }
     
-    /* Tabelas Limpas e Idênticas ao Novo Print */
+    /* Tabelas Limpas */
     .table-container-modern {
       border: 1px solid #e2e8f0;
       border-radius: 16px;
@@ -148,7 +149,7 @@
       background-color: #f8fafc !important; 
     }
     
-    /* Pílulas de Status Baseadas no Segundo Print */
+    /* Badges de Status */
     .badge {
       font-size: 0.8rem !important;
       font-weight: 600 !important;
@@ -161,21 +162,10 @@
       box-shadow: none !important;
     }
     
-    /* Cores exatas do print enviado */
-    .bg-success { 
-      background-color: #137e54 !important; 
-      color: #ffffff !important; 
-    }
-    .bg-danger { 
-      background-color: #ce2d3a !important; 
-      color: #ffffff !important; 
-    }
-    .bg-warning { 
-      background-color: #f59e0b !important; 
-      color: #ffffff !important; 
-    }
+    .bg-success { background-color: #137e54 !important; color: #ffffff !important; }
+    .bg-danger { background-color: #ce2d3a !important; color: #ffffff !important; }
+    .bg-warning { background-color: #f59e0b !important; color: #ffffff !important; }
 
-    /* Ícone de Lupa Customizado do Print */
     .icon-lupa-print {
       color: #7c3aed !important;
       font-size: 0.85rem;
@@ -208,7 +198,7 @@
     /* Loader */
     #loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(244, 246, 2fa, 0.7); 
+      background: rgba(244, 246, 250, 0.7); 
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 1050; 
@@ -260,6 +250,7 @@
       </ul>
 
       <div class="tab-content" id="loginTabsContent">
+        <!-- TAB PROFESSOR -->
         <div class="tab-pane fade show active" id="loginProf">
           <div class="mb-4">
             <label class="form-label">Número de MASP</label>
@@ -271,11 +262,8 @@
           <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100">Acessar Portal <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
 
+        <!-- TAB COORDENAÇÃO (SEM CAMPO DE USUÁRIO - APENAS SENHA) -->
         <div class="tab-pane fade" id="loginCoord">
-          <div class="mb-3">
-            <label class="form-label">Usuário</label>
-            <input type="text" id="adminUser" class="form-control" placeholder="nome de usuário">
-          </div>
           <div class="mb-4">
             <label class="form-label">Senha de Acesso</label>
             <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
@@ -302,6 +290,7 @@
 
     <div class="container my-4">
       
+      <!-- INTERFACE PROFESSOR -->
       <div id="interfaceProfessor" class="d-none">
         <div class="card p-4 mb-4 bg-white">
           <h5 class="fw-bold mb-3 d-flex align-items-center gap-2"><i class="fa-solid fa-filter text-primary" style="color: #583ef2 !important;"></i> Selecione o Diário de Classe</h5>
@@ -366,11 +355,14 @@
         </div>
       </div>
 
+      <!-- INTERFACE COORDENADOR -->
       <div id="interfaceCoordenador" class="d-none">
         <div class="row g-4">
+          <!-- MENU LATERAL COM ABAS SEPARADAS PARA MONITORAMENTO E PREENCHIMENTO AUTOMÁTICO -->
           <div class="col-md-3">
             <div class="list-group shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
               <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active border-0 py-3"><i class="fa-solid fa-chart-pie me-2 w-20px text-center"></i>Status Preenchimento</button>
+              <button onclick="mudarAbaCoord('preenchimento')" id="btn-menu-pree" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-wand-magic-sparkles me-2 w-20px text-center"></i>Preenchimento Automático</button>
               <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
               <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
             </div>
@@ -378,34 +370,15 @@
 
           <div class="col-md-9">
             
+            <!-- ABA 1: MONITORAMENTO DE PREENCHIMENTO -->
             <div id="coordAbaRelatorios" class="card p-4 bg-white">
               <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary" style="color: #583ef2 !important;"></i> Monitoramento de Preenchimento</h5>
               <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
               
               <div class="row g-3 mb-4 p-3 bg-light rounded-4 border">
-                <div class="col-md-3">
-                  <label class="form-label">1. Turma</label>
+                <div class="col-md-12">
+                  <label class="form-label">Selecione a Turma</label>
                   <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select"></select>
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">2. Trimestre</label>
-                  <select id="coordSelectTrimestreAuto" class="form-select">
-                    <option value="">Escolha...</option>
-                    <option value="1">1º Trimestre</option>
-                    <option value="2">2º Trimestre</option>
-                    <option value="3">3º Trimestre</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <label class="form-label">Nota Mín.</label>
-                  <input type="number" id="coordNotaMinAuto" class="form-control" step="0.5" min="0" max="100" value="18.0">
-                </div>
-                <div class="col-md-2">
-                  <label class="form-label">Nota Máx.</label>
-                  <input type="number" id="coordNotaMaxAuto" class="form-control" step="0.5" min="0" max="100" value="21.0">
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-warning text-dark w-100 py-2 fw-bold" style="border-radius:14px !important;" title="Preenchimento rápido em lote"><i class="fa-solid fa-wand-magic-sparkles"></i> Gerar</button>
                 </div>
               </div>
               
@@ -425,6 +398,7 @@
                 </table>
               </div>
 
+              <!-- MODO SUPERVISOR / DIÁRIO AUDITADO -->
               <div id="cardDiarioCoord" class="card mt-4 bg-white overflow-hidden d-none border-primary border-top border-3" style="border-top-color: #583ef2 !important;">
                 <div class="card-header bg-light p-4 d-flex justify-content-between align-items-center">
                   <div>
@@ -459,9 +433,45 @@
                   <button onclick="salvarDiarioCoord()" class="btn btn-primary px-4 py-2 shadow-sm"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar como Coordenador</button>
                 </div>
               </div>
-
             </div>
 
+            <!-- ABA 2: PREENCHIMENTO AUTOMÁTICO SEPARADO -->
+            <div id="coordAbaPreenchimento" class="card p-4 d-none bg-white">
+              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-primary" style="color: #583ef2 !important;"></i> Preenchimento Automático em Lote</h5>
+              <p class="text-muted small mb-4">Gere notas e frequência automaticamente para todos os alunos de uma turma em um trimestre específico.</p>
+              
+              <div class="p-4 bg-light rounded-4 border mb-4">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">1. Selecione a Turma</label>
+                    <select id="coordSelectTurmaAuto" class="form-select"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">2. Trimestre de Destino</label>
+                    <select id="coordSelectTrimestreAuto" class="form-select">
+                      <option value="1">1º Trimestre</option>
+                      <option value="2">2º Trimestre</option>
+                      <option value="3">3º Trimestre</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Nota Mínima</label>
+                    <input type="number" id="coordNotaMinAuto" class="form-control" step="0.5" min="0" max="100" value="18.0">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Nota Máxima</label>
+                    <input type="number" id="coordNotaMaxAuto" class="form-control" step="0.5" min="0" max="100" value="21.0">
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-primary w-100 py-3 fw-bold shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Executar Preenchimento em Lote
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ABA 3: CADASTRAR ALUNO -->
             <div id="coordAbaAluno" class="card p-4 d-none bg-white">
               <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-user-plus text-success"></i> Cadastrar Novo Aluno na Matriz</h5>
               <div class="mb-3">
@@ -475,6 +485,7 @@
               <button onclick="executarCadastroEstudante()" class="btn btn-success py-2"><i class="fa-solid fa-check me-2"></i>Inserir na Aba Alunos</button>
             </div>
 
+            <!-- ABA 4: VINCULAR PROFESSOR -->
             <div id="coordAbaProfessor" class="card p-4 d-none bg-white">
               <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-link text-dark"></i> Vincular Professor ao Diário</h5>
               <div class="row g-3 mb-3">
@@ -512,10 +523,19 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxN4htiF3u1GbrVY7CJyr6YLTFkpsxsLfsSVSx5BOH7MCN11GnNxiIvH4SMAu2vT9m1/exec"; 
 
+    function formatarNotaVal(val) {
+      if (val === "" || val === null || val === undefined) return "";
+      var str = String(val).trim().replace(",", ".");
+      if (str === "") return "";
+      var num = Number(str);
+      if (isNaN(num)) return str;
+      return num.toFixed(1);
+    }
+
     function notificar(mensagem, sucesso = false, tituloAlternativo = null) {
       Swal.fire({
         title: tituloAlternativo ? tituloAlternativo : (sucesso ? 'Tudo certo!' : 'Atenção'),
-        text: message = mensagem,
+        text: mensagem,
         icon: sucesso ? 'success' : 'warning',
         confirmButtonColor: '#583ef2',
         confirmButtonText: 'OK',
@@ -545,10 +565,11 @@
     let disciplinaAuditadaAtual = "";
 
     async function efetuarLogin(perfil) {
-      let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : document.getElementById("adminUser").value;
+      let usuario = perfil === 'professor' ? document.getElementById("maspInput").value : "admin";
       let senha = perfil === 'coordenador' ? document.getElementById("adminPass").value : null;
 
-      if(!usuario) { notificar("Por favor, preencha os dados de acesso.", false); return; }
+      if(perfil === 'professor' && !usuario) { notificar("Por favor, preencha o MASP.", false); return; }
+      if(perfil === 'coordenador' && !senha) { notificar("Por favor, preencha a senha.", false); return; }
 
       exibirLoader(true);
       let res = await chamarServidor("autenticarLogin", { perfil: perfil, usuario: usuario, senha: senha });
@@ -639,9 +660,9 @@
           <tr ${classeLinha}>
             <td class="text-center fw-bold text-secondary">${i + 1}</td>
             <td class="fw-bold text-dark">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value, this)" onblur="atualizarCacheNota(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value, this)" onblur="atualizarCacheNota(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
@@ -655,7 +676,11 @@
       });
     }
 
-    function atualizarCacheNota(index, trimestre, valor) { cacheAlunosAtuais[index]['nota' + trimestre] = valor; }
+    function atualizarCacheNota(index, trimestre, valor, el) { 
+      let fmt = formatarNotaVal(valor);
+      cacheAlunosAtuais[index]['nota' + trimestre] = fmt; 
+      if (el && fmt !== "" && el.value !== fmt) el.value = fmt;
+    }
     function atualizarCacheCH(index, trimestre, checked) { cacheAlunosAtuais[index]['ch' + trimestre] = checked; }
 
     async function salvarDiario() {
@@ -671,7 +696,7 @@
     async function alternarStatusEstudante(linha, statusTaxado) {
       let turma = document.getElementById("profTurma").value;
       exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: i = linha, excluir: !statusTaxado });
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
@@ -685,7 +710,7 @@
       document.getElementById("nomeAlunoProfInput").value = "";
     }
 
-    async function ejecutarCadastroEstudanteProf() {
+    async function executarCadastroEstudanteProf() {
       let turma = document.getElementById("profTurma").value;
       let nome = document.getElementById("nomeAlunoProfInput").value;
       if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
@@ -704,10 +729,12 @@
     }
 
     function popularSelectsCoordenador(turmas) {
-      ['coordSelectTurma', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
+      ['coordSelectTurma', 'coordSelectTurmaAuto', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
         let el = document.getElementById(id);
-        el.innerHTML = '<option value="">Selecione...</option>';
-        turmas.forEach(t => el.innerHTML += `<option value="${t}">${t}</option>`);
+        if (el) {
+          el.innerHTML = '<option value="">Selecione...</option>';
+          turmas.forEach(t => el.innerHTML += `<option value="${t}">${t}</option>`);
+        }
       });
     }
 
@@ -741,7 +768,7 @@
     }
 
     async function executarPreenchimentoAutomatico() {
-      let turma = document.getElementById("coordSelectTurma").value;
+      let turma = document.getElementById("coordSelectTurmaAuto").value;
       let trimestre = document.getElementById("coordSelectTrimestreAuto").value;
       let notaMin = parseFloat(document.getElementById("coordNotaMinAuto").value);
       let notaMax = parseFloat(document.getElementById("coordNotaMaxAuto").value);
@@ -774,10 +801,6 @@
           
           if(res) {
             notificar(res.mensagem, res.sucesso);
-            if(res.sucesso) {
-              carregarRelatorioPreenchimento(); 
-              document.getElementById("cardDiarioCoord").classList.add("d-none"); 
-            }
           }
         }
       });
@@ -825,9 +848,9 @@
           <tr ${classeLinha}>
             <td class="text-center fw-bold text-secondary">${i + 1}</td>
             <td class="fw-bold text-dark">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
@@ -841,7 +864,11 @@
       });
     }
 
-    function atualizarCacheNotaCoord(index, trimestre, valor) { cacheAlunosCoord[index]['nota' + trimestre] = valor; }
+    function atualizarCacheNotaCoord(index, trimestre, valor, el) { 
+      let fmt = formatarNotaVal(valor);
+      cacheAlunosCoord[index]['nota' + trimestre] = fmt; 
+      if (el && fmt !== "" && el.value !== fmt) el.value = fmt;
+    }
     function atualizarCacheCHCoord(index, trimestre, checked) { cacheAlunosCoord[index]['ch' + trimestre] = checked; }
 
     async function salvarDiarioCoord() {
@@ -879,7 +906,7 @@
       }
     }
 
-    async function ejecutarCadastroEstudante() {
+    async function executarCadastroEstudante() {
       let turma = document.getElementById("cadAlunoTurma").value;
       let nome = document.getElementById("cadAlunoNome").value;
       if(!turma || !nome) { notificar("Preencha todos os campos!", false); return; }
@@ -913,22 +940,34 @@
     }
 
     function mudarAbaCoord(aba) {
-      ['relatorios', 'aluno', 'professor'].forEach(a => {
-        document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`).classList.add("d-none");
+      ['relatorios', 'preenchimento', 'aluno', 'professor'].forEach(a => {
+        let el = document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`);
+        if (el) el.classList.add("d-none");
         let btn = document.getElementById(`btn-menu-${a.substring(0,4)}`);
-        btn.classList.remove("active");
-        btn.classList.add("text-dark");
+        if (btn) {
+          btn.classList.remove("active");
+          btn.classList.add("text-dark");
+        }
       });
       document.getElementById("cardDiarioCoord").classList.add("d-none");
-      document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`).classList.remove("d-none");
+      
+      let targetEl = document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`);
+      if (targetEl) targetEl.classList.remove("d-none");
+      
       let activeBtn = document.getElementById(`btn-menu-${aba.substring(0,4)}`);
-      activeBtn.classList.add("active");
-      activeBtn.classList.remove("text-dark");
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.classList.remove("text-dark");
+      }
     }
 
     function exibirLoader(mostrar) {
       let l = document.getElementById("loader");
-      if(mostrar) l.classList.remove("d-none"); else l.classList.add("d-none");
+      if(mostrar) {
+        if (l) l.classList.remove("d-none");
+      } else {
+        if (l) l.classList.add("d-none");
+      }
     }
 
     function logout() {
