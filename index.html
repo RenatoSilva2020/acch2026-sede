@@ -211,7 +211,7 @@
     /* Loader */
     #loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(244, 246, 2fa, 0.7); 
+      background: rgba(244, 246, 250, 0.7); 
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 1050; 
@@ -321,19 +321,6 @@
         <div id="cardDiario" class="card d-none bg-white">
           <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
             <h5 id="tituloDiario" class="m-0 fw-bold text-dark"></h5>
-            <button onclick="toggleFormAlunoProf(true)" class="btn btn-sm btn-primary px-3 rounded-pill"><i class="fa-solid fa-user-plus me-1"></i> Cadastrar Aluno</button>
-          </div>
-
-          <div id="formRapidoAlunoProf" class="card-body bg-light border-bottom d-none p-4">
-            <div class="row g-2 align-items-center">
-              <div class="col-sm-8">
-                <input type="text" id="nomeAlunoProfInput" class="form-control text-uppercase" placeholder="NOME COMPLETO DO ESTUDANTE">
-              </div>
-              <div class="col-sm-4 d-flex gap-2">
-                <button onclick="executarCadastroEstudanteProf()" class="btn btn-success w-100"><i class="fa-solid fa-check me-1"></i> Confirmar</button>
-                <button onclick="toggleFormAlunoProf(false)" class="btn btn-secondary px-3"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-            </div>
           </div>
 
           <div class="table-responsive p-0">
@@ -341,10 +328,9 @@
               <thead class="align-middle text-center">
                 <tr>
                   <th rowspan="2" width="5%" class="pb-3">Nº</th>
-                  <th rowspan="2" width="35%" class="text-start pb-3">Nome Completo do Estudante</th>
+                  <th rowspan="2" width="45%" class="text-start pb-3">Nome Completo do Estudante</th>
                   <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
                   <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
-                  <th rowspan="2" width="10%" class="pb-3">Ações</th>
                 </tr>
                 <tr>
                   <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
@@ -371,7 +357,7 @@
             <div class="list-group shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
               <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active border-0 py-3"><i class="fa-solid fa-chart-pie me-2 w-20px text-center"></i>Status Preenchimento</button>
               <button onclick="mudarAbaCoord('auto')" id="btn-menu-auto" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-wand-magic-sparkles me-2 w-20px text-center"></i>Preenchimento Auto</button>
-              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
+              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-users me-2 w-20px text-center"></i>Cadastro de Estudante</button>
               <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
             </div>
           </div>
@@ -416,10 +402,9 @@
                     <thead class="align-middle text-center">
                       <tr>
                         <th rowspan="2" width="5%" class="pb-3">Nº</th>
-                        <th rowspan="2" width="35%" class="text-start pb-3">Nome Completo do Estudante</th>
+                        <th rowspan="2" width="45%" class="text-start pb-3">Nome Completo do Estudante</th>
                         <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
                         <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
-                        <th rowspan="2" width="10%" class="pb-3">Ações</th>
                       </tr>
                       <tr>
                         <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
@@ -440,7 +425,7 @@
 
             </div>
 
-            <!-- NOVA ABA PREENCHIMENTO AUTOMÁTICO -->
+            <!-- ABA PREENCHIMENTO AUTOMÁTICO -->
             <div id="coordAbaAuto" class="card p-4 d-none bg-white">
               <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-warning"></i> Preenchimento Automático em Lote</h5>
               <p class="text-muted small mb-4">Gere notas aleatórias entre valores específicos e preencha a carga horária para todos os estudantes de uma turma simultaneamente.</p>
@@ -473,17 +458,46 @@
               </div>
             </div>
 
+            <!-- NOVA ABA CADASTRO DE ESTUDANTE -->
             <div id="coordAbaAluno" class="card p-4 d-none bg-white">
-              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-user-plus text-success"></i> Cadastrar Novo Aluno na Matriz</h5>
-              <div class="mb-3">
-                <label class="form-label">Turma do Aluno</label>
-                <select id="cadAlunoTurma" class="form-select"></select>
-              </div>
+              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-users text-success"></i> Cadastro de Estudante</h5>
+              
               <div class="mb-4">
-                <label class="form-label">Nome Completo do Estudante</label>
-                <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
+                <label class="form-label">Selecione a Turma</label>
+                <select id="cadAlunoTurma" class="form-select" onchange="carregarListaAlunosCoordBasico()"></select>
               </div>
-              <button onclick="executarCadastroEstudante()" class="btn btn-success py-2"><i class="fa-solid fa-check me-2"></i>Inserir na Aba Alunos</button>
+
+              <!-- Formulário de Novo Cadastro -->
+              <div class="card bg-light border-0 mb-4 p-4 rounded-4">
+                <h6 class="fw-bold mb-3"><i class="fa-solid fa-plus me-2"></i>Cadastrar Novo Aluno na Matriz</h6>
+                <div class="row g-3 align-items-end">
+                  <div class="col-md-9">
+                    <label class="form-label">Nome Completo do Estudante</label>
+                    <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
+                  </div>
+                  <div class="col-md-3">
+                    <button onclick="executarCadastroEstudante()" class="btn btn-success w-100 py-2"><i class="fa-solid fa-check me-2"></i>Inserir</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabela de Alunos e Ativação/Inativação -->
+              <h6 class="fw-bold mb-3"><i class="fa-solid fa-list me-2"></i>Lista de Alunos Cadastrados</h6>
+              <div class="table-container-modern">
+                <table class="table align-middle m-0 table-hover">
+                  <thead class="text-center">
+                    <tr>
+                      <th width="10%">Nº</th>
+                      <th class="text-start">Nome do Estudante</th>
+                      <th width="15%">Status</th>
+                      <th width="15%">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="listaAlunosCoordCorpo">
+                    <tr><td colspan="4" class="text-muted text-center py-4">Selecione uma turma para carregar a lista.</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div id="coordAbaProfessor" class="card p-4 d-none bg-white">
@@ -553,6 +567,7 @@
     let dadosUsuarioLogado = {};
     let cacheAlunosAtuais = [];
     let cacheAlunosCoord = [];
+    let cacheAlunosCadastroCoord = [];
     let disciplinaAuditadaAtual = "";
 
     async function efetuarLogin(perfil) {
@@ -609,7 +624,6 @@
         selectDisc.innerHTML += `<option value="${d}">${d}</option>`;
       });
       document.getElementById("cardDiario").classList.add("d-none");
-      toggleFormAlunoProf(false);
     }
 
     async function carregarListaAlunos() {
@@ -634,7 +648,6 @@
       }
     }
 
-    // Função auxiliar para processar e manter visual com casas decimais
     function formatarNotaEAtualizarCache(input, index, trimestre, isCoord) {
       let val = input.value.replace(',', '.');
       if (val === '') {
@@ -655,7 +668,7 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosAtuais.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
         return;
       }
 
@@ -677,11 +690,6 @@
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center">
-              <button onclick="alternarStatusEstudante(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
-                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
-              </button>
-            </td>
           </tr>
         `;
       });
@@ -698,41 +706,6 @@
       let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosAtuais });
       exibirLoader(false);
       if(res) notificar(res.mensagem, res.sucesso);
-    }
-
-    async function alternarStatusEstudante(linha, statusTaxado) {
-      let turma = document.getElementById("profTurma").value;
-      exibirLoader(true);
-      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: i = linha, excluir: !statusTaxado });
-      exibirLoader(false);
-      if(res) { 
-        notificar(res.mensagem, res.sucesso); 
-        carregarListaAlunos(); 
-      }
-    }
-
-    function toggleFormAlunoProf(mostrar) {
-      let form = document.getElementById("formRapidoAlunoProf");
-      if(mostrar) form.classList.remove("d-none"); else form.classList.add("d-none");
-      document.getElementById("nomeAlunoProfInput").value = "";
-    }
-
-    async function executarCadastroEstudanteProf() {
-      let turma = document.getElementById("profTurma").value;
-      let nome = document.getElementById("nomeAlunoProfInput").value;
-      if(!nome) { notificar("Informe o nome completo do estudante.", false); return; }
-
-      exibirLoader(true);
-      let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
-      exibirLoader(false);
-
-      if(res) {
-        notificar(res.mensagem, res.sucesso);
-        if(res.sucesso) {
-          toggleFormAlunoProf(false);
-          carregarListaAlunos(); 
-        }
-      }
     }
 
     function popularSelectsCoordenador(turmas) {
@@ -846,7 +819,7 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosCoord.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
         return;
       }
 
@@ -868,11 +841,6 @@
             <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
             <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center">
-              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
-                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
-              </button>
-            </td>
           </tr>
         `;
       });
@@ -894,25 +862,67 @@
       }
     }
 
-    async function alternarStatusEstudanteCoord(linha, statusTaxado) {
-      let turma = document.getElementById("coordSelectTurma").value;
+    // Funcionalidades Centrais do Coordenador (Aba Cadastro de Estudante)
+    async function carregarListaAlunosCoordBasico() {
+      let turma = document.getElementById("cadAlunoTurma").value;
+      let tbody = document.getElementById("listaAlunosCoordCorpo");
+      
+      if (!turma) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma para carregar a lista.</td></tr>';
+        return;
+      }
+
+      exibirLoader(true);
+      let lista = await chamarServidor("getListaAlunos", { turma: turma });
+      exibirLoader(false);
+
+      if (lista && Array.isArray(lista)) {
+        lista.sort((a, b) => {
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
+          return a.taxado ? 1 : -1; 
+        });
+        
+        cacheAlunosCadastroCoord = lista;
+        desenharTabelaAlunosCadastroCoord();
+      }
+    }
+
+    function desenharTabelaAlunosCadastroCoord() {
+      let tbody = document.getElementById("listaAlunosCoordCorpo");
+      tbody.innerHTML = "";
+
+      if(cacheAlunosCadastroCoord.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Nenhum estudante cadastrado.</td></tr>';
+        return;
+      }
+
+      cacheAlunosCadastroCoord.forEach((aluno, i) => {
+        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let statusBadge = aluno.taxado ? '<span class="badge bg-danger">Inativo</span>' : '<span class="badge bg-success">Ativo</span>';
+
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary">${i + 1}</td>
+            <td class="fw-bold text-dark text-start">${aluno.nome}</td>
+            <td class="text-center">${statusBadge}</td>
+            <td class="text-center">
+              <button onclick="alternarStatusEstudanteCadastroCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem;">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Inativar'}
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function alternarStatusEstudanteCadastroCoord(linha, statusTaxado) {
+      let turma = document.getElementById("cadAlunoTurma").value;
       exibirLoader(true);
       let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
-        auditarDisciplina(disciplinaAuditadaAtual); 
-      }
-    }
-
-    async function carregarDisciplinasCadastroProf(turma) {
-      let select = document.getElementById("cadProfDisciplina");
-      select.innerHTML = '<option value="">Carregando...</option>';
-      if(!turma) return;
-      let disc = await chamarServidor("getDisciplinasTodas", { turma: turma });
-      if(disc && Array.isArray(disc)) {
-        select.innerHTML = '<option value="">Selecione...</option>';
-        disc.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
+        carregarListaAlunosCoordBasico(); 
       }
     }
 
@@ -926,7 +936,21 @@
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
-        if(res.sucesso) document.getElementById("cadAlunoNome").value = ""; 
+        if(res.sucesso) {
+           document.getElementById("cadAlunoNome").value = ""; 
+           carregarListaAlunosCoordBasico();
+        }
+      }
+    }
+
+    async function carregarDisciplinasCadastroProf(turma) {
+      let select = document.getElementById("cadProfDisciplina");
+      select.innerHTML = '<option value="">Carregando...</option>';
+      if(!turma) return;
+      let disc = await chamarServidor("getDisciplinasTodas", { turma: turma });
+      if(disc && Array.isArray(disc)) {
+        select.innerHTML = '<option value="">Selecione...</option>';
+        disc.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
       }
     }
 
