@@ -195,6 +195,43 @@
     .text-taxado { text-decoration: line-through; color: #94a3b8 !important; opacity: 0.65; }
     .text-taxado input { background-color: #e2e8f0 !important; pointer-events: none; }
 
+    /* Colunas congeladas na tabela de notas */
+    .col-sticky-num {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 5 !important;
+      width: 50px !important;
+      min-width: 50px !important;
+      max-width: 50px !important;
+      background-color: #ffffff !important;
+    }
+
+    .col-sticky-name {
+      position: sticky !important;
+      left: 50px !important;
+      z-index: 5 !important;
+      min-width: 240px !important;
+      background-color: #ffffff !important;
+      box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.08);
+      border-right: 1px solid #dee2e6 !important;
+    }
+
+    thead th.col-sticky-num,
+    thead th.col-sticky-name {
+      z-index: 10 !important;
+      background-color: #f8f9fa !important;
+    }
+
+    tbody tr:hover td.col-sticky-num,
+    tbody tr:hover td.col-sticky-name {
+      background-color: #f8f9fa !important;
+    }
+
+    tbody tr.text-taxado td.col-sticky-num,
+    tbody tr.text-taxado td.col-sticky-name {
+      background-color: #f8f9fa !important;
+    }
+
     /* Loader */
     #loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -252,34 +289,23 @@
       <div class="tab-content" id="loginTabsContent">
         <!-- TAB PROFESSOR -->
         <div class="tab-pane fade show active" id="loginProf">
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small text-uppercase">Número de MASP</label>
+          <div class="mb-4">
+            <label class="form-label">Número de MASP</label>
             <div class="input-group">
-              <span class="input-group-text border-end-0 bg-white"><i class="fa-solid fa-id-card text-muted"></i></span>
-              <input type="text" id="maspInput" class="form-control border-start-0 ps-0" placeholder="Digite seu MASP (Ex: 1234567)" onkeydown="if(event.key==='Enter'){efetuarLogin('professor');}">
-            </div>
-            <div class="d-flex justify-content-between mt-1 text-muted" style="font-size: 0.75rem;">
-              <span>Apenas números</span>
-              <a href="javascript:void(0)" onclick="document.getElementById('maspInput').value='1234567'" class="text-decoration-none">Exemplo: 1234567</a>
+              <span class="input-group-text border-end-0"><i class="fa-solid fa-id-card"></i></span>
+              <input type="text" id="maspInput" class="form-control border-start-0 ps-0" placeholder="Apenas números">
             </div>
           </div>
-          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100 py-2 fw-semibold">Acessar Portal <i class="fa-solid fa-arrow-right ms-1"></i></button>
+          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100">Acessar Portal <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
 
         <!-- TAB COORDENAÇÃO (SEM CAMPO DE USUÁRIO - APENAS SENHA) -->
         <div class="tab-pane fade" id="loginCoord">
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small text-uppercase">Senha de Acesso da Coordenação</label>
-            <div class="input-group">
-              <span class="input-group-text border-end-0 bg-white"><i class="fa-solid fa-lock text-muted"></i></span>
-              <input type="password" id="adminPass" class="form-control border-start-0 ps-0" placeholder="Digite a senha (padrão: portomario26)" onkeydown="if(event.key==='Enter'){efetuarLogin('coordenador');}">
-            </div>
-            <div class="d-flex justify-content-between mt-1 text-muted" style="font-size: 0.75rem;">
-              <span>Senha padrão: <b>portomario26</b></span>
-              <a href="javascript:void(0)" onclick="document.getElementById('adminPass').value='portomario26'" class="text-decoration-none">Preencher</a>
-            </div>
+          <div class="mb-4">
+            <label class="form-label">Senha de Acesso</label>
+            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
           </div>
-          <button onclick="efetuarLogin('coordenador')" class="btn btn-primary w-100 py-2 fw-semibold">Entrar como Coordenador <i class="fa-solid fa-arrow-right ms-1"></i></button>
+          <button onclick="efetuarLogin('coordenador')" class="btn btn-primary w-100">Entrar como Coordenador <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
       </div>
     </div>
@@ -294,7 +320,7 @@
         </a>
         <div class="d-flex align-items-center gap-3">
           <span id="nomeUsuarioLogado" class="text-white small fw-medium opacity-75"></span>
-          <button onclick="logout()" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fs-7"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</button>
+          <button onclick="tentarLogout()" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fs-7"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</button>
         </div>
       </div>
     </nav>
@@ -329,8 +355,8 @@
             <table class="table table-hover align-middle m-0 text-nowrap">
               <thead class="align-middle text-center">
                 <tr>
-                  <th rowspan="2" width="5%" class="pb-3">Nº</th>
-                  <th rowspan="2" width="40%" class="text-start pb-3">Nome Completo do Estudante</th>
+                  <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
+                  <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
                   <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
                   <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
                 </tr>
@@ -409,8 +435,8 @@
                   <table class="table table-hover align-middle m-0 text-nowrap">
                     <thead class="align-middle text-center">
                       <tr>
-                        <th rowspan="2" width="5%" class="pb-3">Nº</th>
-                        <th rowspan="2" width="35%" class="text-start pb-3">Nome Completo do Estudante</th>
+                        <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
+                        <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
                         <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
                         <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
                         <th rowspan="2" width="10%" class="pb-3">Ações</th>
@@ -607,91 +633,74 @@
 
     let dadosUsuarioLogado = {};
     let cacheAlunosAtuais = [];
-    let snapshotAlunosAtuais = "";
+    let cacheAlunosOriginaisProf = "[]";
     let cacheAlunosCoord = [];
-    let snapshotAlunosCoord = "";
+    let cacheAlunosOriginaisCoord = "[]";
     let disciplinaAuditadaAtual = "";
 
-    function temAlteracoesNaoSalvas() {
-      if (dadosUsuarioLogado.papel === "professor") {
+    function verificarAlteracoesNaoSalvas() {
+      if (dadosUsuarioLogado.papel === 'professor') {
         let cardDiario = document.getElementById("cardDiario");
         if (cardDiario && !cardDiario.classList.contains("d-none") && cacheAlunosAtuais.length > 0) {
-          if (!snapshotAlunosAtuais) return false;
-          return JSON.stringify(cacheAlunosAtuais) !== snapshotAlunosAtuais;
+          return JSON.stringify(cacheAlunosAtuais) !== cacheAlunosOriginaisProf;
         }
-      } else if (dadosUsuarioLogado.papel === "coordenador") {
+      }
+      if (dadosUsuarioLogado.papel === 'coordenador') {
         let cardDiarioCoord = document.getElementById("cardDiarioCoord");
         if (cardDiarioCoord && !cardDiarioCoord.classList.contains("d-none") && cacheAlunosCoord.length > 0) {
-          if (!snapshotAlunosCoord) return false;
-          return JSON.stringify(cacheAlunosCoord) !== snapshotAlunosCoord;
+          return JSON.stringify(cacheAlunosCoord) !== cacheAlunosOriginaisCoord;
         }
       }
       return false;
     }
 
-    // CONTROLE DE NAVEGAÇÃO E BOTÃO VOLTAR DO DISPOSITIVO/NAVEGADOR
-    window.history.pushState({ app: 'diario-escolar', view: 'root' }, '');
-    window.addEventListener('popstate', function() {
-      window.history.pushState({ app: 'diario-escolar', view: 'root' }, '');
+    // Interceptação de histórico para botão Voltar (navegador e mobile)
+    window.history.pushState({ app: "portal_escolar" }, "", window.location.href);
+    window.addEventListener("popstate", function(event) {
+      window.history.pushState({ app: "portal_escolar" }, "", window.location.href);
 
-      if (temAlteracoesNaoSalvas()) {
+      let temAlteracoes = verificarAlteracoesNaoSalvas();
+      let usuarioLogado = dadosUsuarioLogado && dadosUsuarioLogado.papel;
+
+      if (temAlteracoes) {
         Swal.fire({
           title: 'Alterações não salvas!',
-          text: 'Você possui alterações de notas ou carga horária que ainda não foram salvas. Deseja realmente voltar sem salvar?',
+          text: 'Você possui alterações que ainda não foram salvas no diário. Deseja realmente voltar sem salvar?',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#ef4444',
-          cancelButtonColor: '#583ef2',
-          confirmButtonText: 'Sim, sair sem salvar',
-          cancelButtonText: 'Não, continuar editando',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Sim, voltar sem salvar',
+          cancelButtonText: 'Continuar editando',
+          reverseButtons: true,
           customClass: { popup: 'rounded-4' }
-        }).then((result) => {
+        }).then(function(result) {
           if (result.isConfirmed) {
             if (dadosUsuarioLogado.papel === 'professor') {
-              cacheAlunosAtuais = [];
-              snapshotAlunosAtuais = "";
               document.getElementById("cardDiario").classList.add("d-none");
               document.getElementById("profDisciplina").value = "";
-            } else if (dadosUsuarioLogado.papel === 'coordenador' && !document.getElementById("cardDiarioCoord").classList.contains("d-none")) {
-              cacheAlunosCoord = [];
-              snapshotAlunosCoord = "";
+              cacheAlunosAtuais = [];
+              cacheAlunosOriginaisProf = "[]";
+            } else if (dadosUsuarioLogado.papel === 'coordenador') {
               document.getElementById("cardDiarioCoord").classList.add("d-none");
+              cacheAlunosCoord = [];
+              cacheAlunosOriginaisCoord = "[]";
             } else {
-              executarLogout();
+              logout();
             }
           }
         });
         return;
       }
 
-      // Caso 1: Usuário está deslogado na tela inicial
-      if (!dadosUsuarioLogado.papel) {
-        Swal.fire({
-          title: 'Deseja sair do sistema?',
-          text: 'Você está na tela inicial. Deseja realmente fechar ou sair do sistema?',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#583ef2',
-          cancelButtonColor: '#6e7881',
-          confirmButtonText: 'Sim, sair',
-          cancelButtonText: 'Cancelar',
-          customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.history.back();
-          }
-        });
-        return;
-      }
-
-      // Caso 2: Usuário está logado
+      // Se não há alterações não salvas mas um diário está aberto:
       if (dadosUsuarioLogado.papel === 'professor') {
         let cardDiario = document.getElementById("cardDiario");
         if (cardDiario && !cardDiario.classList.contains("d-none")) {
           cardDiario.classList.add("d-none");
           document.getElementById("profDisciplina").value = "";
           cacheAlunosAtuais = [];
-          snapshotAlunosAtuais = "";
+          cacheAlunosOriginaisProf = "[]";
           return;
         }
       }
@@ -701,33 +710,46 @@
         if (cardDiarioCoord && !cardDiarioCoord.classList.contains("d-none")) {
           cardDiarioCoord.classList.add("d-none");
           cacheAlunosCoord = [];
-          snapshotAlunosCoord = "";
+          cacheAlunosOriginaisCoord = "[]";
           return;
         }
       }
 
+      // Tela inicial / principal
       Swal.fire({
-        title: 'Deseja encerrar a sessão?',
-        text: 'Deseja sair da sua conta e retornar à tela inicial de login?',
+        title: 'Sair do Sistema?',
+        text: usuarioLogado ? 'Deseja realmente sair do sistema e encerrar sua sessão?' : 'Deseja realmente sair do sistema?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#583ef2',
-        cancelButtonColor: '#6e7881',
+        cancelButtonColor: '#64748b',
         confirmButtonText: 'Sim, sair',
-        cancelButtonText: 'Permanecer',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
         customClass: { popup: 'rounded-4' }
-      }).then((result) => {
+      }).then(function(result) {
         if (result.isConfirmed) {
-          executarLogout();
+          if (usuarioLogado) {
+            logout();
+          } else {
+            Swal.fire({
+              title: 'Sessão Finalizada',
+              text: 'Você pode fechar esta aba com segurança.',
+              icon: 'info',
+              confirmButtonColor: '#583ef2',
+              confirmButtonText: 'OK',
+              customClass: { popup: 'rounded-4' }
+            });
+          }
         }
       });
     });
 
-    window.addEventListener('beforeunload', function(e) {
-      if (temAlteracoesNaoSalvas()) {
+    window.addEventListener("beforeunload", function(e) {
+      if (verificarAlteracoesNaoSalvas()) {
         e.preventDefault();
-        e.returnValue = 'Você possui alterações não salvas. Deseja realmente sair?';
-        return e.returnValue;
+        e.returnValue = '';
+        return '';
       }
     });
 
@@ -747,7 +769,7 @@
         
         document.getElementById("telaLogin").classList.add("d-none");
         document.getElementById("painelSistema").classList.remove("d-none");
-        document.getElementById("nomeUsuarioLogado").innerText = "Olá, " + res.nome + " (" + perfil.toUpperCase() + ")";
+        document.getElementById("nomeUsuarioLogado").innerText = `Olá, ${res.nome} (${perfil.toUpperCase()})`;
 
         if (perfil === 'professor') {
           document.getElementById("interfaceProfessor").classList.remove("d-none");
@@ -769,60 +791,28 @@
     function popularSelectTurmasProfessor() {
       let select = document.getElementById("profTurma");
       select.innerHTML = '<option value="">Selecione...</option>';
-      Object.keys(dadosUsuarioLogado.turmas).forEach(function(turma) {
-        select.innerHTML += '<option value="' + turma + '">' + turma + '</option>';
+      Object.keys(dadosUsuarioLogado.turmas).forEach(turma => {
+        select.innerHTML += `<option value="${turma}">${turma}</option>`;
       });
     }
 
-    function atualizarDisciplinasProfessorConfirmado() {
+    function atualizarDisciplinasProfessor() {
       let turmaSel = document.getElementById("profTurma").value;
       let selectDisc = document.getElementById("profDisciplina");
       selectDisc.innerHTML = '<option value="">Selecione...</option>';
-      cacheAlunosAtuais = [];
-      snapshotAlunosAtuais = "";
       
-      if (!turmaSel) {
-        document.getElementById("cardDiario").classList.add("d-none");
-        return;
-      }
+      if (!turmaSel) return;
       let disciplinas = dadosUsuarioLogado.turmas[turmaSel] || [];
-      disciplinas.forEach(function(d) {
-        selectDisc.innerHTML += '<option value="' + d + '">' + d + '</option>';
+      disciplinas.forEach(d => {
+        selectDisc.innerHTML += `<option value="${d}">${d}</option>`;
       });
       document.getElementById("cardDiario").classList.add("d-none");
     }
 
-    function atualizarDisciplinasProfessor() {
-      if (temAlteracoesNaoSalvas()) {
-        Swal.fire({
-          title: 'Alterações não salvas!',
-          text: 'Você possui alterações não salvas no diário atual. Se trocar de turma sem salvar, elas serão perdidas. Deseja continuar?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ef4444',
-          cancelButtonColor: '#583ef2',
-          confirmButtonText: 'Sim, trocar de turma',
-          cancelButtonText: 'Permanecer e salvar',
-          customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            atualizarDisciplinasProfessorConfirmado();
-          }
-        });
-        return;
-      }
-      atualizarDisciplinasProfessorConfirmado();
-    }
-
-    async function carregarListaAlunosConfirmado() {
+    async function carregarListaAlunos() {
       let turma = document.getElementById("profTurma").value;
       let disciplina = document.getElementById("profDisciplina").value;
-      if (!turma || !disciplina) {
-        document.getElementById("cardDiario").classList.add("d-none");
-        cacheAlunosAtuais = [];
-        snapshotAlunosAtuais = "";
-        return;
-      }
+      if (!turma || !disciplina) return;
 
       exibirLoader(true);
       let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
@@ -835,33 +825,11 @@
         });
         
         cacheAlunosAtuais = lista;
-        snapshotAlunosAtuais = JSON.stringify(lista);
+        cacheAlunosOriginaisProf = JSON.stringify(lista);
         desenharTabelaDiario();
-        document.getElementById("tituloDiario").innerText = "Alunos Matriculados - " + disciplina;
+        document.getElementById("tituloDiario").innerText = `Alunos Matriculados - ${disciplina}`;
         document.getElementById("cardDiario").classList.remove("d-none");
       }
-    }
-
-    async function carregarListaAlunos() {
-      if (temAlteracoesNaoSalvas()) {
-        Swal.fire({
-          title: 'Alterações não salvas!',
-          text: 'Você possui alterações não salvas nesta disciplina. Deseja descartar as alterações e abrir esta outra disciplina?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ef4444',
-          cancelButtonColor: '#583ef2',
-          confirmButtonText: 'Sim, trocar sem salvar',
-          cancelButtonText: 'Permanecer e salvar',
-          customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            carregarListaAlunosConfirmado();
-          }
-        });
-        return;
-      }
-      carregarListaAlunosConfirmado();
     }
 
     function desenharTabelaDiario() {
@@ -877,16 +845,18 @@
         let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
         let disabledInput = aluno.taxado ? 'disabled' : '';
         
-        tbody.innerHTML += '<tr ' + classeLinha + '>' +
-          '<td class="text-center fw-bold text-secondary">' + (i + 1) + '</td>' +
-          '<td class="fw-bold text-dark">' + aluno.nome + '</td>' +
-          '<td><input type="number" step="0.1" value="' + aluno.nota1 + '" ' + disabledInput + ' onchange="atualizarCacheNota(' + i + ', 1, this.value, this)" onblur="atualizarCacheNota(' + i + ', 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>' +
-          '<td><input type="number" step="0.1" value="' + aluno.nota2 + '" ' + disabledInput + ' onchange="atualizarCacheNota(' + i + ', 2, this.value, this)" onblur="atualizarCacheNota(' + i + ', 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>' +
-          '<td><input type="number" step="0.1" value="' + aluno.nota3 + '" ' + disabledInput + ' onchange="atualizarCacheNota(' + i + ', 3, this.value, this)" onblur="atualizarCacheNota(' + i + ', 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>' +
-          '<td class="text-center"><input type="checkbox" ' + (aluno.ch1 ? 'checked' : '') + ' ' + disabledInput + ' onchange="atualizarCacheCH(' + i + ', 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>' +
-          '<td class="text-center"><input type="checkbox" ' + (aluno.ch2 ? 'checked' : '') + ' ' + disabledInput + ' onchange="atualizarCacheCH(' + i + ', 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>' +
-          '<td class="text-center"><input type="checkbox" ' + (aluno.ch3 ? 'checked' : '') + ' ' + disabledInput + ' onchange="atualizarCacheCH(' + i + ', 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>' +
-        '</tr>';
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
+            <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value, this)" onblur="atualizarCacheNota(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value, this)" onblur="atualizarCacheNota(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+          </tr>
+        `;
       });
     }
 
@@ -905,9 +875,7 @@
       let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosAtuais });
       exibirLoader(false);
       if(res) {
-        if(res.sucesso) {
-          snapshotAlunosAtuais = JSON.stringify(cacheAlunosAtuais);
-        }
+        if(res.sucesso) cacheAlunosOriginaisProf = JSON.stringify(cacheAlunosAtuais);
         notificar(res.mensagem, res.sucesso);
       }
     }
@@ -917,9 +885,7 @@
         let el = document.getElementById(id);
         if (el) {
           el.innerHTML = '<option value="">Selecione...</option>';
-          turmas.forEach(function(t) {
-            el.innerHTML += '<option value="' + t + '">' + t + '</option>';
-          });
+          turmas.forEach(t => el.innerHTML += `<option value="${t}">${t}</option>`);
         }
       });
     }
@@ -939,14 +905,16 @@
         tbody.innerHTML = "";
         dados.forEach(linha => {
           let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning" : "bg-danger");
-          tbody.innerHTML += '<tr onclick="auditarDisciplina('' + linha.disciplina + '')">' +
-            '<td class="fw-bold text-start text-dark py-3">' +
-              '<i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>' + linha.disciplina.toUpperCase() +
-            '</td>' +
-            '<td><span class="badge ' + badgeColor(linha.t1) + '">' + linha.t1 + '</span></td>' +
-            '<td><span class="badge ' + badgeColor(linha.t2) + '">' + linha.t2 + '</span></td>' +
-            '<td><span class="badge ' + badgeColor(linha.t3) + '">' + linha.t3 + '</span></td>' +
-          '</tr>';
+          tbody.innerHTML += `
+            <tr onclick="auditarDisciplina('${linha.disciplina}')">
+              <td class="fw-bold text-start text-dark py-3">
+                <i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>${linha.disciplina.toUpperCase()}
+              </td>
+              <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+              <td><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
+              <td><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
+            </tr>
+          `;
         });
       }
     }
@@ -1038,8 +1006,8 @@
         }
 
         let textoConfirma = vinculosMaspCarregados.length > 0
-          ? "Esta ação vai preencher a carga horária e gerar notas (de " + notaMin.toFixed(1) + " a " + notaMax.toFixed(1) + ") em " + itensSelecionados.length + " diários selecionados do MASP " + masp + " no " + trimestre + "º trimestre. Deseja continuar?"
-          : "Esta ação vai preencher a carga horária e gerar notas (de " + notaMin.toFixed(1) + " a " + notaMax.toFixed(1) + ") SOMENTE nas abas e turmas associadas ao MASP " + masp + " no " + trimestre + "º trimestre. Deseja continuar?";
+          ? `Esta ação vai preencher a carga horária e gerar notas (de ${notaMin.toFixed(1)} a ${notaMax.toFixed(1)}) em ${itensSelecionados.length} diários selecionados do MASP ${masp} no ${trimestre}º trimestre. Deseja continuar?`
+          : `Esta ação vai preencher a carga horária e gerar notas (de ${notaMin.toFixed(1)} a ${notaMax.toFixed(1)}) SOMENTE nas abas e turmas associadas ao MASP ${masp} no ${trimestre}º trimestre. Deseja continuar?`;
 
         Swal.fire({
           title: 'Preencher por MASP?',
@@ -1073,7 +1041,7 @@
 
         Swal.fire({
           title: 'Confirmar Preenchimento Dinâmico?',
-          text: "Esta ação vai preencher a carga horária e gerar notas aleatórias (de " + notaMin.toFixed(1) + " a " + notaMax.toFixed(1) + ") para TODOS os alunos ativos da turma " + turma + " no " + trimestre + "º trimestre. Deseja continuar?",
+          text: `Esta ação vai preencher a carga horária e gerar notas aleatórias (de ${notaMin.toFixed(1)} a ${notaMax.toFixed(1)}) para TODOS os alunos ativos da turma ${turma} no ${trimestre}º trimestre. Deseja continuar?`,
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#583ef2',
@@ -1099,7 +1067,7 @@
       }
     }
 
-    async function auditarDisciplinaConfirmado(disciplina) {
+    async function auditarDisciplina(disciplina) {
       let turma = document.getElementById("coordSelectTurma").value;
       if (!turma || !disciplina) return;
       disciplinaAuditadaAtual = disciplina;
@@ -1115,36 +1083,14 @@
         });
         
         cacheAlunosCoord = lista;
-        snapshotAlunosCoord = JSON.stringify(lista);
+        cacheAlunosOriginaisCoord = JSON.stringify(lista);
         desenharTabelaDiarioCoord();
-        document.getElementById("tituloDiarioCoord").innerText = disciplina + " — Turma " + turma;
+        document.getElementById("tituloDiarioCoord").innerText = `${disciplina} — Turma ${turma}`;
         
         let painelCoord = document.getElementById("cardDiarioCoord");
         painelCoord.classList.remove("d-none");
         painelCoord.scrollIntoView({ behavior: 'smooth' });
       }
-    }
-
-    async function auditarDisciplina(disciplina) {
-      if (temAlteracoesNaoSalvas()) {
-        Swal.fire({
-          title: 'Alterações não salvas!',
-          text: 'Você possui alterações não salvas no diário auditado atual. Deseja descartar as alterações e abrir esta disciplina?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ef4444',
-          cancelButtonColor: '#583ef2',
-          confirmButtonText: 'Sim, descartar e abrir',
-          cancelButtonText: 'Cancelar',
-          customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            auditarDisciplinaConfirmado(disciplina);
-          }
-        });
-        return;
-      }
-      auditarDisciplinaConfirmado(disciplina);
     }
 
     function desenharTabelaDiarioCoord() {
@@ -1160,21 +1106,23 @@
         let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
         let disabledInput = aluno.taxado ? 'disabled' : '';
         
-        tbody.innerHTML += '<tr ' + classeLinha + '>' +
-          '<td class="text-center fw-bold text-secondary">' + (i + 1) + '</td>' +
-          '<td class="fw-bold text-dark">' + aluno.nome + '</td>' +
-          '<td><input type="number" step="0.1" value="' + aluno.nota1 + '" ' + disabledInput + ' onchange="atualizarCacheNotaCoord(' + i + ', 1, this.value, this)" onblur="atualizarCacheNotaCoord(' + i + ', 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>' +
-          '<td><input type="number" step="0.1" value="' + aluno.nota2 + '" ' + disabledInput + ' onchange="atualizarCacheNotaCoord(' + i + ', 2, this.value, this)" onblur="atualizarCacheNotaCoord(' + i + ', 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>' +
-          '<td><input type="number" step="0.1" value="' + aluno.nota3 + '" ' + disabledInput + ' onchange="atualizarCacheNotaCoord(' + i + ', 3, this.value, this)" onblur="atualizarCacheNotaCoord(' + i + ', 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>' +
-          '<td class="text-center"><input type="checkbox" ' + (aluno.ch1 ? 'checked' : '') + ' ' + disabledInput + ' onchange="atualizarCacheCHCoord(' + i + ', 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>' +
-          '<td class="text-center"><input type="checkbox" ' + (aluno.ch2 ? 'checked' : '') + ' ' + disabledInput + ' onchange="atualizarCacheCHCoord(' + i + ', 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>' +
-          '<td class="text-center"><input type="checkbox" ' + (aluno.ch3 ? 'checked' : '') + ' ' + disabledInput + ' onchange="atualizarCacheCHCoord(' + i + ', 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>' +
-          '<td class="text-center">' +
-            '<button onclick="alternarStatusEstudanteCoord(' + aluno.linhaPlanilha + ', ' + aluno.taxado + ')" class="btn btn-sm ' + (aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger') + ' py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">' +
-              (aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar') +
-            '</button>' +
-          '</td>' +
-        '</tr>';
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
+            <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
+            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+            <td class="text-center">
+              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
+                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              </button>
+            </td>
+          </tr>
+        `;
       });
     }
 
@@ -1193,9 +1141,7 @@
       let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosCoord });
       exibirLoader(false);
       if(res) {
-        if(res.sucesso) {
-          snapshotAlunosCoord = JSON.stringify(cacheAlunosCoord);
-        }
+        if(res.sucesso) cacheAlunosOriginaisCoord = JSON.stringify(cacheAlunosCoord);
         notificar(res.mensagem, res.sucesso);
         carregarRelatorioPreenchimento(); 
       }
@@ -1208,7 +1154,7 @@
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
-        auditarDisciplinaConfirmado(disciplinaAuditadaAtual); 
+        auditarDisciplina(disciplinaAuditadaAtual); 
       }
     }
 
@@ -1219,9 +1165,7 @@
       let disc = await chamarServidor("getDisciplinasTodas", { turma: turma });
       if(disc && Array.isArray(disc)) {
         select.innerHTML = '<option value="">Selecione...</option>';
-        disc.forEach(function(d) {
-          select.innerHTML += '<option value="' + d + '">' + d + '</option>';
-        });
+        disc.forEach(d => select.innerHTML += `<option value="${d}">${d}</option>`);
       }
     }
 
@@ -1259,45 +1203,21 @@
     }
 
     function mudarAbaCoord(aba) {
-      if (temAlteracoesNaoSalvas()) {
-        Swal.fire({
-          title: 'Alterações não salvas!',
-          text: 'Você possui alterações não salvas no diário auditado. Deseja descartar as alterações e mudar de aba?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#ef4444',
-          cancelButtonColor: '#583ef2',
-          confirmButtonText: 'Sim, descartar',
-          cancelButtonText: 'Cancelar',
-          customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            executarMudancaAbaCoord(aba);
-          }
-        });
-        return;
-      }
-      executarMudancaAbaCoord(aba);
-    }
-
-    function executarMudancaAbaCoord(aba) {
-      ['relatorios', 'preenchimento', 'aluno', 'professor'].forEach(function(a) {
-        let el = document.getElementById('coordAba' + a.charAt(0).toUpperCase() + a.slice(1));
+      ['relatorios', 'preenchimento', 'aluno', 'professor'].forEach(a => {
+        let el = document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`);
         if (el) el.classList.add("d-none");
-        let btn = document.getElementById('btn-menu-' + a.substring(0,4));
+        let btn = document.getElementById(`btn-menu-${a.substring(0,4)}`);
         if (btn) {
           btn.classList.remove("active");
           btn.classList.add("text-dark");
         }
       });
       document.getElementById("cardDiarioCoord").classList.add("d-none");
-      cacheAlunosCoord = [];
-      snapshotAlunosCoord = "";
       
-      let targetEl = document.getElementById('coordAba' + aba.charAt(0).toUpperCase() + aba.slice(1));
+      let targetEl = document.getElementById(`coordAba${aba.charAt(0).toUpperCase() + aba.slice(1)}`);
       if (targetEl) targetEl.classList.remove("d-none");
       
-      let activeBtn = document.getElementById('btn-menu-' + aba.substring(0,4));
+      let activeBtn = document.getElementById(`btn-menu-${aba.substring(0,4)}`);
       if (activeBtn) {
         activeBtn.classList.add("active");
         activeBtn.classList.remove("text-dark");
@@ -1313,54 +1233,51 @@
       }
     }
 
-    function executarLogout() {
+    function logout() {
       dadosUsuarioLogado = {};
       cacheAlunosAtuais = [];
-      snapshotAlunosAtuais = "";
+      cacheAlunosOriginaisProf = "[]";
       cacheAlunosCoord = [];
-      snapshotAlunosCoord = "";
+      cacheAlunosOriginaisCoord = "[]";
       document.getElementById("painelSistema").classList.add("d-none");
       document.getElementById("telaLogin").classList.remove("d-none");
       document.getElementById("maspInput").value = "";
       document.getElementById("adminPass").value = "";
-      document.getElementById("cardDiario").classList.add("d-none");
-      document.getElementById("cardDiarioCoord").classList.add("d-none");
     }
 
-    function logout() {
-      if (temAlteracoesNaoSalvas()) {
+    function tentarLogout() {
+      if (verificarAlteracoesNaoSalvas()) {
         Swal.fire({
           title: 'Alterações não salvas!',
-          text: 'Você possui alterações de notas ou carga horária que ainda não foram salvas. Deseja realmente sair sem salvar?',
+          text: 'Você possui alterações não salvas no diário. Deseja sair do sistema sem salvar?',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#ef4444',
-          cancelButtonColor: '#583ef2',
+          cancelButtonColor: '#64748b',
           confirmButtonText: 'Sim, sair sem salvar',
           cancelButtonText: 'Continuar editando',
+          reverseButtons: true,
           customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            executarLogout();
-          }
+        }).then(function(res) {
+          if (res.isConfirmed) logout();
         });
-      } else {
-        Swal.fire({
-          title: 'Deseja encerrar a sessão?',
-          text: 'Deseja sair da sua conta e retornar à tela inicial de login?',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#583ef2',
-          cancelButtonColor: '#6e7881',
-          confirmButtonText: 'Sim, sair',
-          cancelButtonText: 'Permanecer',
-          customClass: { popup: 'rounded-4' }
-        }).then((result) => {
-          if (result.isConfirmed) {
-            executarLogout();
-          }
-        });
+        return;
       }
+
+      Swal.fire({
+        title: 'Sair do Sistema?',
+        text: 'Deseja realmente sair da sua conta?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#583ef2',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Sim, sair',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        customClass: { popup: 'rounded-4' }
+      }).then(function(res) {
+        if (res.isConfirmed) logout();
+      });
     }
   </script>
   
