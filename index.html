@@ -389,6 +389,7 @@
               <button onclick="mudarAbaCoord('preenchimento')" id="btn-menu-pree" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-wand-magic-sparkles me-2 w-20px text-center"></i>Preenchimento Automático</button>
               <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
               <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
+              <button onclick="mudarAbaCoord('gerenciarProfessores')" id="btn-menu-gerp" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-gear me-2 w-20px text-center"></i>Editar / Alterar Vínculos</button>
             </div>
           </div>
 
@@ -585,6 +586,100 @@
               <button onclick="executarCadastroProfessor()" class="btn btn-primary py-2"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Vínculo</button>
             </div>
 
+            <!-- ABA 5: EDITAR / ALTERAR VÍNCULOS DOS PROFESSORES -->
+            <div id="coordAbaGerenciarProfessores" class="card p-4 d-none bg-white">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h5 class="fw-bold m-0 d-flex align-items-center gap-2"><i class="fa-solid fa-user-gear text-primary" style="color: #583ef2 !important;"></i> Editar e Alterar Vínculos dos Professores</h5>
+                  <p class="text-muted small mb-0 mt-1">Consulte os vínculos cadastrados digitando o MASP do docente (mesma lógica da busca por MASP).</p>
+                </div>
+                <button onclick="carregarProfessoresCoordHtml()" class="btn btn-sm btn-light border"><i class="fa-solid fa-rotate me-1"></i> Atualizar</button>
+              </div>
+
+              <!-- BUSCA POR MASP DO DOCENTE -->
+              <div class="p-3 bg-light rounded-4 border mb-4">
+                <label class="form-label small fw-bold text-uppercase text-dark">1. Consultar Vínculos por MASP do Professor</label>
+                <div class="input-group mb-2">
+                  <input type="text" id="coordMaspGerenciarInput" class="form-control" placeholder="Digite o MASP (ex: 13247499)" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarVinculosMaspGerenciarHtml();}">
+                  <button class="btn btn-primary fw-semibold" type="button" onclick="buscarVinculosMaspGerenciarHtml()">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i> Buscar Vínculos
+                  </button>
+                </div>
+                <div id="infoDocenteGerenciarHtml" class="d-none mt-2 pt-2 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <div>
+                    <span class="badge bg-primary me-2"><i class="fa-solid fa-user-tie me-1"></i> Docente</span>
+                    <strong id="nomeDocenteGerenciarHtml" class="text-dark"></strong>
+                    <span id="maspDocenteGerenciarBadge" class="badge bg-light text-dark border ms-2"></span>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="limparBuscaMaspGerenciarHtml()">Limpar Busca</button>
+                </div>
+              </div>
+
+              <!-- CARD DE EDIÇÃO ATIVA -->
+              <div id="cardEdicaoProfCoord" class="card p-3 mb-4 bg-light border-primary d-none" style="border-radius: 14px; border: 2px solid rgba(88,62,242,0.3) !important;">
+                <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-pencil me-1"></i> Editando Vínculo do Docente</h6>
+                <input type="hidden" id="editProfLinha" value="">
+                <input type="hidden" id="editProfMaspAntigo" value="">
+                <input type="hidden" id="editProfTurmaAntiga" value="">
+                <input type="hidden" id="editProfDisciplinaAntiga" value="">
+                
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold">Nome do Docente</label>
+                    <input type="text" id="editProfNome" class="form-control form-control-sm">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold">MASP</label>
+                    <input type="text" id="editProfMasp" class="form-control form-control-sm">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold">Turma Vinculada</label>
+                    <select id="editProfTurma" onchange="carregarDisciplinasEdicaoProf(this.value)" class="form-select form-select-sm"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold">Disciplina / Componente</label>
+                    <select id="editProfDisciplina" class="form-select form-select-sm">
+                      <option value="">Selecione a turma primeiro...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="text-end">
+                  <button onclick="cancelarEdicaoProfHtml()" class="btn btn-sm btn-secondary me-2">Cancelar</button>
+                  <button onclick="salvarEdicaoProfHtml()" class="btn btn-sm btn-primary"><i class="fa-solid fa-floppy-disk me-1"></i> Salvar Alterações</button>
+                </div>
+              </div>
+
+              <!-- BARRA DE BUSCA -->
+              <div class="row g-2 mb-3">
+                <div class="col-md-7">
+                  <input type="text" id="filtroProfTexto" onkeyup="filtrarProfessoresHtml()" placeholder="Filtrar por Nome, MASP ou Disciplina..." class="form-control form-control-sm">
+                </div>
+                <div class="col-md-5">
+                  <select id="filtroProfTurma" onchange="filtrarProfessoresHtml()" class="form-select form-select-sm">
+                    <option value="">Todas as Turmas</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- TABELA DE VÍNCULOS -->
+              <div class="table-responsive">
+                <table class="table table-hover align-middle small text-nowrap">
+                  <thead class="bg-light">
+                    <tr>
+                      <th class="py-2">Docente</th>
+                      <th class="py-2 text-center">MASP</th>
+                      <th class="py-2 text-center">Turma</th>
+                      <th class="py-2">Disciplina</th>
+                      <th class="py-2 text-center" width="130">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabelaProfessoresCorpo">
+                    <tr><td colspan="5" class="text-center text-muted py-4">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -637,6 +732,7 @@
     let cacheAlunosCoord = [];
     let cacheAlunosOriginaisCoord = "[]";
     let disciplinaAuditadaAtual = "";
+    let listaProfessoresCadastrados = [];
 
     function verificarAlteracoesNaoSalvas() {
       if (dadosUsuarioLogado.papel === 'professor') {
@@ -1203,7 +1299,7 @@
     }
 
     function mudarAbaCoord(aba) {
-      ['relatorios', 'preenchimento', 'aluno', 'professor'].forEach(a => {
+      ['relatorios', 'preenchimento', 'aluno', 'professor', 'gerenciarProfessores'].forEach(a => {
         let el = document.getElementById(`coordAba${a.charAt(0).toUpperCase() + a.slice(1)}`);
         if (el) el.classList.add("d-none");
         let btn = document.getElementById(`btn-menu-${a.substring(0,4)}`);
@@ -1222,6 +1318,229 @@
         activeBtn.classList.add("active");
         activeBtn.classList.remove("text-dark");
       }
+
+      if (aba === 'gerenciarProfessores') {
+        carregarProfessoresCoordHtml();
+      }
+    }
+
+    async function buscarVinculosMaspGerenciarHtml() {
+      let masp = (document.getElementById("coordMaspGerenciarInput")?.value || "").trim().replace(/D/g, "");
+      if (!masp) {
+        notificar("Informe o MASP do docente para buscar os vínculos.", false);
+        return;
+      }
+
+      let tbody = document.getElementById("tabelaProfessoresCorpo");
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>Buscando vínculos do docente no banco central...</td></tr>';
+      
+      exibirLoader(true);
+      let res = await chamarServidor("autenticarLogin", { perfil: "professor", usuario: masp });
+      exibirLoader(false);
+
+      if (res && res.sucesso && res.turmasVinculadas) {
+        let nomeProf = res.nome || ("Docente MASP " + masp);
+        let lista = [];
+        let cont = 2;
+        Object.entries(res.turmasVinculadas).forEach(([turma, discts]) => {
+          if (Array.isArray(discts)) {
+            discts.forEach(d => {
+              lista.push({
+                linha: cont++,
+                nome: nomeProf,
+                masp: masp,
+                turma: turma,
+                disciplina: d
+              });
+            });
+          }
+        });
+
+        listaProfessoresCadastrados = lista;
+        document.getElementById("infoDocenteGerenciarHtml")?.classList.remove("d-none");
+        let nomeEl = document.getElementById("nomeDocenteGerenciarHtml");
+        if (nomeEl) nomeEl.innerText = nomeProf;
+        let badgeEl = document.getElementById("maspDocenteGerenciarBadge");
+        if (badgeEl) badgeEl.innerText = "MASP: " + masp + " (" + lista.length + " vínculos)";
+        
+        desenharTabelaProfessoresHtml();
+        notificar(lista.length + " vínculo(s) encontrado(s) para " + nomeProf, true);
+      } else {
+        listaProfessoresCadastrados = [];
+        document.getElementById("infoDocenteGerenciarHtml")?.classList.add("d-none");
+        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Nenhum vínculo encontrado para o MASP ' + masp + '.</td></tr>';
+        notificar(res?.mensagem || ("Nenhum vínculo encontrado para o MASP " + masp), false);
+      }
+    }
+
+    function limparBuscaMaspGerenciarHtml() {
+      let input = document.getElementById("coordMaspGerenciarInput");
+      if (input) input.value = "";
+      document.getElementById("infoDocenteGerenciarHtml")?.classList.add("d-none");
+      listaProfessoresCadastrados = [];
+      desenharTabelaProfessoresHtml();
+    }
+
+    async function carregarProfessoresCoordHtml() {
+      let maspInput = document.getElementById("coordMaspGerenciarInput")?.value || "";
+      if (maspInput.trim()) {
+        buscarVinculosMaspGerenciarHtml();
+        return;
+      }
+
+      let tbody = document.getElementById("tabelaProfessoresCorpo");
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Carregando vínculos...</td></tr>';
+      
+      let res = await chamarServidor("getProfessoresCadastrados");
+      if (Array.isArray(res) && res.length > 0) {
+        listaProfessoresCadastrados = res;
+        desenharTabelaProfessoresHtml();
+      } else {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>';
+      }
+    }
+
+    function desenharTabelaProfessoresHtml() {
+      let tbody = document.getElementById("tabelaProfessoresCorpo");
+      if (!tbody) return;
+      
+      let fTexto = (document.getElementById("filtroProfTexto")?.value || "").toLowerCase();
+      let fTurma = document.getElementById("filtroProfTurma")?.value || "";
+
+      let filtrados = listaProfessoresCadastrados.filter(p => {
+        let matchTexto = !fTexto || 
+          p.nome.toLowerCase().includes(fTexto) || 
+          p.masp.includes(fTexto.replace(/\D/g, '')) || 
+          p.disciplina.toLowerCase().includes(fTexto);
+        let matchTurma = !fTurma || p.turma === fTurma;
+        return matchTexto && matchTurma;
+      });
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Nenhum vínculo encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = "";
+      filtrados.forEach((item, idx) => {
+        tbody.innerHTML += `
+          <tr>
+            <td class="fw-bold text-dark"><i class="fa-solid fa-user-tie text-primary me-2"></i>${item.nome}</td>
+            <td class="text-center font-monospace">${item.masp}</td>
+            <td class="text-center"><span class="badge bg-light text-primary border">${item.turma}</span></td>
+            <td>${item.disciplina}</td>
+            <td class="text-center">
+              <button onclick="abrirEdicaoProfHtml(${item.linha || idx})" class="btn btn-sm btn-outline-primary py-0 px-2 me-1" style="font-size:0.75rem;"><i class="fa-solid fa-pencil"></i> Editar</button>
+              <button onclick="excluirVinculoProfHtml('${item.linha}', '${item.masp}', '${item.turma}', '${item.disciplina}', '${item.nome}')" class="btn btn-sm btn-outline-danger py-0 px-2" style="font-size:0.75rem;"><i class="fa-solid fa-trash"></i> Excluir</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function filtrarProfessoresHtml() {
+      desenharTabelaProfessoresHtml();
+    }
+
+    async function abrirEdicaoProfHtml(linhaOuIdx) {
+      let item = listaProfessoresCadastrados.find(p => p.linha === Number(linhaOuIdx)) || listaProfessoresCadastrados[linhaOuIdx];
+      if (!item) return;
+
+      document.getElementById("editProfLinha").value = item.linha || "";
+      document.getElementById("editProfNome").value = item.nome;
+      document.getElementById("editProfMasp").value = item.masp;
+      document.getElementById("editProfMaspAntigo").value = item.masp;
+      document.getElementById("editProfTurmaAntiga").value = item.turma;
+      document.getElementById("editProfDisciplinaAntiga").value = item.disciplina;
+
+      let selectTurma = document.getElementById("editProfTurma");
+      selectTurma.innerHTML = '<option value="">Selecione...</option>';
+      (window.TURMAS_GLOB || ["3EJA-MORADA", "1REG01", "1REG02", "1REG03", "2REG01", "2REG02", "3REG01", "3REG02", "3EJA-SEDE", "1REG05", "1REG06", "1REG07", "1REG08", "2REG08", "2REG09", "2REG10", "3REG07", "3REG08", "3REG09"]).forEach(t => {
+        selectTurma.innerHTML += `<option value="${t}" ${t === item.turma ? 'selected' : ''}>${t}</option>`;
+      });
+
+      await carregarDisciplinasEdicaoProf(item.turma, item.disciplina);
+      document.getElementById("cardEdicaoProfCoord").classList.remove("d-none");
+      document.getElementById("cardEdicaoProfCoord").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function carregarDisciplinasEdicaoProf(turma, discSelecionada = "") {
+      let select = document.getElementById("editProfDisciplina");
+      select.innerHTML = '<option value="">Carregando...</option>';
+      if (!turma) return;
+      let disc = await chamarServidor("getDisciplinasTodas", { turma: turma });
+      if (disc && Array.isArray(disc)) {
+        select.innerHTML = '<option value="">Selecione...</option>';
+        disc.forEach(d => {
+          select.innerHTML += `<option value="${d}" ${d === discSelecionada ? 'selected' : ''}>${d}</option>`;
+        });
+      }
+    }
+
+    function cancelarEdicaoProfHtml() {
+      document.getElementById("cardEdicaoProfCoord").classList.add("d-none");
+    }
+
+    async function salvarEdicaoProfHtml() {
+      let linha = document.getElementById("editProfLinha").value;
+      let nome = document.getElementById("editProfNome").value;
+      let masp = document.getElementById("editProfMasp").value;
+      let turma = document.getElementById("editProfTurma").value;
+      let disc = document.getElementById("editProfDisciplina").value;
+      let maspAntigo = document.getElementById("editProfMaspAntigo").value;
+      let turmaAntiga = document.getElementById("editProfTurmaAntiga").value;
+      let discAntiga = document.getElementById("editProfDisciplinaAntiga").value;
+
+      if (!nome || !masp || !turma || !disc) {
+        notificar("Preencha todos os campos do vínculo!", false);
+        return;
+      }
+
+      exibirLoader(true);
+      let res = await chamarServidor("atualizarVinculoProfessor", {
+        linha: linha,
+        nomeProf: nome,
+        maspProf: masp,
+        turma: turma,
+        disciplinaProf: disc,
+        maspAntigo: maspAntigo,
+        turmaAntiga: turmaAntiga,
+        disciplinaAntiga: discAntiga
+      });
+      exibirLoader(false);
+
+      if (res) {
+        notificar(res.mensagem, res.sucesso);
+        if (res.sucesso) {
+          cancelarEdicaoProfHtml();
+          carregarProfessoresCoordHtml();
+        }
+      }
+    }
+
+    async function excluirVinculoProfHtml(linha, masp, turma, disciplina, nome) {
+      Swal.fire({
+        title: 'Excluir Vínculo?',
+        text: `Deseja realmente remover o vínculo do docente ${nome} (${masp}) na turma ${turma} - ${disciplina}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Sim, excluir',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        customClass: { popup: 'rounded-4' }
+      }).then(async function(result) {
+        if (result.isConfirmed) {
+          exibirLoader(true);
+          let res = await chamarServidor("excluirVinculoProfessor", { linha: linha, masp: masp, turma: turma, disciplina: disciplina });
+          exibirLoader(false);
+          if (res) {
+            notificar(res.mensagem, res.sucesso);
+            if (res.sucesso) carregarProfessoresCoordHtml();
+          }
+        }
+      });
     }
 
     function exibirLoader(mostrar) {
