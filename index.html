@@ -353,7 +353,7 @@
 
           <div class="table-responsive p-0">
             <table class="table table-hover align-middle m-0 text-nowrap">
-              <thead class="align-middle text-center">
+              <thead class="align-middle text-center" id="tabelaHeadDiario">
                 <tr>
                   <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
                   <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
@@ -409,9 +409,9 @@
               
               <div class="table-container-modern">
                 <table class="table align-middle text-center table-auditavel">
-                  <thead>
+                  <thead id="tabelaRelatorioCabecalho">
                     <tr>
-                      <th class="text-start py-3">Componente Curricular</th>
+                      <th class="text-start py-3 ps-3">Componente Curricular</th>
                       <th class="py-3">1º Trimestre</th>
                       <th class="py-3">2º Trimestre</th>
                       <th class="py-3">3º Trimestre</th>
@@ -434,7 +434,7 @@
                 </div>
                 <div class="table-responsive p-0">
                   <table class="table table-hover align-middle m-0 text-nowrap">
-                    <thead class="align-middle text-center">
+                    <thead class="align-middle text-center" id="tabelaHeadDiarioCoord">
                       <tr>
                         <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
                         <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
@@ -515,7 +515,7 @@
 
                   <div class="col-md-6 d-none" id="containerAutoTurma">
                     <label class="form-label fw-bold">1. Selecione a Turma</label>
-                    <select id="coordSelectTurmaAuto" class="form-select"></select>
+                    <select id="coordSelectTurmaAuto" onchange="ajustarTrimestreAutoTurma()" class="form-select"></select>
                     <small class="text-muted">Preencherá todas as disciplinas da turma selecionada.</small>
                   </div>
 
@@ -734,6 +734,23 @@
     let disciplinaAuditadaAtual = "";
     let listaProfessoresCadastrados = [];
 
+    function isTurmaEja(turma) {
+      if (!turma) return false;
+      var nome = String(turma).toUpperCase().trim();
+      return nome.indexOf("EJA") !== -1 || nome === "3EJA-SEDE" || nome === "3EJA-MORADA";
+    }
+
+    function ajustarTrimestreAutoTurma() {
+      let turma = document.getElementById("coordSelectTurmaAuto").value;
+      let selTrim = document.getElementById("coordSelectTrimestreAuto");
+      if (!selTrim) return;
+      if (isTurmaEja(turma)) {
+        selTrim.innerHTML = '<option value="1" selected>Semestre Único (EJA)</option>';
+      } else {
+        selTrim.innerHTML = '<option value="1">1º Trimestre</option><option value="2">2º Trimestre</option><option value="3">3º Trimestre</option>';
+      }
+    }
+
     function verificarAlteracoesNaoSalvas() {
       if (dadosUsuarioLogado.papel === 'professor') {
         let cardDiario = document.getElementById("cardDiario");
@@ -910,6 +927,44 @@
       let disciplina = document.getElementById("profDisciplina").value;
       if (!turma || !disciplina) return;
 
+      let isEja = isTurmaEja(turma);
+      let thead = document.getElementById("tabelaHeadDiario");
+      if (thead) {
+        if (isEja) {
+          thead.innerHTML = `
+            <tr>
+              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
+              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+            </tr>
+            <tr>
+              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">SEMESTRE</th>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">TOTAL</th>
+              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH SEMEST.</th>
+              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH TOTAL</th>
+            </tr>
+          `;
+        } else {
+          thead.innerHTML = `
+            <tr>
+              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
+              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+            </tr>
+            <tr>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+              <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
+              <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
+              <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+            </tr>
+          `;
+        }
+      }
+
       exibirLoader(true);
       let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
       exibirLoader(false);
@@ -929,11 +984,13 @@
     }
 
     function desenharTabelaDiario() {
+      let turma = document.getElementById("profTurma").value;
+      let isEja = isTurmaEja(turma);
       let tbody = document.getElementById("tabelaAlunosCorpo");
       tbody.innerHTML = "";
 
       if(cacheAlunosAtuais.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="${isEja ? 6 : 8}" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
         return;
       }
 
@@ -941,18 +998,31 @@
         let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
         let disabledInput = aluno.taxado ? 'disabled' : '';
         
-        tbody.innerHTML += `
-          <tr ${classeLinha}>
-            <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
-            <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value, this)" onblur="atualizarCacheNota(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value, this)" onblur="atualizarCacheNota(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-          </tr>
-        `;
+        if (isEja) {
+          tbody.innerHTML += `
+            <tr ${classeLinha}>
+              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
+              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
+              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td><div class="bg-light border text-center p-1 mx-auto fw-bold text-secondary" style="max-width:70px; border-radius: 10px !important; font-size: 13px;">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td><div class="bg-light border text-center p-1 mx-auto text-secondary font-monospace" style="max-width:85px; border-radius: 10px !important; font-size: 12px;">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML += `
+            <tr ${classeLinha}>
+              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
+              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
+              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value, this)" onblur="atualizarCacheNota(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value, this)" onblur="atualizarCacheNota(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+            </tr>
+          `;
+        }
       });
     }
 
@@ -989,9 +1059,31 @@
     async function carregarRelatorioPreenchimento() {
       let turma = document.getElementById("coordSelectTurma").value;
       let tbody = document.getElementById("tabelaRelatorioCorpo");
+      let thead = document.getElementById("tabelaRelatorioCabecalho");
       document.getElementById("cardDiarioCoord").classList.add("d-none"); 
       
-      if(!turma) { tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma.</td></tr>'; return; }
+      let isEja = isTurmaEja(turma);
+      if (thead) {
+        if (isEja) {
+          thead.innerHTML = `
+            <tr>
+              <th class="text-start py-3 ps-3">Componente Curricular</th>
+              <th class="py-3">Semestre Único</th>
+            </tr>
+          `;
+        } else {
+          thead.innerHTML = `
+            <tr>
+              <th class="text-start py-3 ps-3">Componente Curricular</th>
+              <th class="py-3">1º Trimestre</th>
+              <th class="py-3">2º Trimestre</th>
+              <th class="py-3">3º Trimestre</th>
+            </tr>
+          `;
+        }
+      }
+
+      if(!turma) { tbody.innerHTML = `<tr><td colspan="${isEja ? 2 : 4}" class="text-center text-muted py-4">Selecione uma turma.</td></tr>`; return; }
 
       exibirLoader(true);
       let dados = await chamarServidor("getStatusPreenchimento", { turma: turma });
@@ -999,18 +1091,29 @@
 
       if(dados && Array.isArray(dados)) {
         tbody.innerHTML = "";
+        let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning" : "bg-danger");
         dados.forEach(linha => {
-          let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning" : "bg-danger");
-          tbody.innerHTML += `
-            <tr onclick="auditarDisciplina('${linha.disciplina}')">
-              <td class="fw-bold text-start text-dark py-3">
-                <i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>${linha.disciplina.toUpperCase()}
-              </td>
-              <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
-              <td><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
-              <td><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
-            </tr>
-          `;
+          if (isEja) {
+            tbody.innerHTML += `
+              <tr onclick="auditarDisciplina('${linha.disciplina}')">
+                <td class="fw-bold text-start text-dark py-3 ps-3">
+                  <i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>${linha.disciplina.toUpperCase()}
+                </td>
+                <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+              </tr>
+            `;
+          } else {
+            tbody.innerHTML += `
+              <tr onclick="auditarDisciplina('${linha.disciplina}')">
+                <td class="fw-bold text-start text-dark py-3 ps-3">
+                  <i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>${linha.disciplina.toUpperCase()}
+                </td>
+                <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+                <td><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
+                <td><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
+              </tr>
+            `;
+          }
         });
       }
     }
@@ -1168,6 +1271,46 @@
       if (!turma || !disciplina) return;
       disciplinaAuditadaAtual = disciplina;
 
+      let isEja = isTurmaEja(turma);
+      let thead = document.getElementById("tabelaHeadDiarioCoord");
+      if (thead) {
+        if (isEja) {
+          thead.innerHTML = `
+            <tr>
+              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
+              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+              <th rowspan="2" width="10%" class="pb-3">Ações</th>
+            </tr>
+            <tr>
+              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">SEMESTRE</th>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">TOTAL</th>
+              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH SEMEST.</th>
+              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH TOTAL</th>
+            </tr>
+          `;
+        } else {
+          thead.innerHTML = `
+            <tr>
+              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
+              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
+              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+              <th rowspan="2" width="10%" class="pb-3">Ações</th>
+            </tr>
+            <tr>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
+              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+              <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
+              <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
+              <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+            </tr>
+          `;
+        }
+      }
+
       exibirLoader(true);
       let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
       exibirLoader(false);
@@ -1190,11 +1333,13 @@
     }
 
     function desenharTabelaDiarioCoord() {
+      let turma = document.getElementById("coordSelectTurma").value;
+      let isEja = isTurmaEja(turma);
       let tbody = document.getElementById("tabelaAlunosCorpoCoord");
       tbody.innerHTML = "";
 
       if(cacheAlunosCoord.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="${isEja ? 7 : 9}" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
         return;
       }
 
@@ -1202,23 +1347,41 @@
         let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
         let disabledInput = aluno.taxado ? 'disabled' : '';
         
-        tbody.innerHTML += `
-          <tr ${classeLinha}>
-            <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
-            <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
-            <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-            <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-            <td class="text-center">
-              <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
-                ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
-              </button>
-            </td>
-          </tr>
-        `;
+        if (isEja) {
+          tbody.innerHTML += `
+            <tr ${classeLinha}>
+              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
+              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
+              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td><div class="bg-light border text-center p-1 mx-auto fw-bold text-secondary" style="max-width:70px; border-radius: 10px !important; font-size: 13px;">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td><div class="bg-light border text-center p-1 mx-auto text-secondary font-monospace" style="max-width:85px; border-radius: 10px !important; font-size: 12px;">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
+              <td class="text-center">
+                <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
+                  ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+                </button>
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML += `
+            <tr ${classeLinha}>
+              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
+              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
+              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td class="text-center">
+                <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
+                  ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+                </button>
+              </td>
+            </tr>
+          `;
+        }
       });
     }
 
