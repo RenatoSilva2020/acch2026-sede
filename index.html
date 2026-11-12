@@ -387,7 +387,7 @@
             <div class="list-group shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
               <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active border-0 py-3"><i class="fa-solid fa-chart-pie me-2 w-20px text-center"></i>Status Preenchimento</button>
               <button onclick="mudarAbaCoord('preenchimento')" id="btn-menu-pree" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-wand-magic-sparkles me-2 w-20px text-center"></i>Preenchimento Automático</button>
-              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-plus me-2 w-20px text-center"></i>Cadastrar Estudante</button>
+              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-users me-2 w-20px text-center"></i>Gerenciar Estudantes</button>
               <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
               <button onclick="mudarAbaCoord('gerenciarProfessores')" id="btn-menu-gerp" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-gear me-2 w-20px text-center"></i>Editar / Alterar Vínculos</button>
             </div>
@@ -544,18 +544,81 @@
               </div>
             </div>
 
-            <!-- ABA 3: CADASTRAR ALUNO -->
+            <!-- ABA 3: GERENCIAR ESTUDANTES DAS TURMAS -->
             <div id="coordAbaAluno" class="card p-4 d-none bg-white">
-              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-user-plus text-success"></i> Cadastrar Novo Aluno na Matriz</h5>
+              <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+                <div>
+                  <h5 class="fw-bold mb-1 d-flex align-items-center gap-2"><i class="fa-solid fa-users text-primary" style="color: #583ef2 !important;"></i> Gerenciamento de Estudantes das Turmas</h5>
+                  <p class="text-muted small mb-0">Visualize os estudantes enturmados, edite a grafia de seus nomes, inative ou reative cadastros e cadastre novos estudantes.</p>
+                </div>
+                <div>
+                  <button onclick="toggleFormNovoEstudanteHtml()" class="btn btn-success btn-sm py-2 px-3 fw-bold"><i class="fa-solid fa-user-plus me-1"></i> Novo Estudante</button>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-4 p-3 bg-light rounded-4 border align-items-center">
+                <div class="col-md-5">
+                  <label class="form-label small fw-bold text-muted text-uppercase mb-1">Selecione a Turma</label>
+                  <select id="cadAlunoTurma" onchange="carregarEstudantesCoordHtml()" class="form-select"></select>
+                </div>
+                <div class="col-md-7">
+                  <div class="row g-2 text-center" id="resumoEstudantesCoord">
+                    <div class="col-4">
+                      <div class="bg-white p-2 rounded-3 border">
+                        <span class="d-block text-muted small" style="font-size: 11px;">TOTAL</span>
+                        <span class="fw-bold fs-6 text-dark" id="qtdTotalEstudantes">0</span>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="bg-white p-2 rounded-3 border">
+                        <span class="d-block text-success small" style="font-size: 11px;">ATIVOS</span>
+                        <span class="fw-bold fs-6 text-success" id="qtdAtivosEstudantes">0</span>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="bg-white p-2 rounded-3 border">
+                        <span class="d-block text-muted small" style="font-size: 11px;">INATIVOS</span>
+                        <span class="fw-bold fs-6 text-secondary" id="qtdInativosEstudantes">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FORM CADASTRO RÁPIDO NOVO ESTUDANTE -->
+              <div id="boxNovoEstudanteCoord" class="card p-3 mb-4 border-success bg-success bg-opacity-10 d-none" style="border-radius: 14px;">
+                <h6 class="fw-bold text-success mb-2"><i class="fa-solid fa-plus me-1"></i> Cadastrar Novo Estudante na Turma</h6>
+                <div class="input-group">
+                  <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Nome completo do estudante" onkeydown="if(event.key==='Enter'){event.preventDefault();executarCadastroEstudante();}">
+                  <button onclick="executarCadastroEstudante()" class="btn btn-success fw-bold px-3"><i class="fa-solid fa-check me-1"></i> Cadastrar</button>
+                  <button onclick="toggleFormNovoEstudanteHtml()" class="btn btn-outline-secondary px-3">Cancelar</button>
+                </div>
+              </div>
+
+              <!-- BUSCA RÁPIDA -->
               <div class="mb-3">
-                <label class="form-label">Turma do Aluno</label>
-                <select id="cadAlunoTurma" class="form-select"></select>
+                <div class="input-group">
+                  <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                  <input type="text" id="filtroEstudanteNomeCoord" class="form-control border-start-0" placeholder="Buscar estudante por nome..." oninput="filtrarTabelaEstudantesCoord()">
+                </div>
               </div>
-              <div class="mb-4">
-                <label class="form-label">Nome Completo do Estudante</label>
-                <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Ex: JOÃO DA SILVA SAURO">
+
+              <!-- TABELA ESTUDANTES -->
+              <div class="table-responsive rounded-3 border">
+                <table class="table table-hover align-middle mb-0 text-center text-sm" style="font-size: 0.88rem;">
+                  <thead class="table-light text-muted small">
+                    <tr>
+                      <th style="width: 60px;">Nº</th>
+                      <th class="text-start">Nome Completo do Estudante</th>
+                      <th style="width: 120px;">Status</th>
+                      <th style="width: 180px;">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabelaEstudantesCorpo">
+                    <tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma para visualizar os estudantes.</td></tr>
+                  </tbody>
+                </table>
               </div>
-              <button onclick="executarCadastroEstudante()" class="btn btn-success py-2"><i class="fa-solid fa-check me-2"></i>Inserir na Aba Alunos</button>
             </div>
 
             <!-- ABA 4: VINCULAR PROFESSOR -->
@@ -1428,9 +1491,141 @@
       }
     }
 
+    let cacheEstudantesTurmaCoord = [];
+
+    function toggleFormNovoEstudanteHtml() {
+      let box = document.getElementById("boxNovoEstudanteCoord");
+      if (box) {
+        box.classList.toggle("d-none");
+        if (!box.classList.contains("d-none")) {
+          document.getElementById("cadAlunoNome")?.focus();
+        }
+      }
+    }
+
+    async function carregarEstudantesCoordHtml() {
+      let turma = document.getElementById("cadAlunoTurma")?.value;
+      let tbody = document.getElementById("tabelaEstudantesCorpo");
+      let totalEl = document.getElementById("qtdTotalEstudantes");
+      let ativosEl = document.getElementById("qtdAtivosEstudantes");
+      let inativosEl = document.getElementById("qtdInativosEstudantes");
+
+      if (!turma) {
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma para visualizar os estudantes.</td></tr>';
+        if (totalEl) totalEl.innerText = "0";
+        if (ativosEl) ativosEl.innerText = "0";
+        if (inativosEl) inativosEl.innerText = "0";
+        cacheEstudantesTurmaCoord = [];
+        return;
+      }
+
+      if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>Carregando estudantes da turma...</td></tr>';
+      
+      exibirLoader(true);
+      let res = await chamarServidor("getEstudantesTurma", { turma: turma });
+      exibirLoader(false);
+
+      if (Array.isArray(res)) {
+        cacheEstudantesTurmaCoord = res;
+      } else {
+        cacheEstudantesTurmaCoord = [];
+      }
+
+      desenharTabelaEstudantesCoord(cacheEstudantesTurmaCoord);
+    }
+
+    function desenharTabelaEstudantesCoord(lista) {
+      let tbody = document.getElementById("tabelaEstudantesCorpo");
+      let totalEl = document.getElementById("qtdTotalEstudantes");
+      let ativosEl = document.getElementById("qtdAtivosEstudantes");
+      let inativosEl = document.getElementById("qtdInativosEstudantes");
+
+      let total = cacheEstudantesTurmaCoord.length;
+      let ativos = cacheEstudantesTurmaCoord.filter(a => !a.taxado).length;
+      let inativos = cacheEstudantesTurmaCoord.filter(a => a.taxado).length;
+
+      if (totalEl) totalEl.innerText = total;
+      if (ativosEl) ativosEl.innerText = ativos;
+      if (inativosEl) inativosEl.innerText = inativos;
+
+      if (!tbody) return;
+      tbody.innerHTML = "";
+
+      if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Nenhum estudante encontrado.</td></tr>';
+        return;
+      }
+
+      lista.forEach((aluno, i) => {
+        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let badgeStatus = aluno.taxado
+          ? '<span class="badge bg-secondary">Inativo</span>'
+          : '<span class="badge bg-success">Ativo</span>';
+
+        let btnAcaoStatus = aluno.taxado
+          ? `<button onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, true)" class="btn btn-sm btn-outline-success py-1 px-2" style="font-size:0.78rem; border-radius:8px;"><i class="fa-solid fa-user-check me-1"></i>Ativar</button>`
+          : `<button onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, false)" class="btn btn-sm btn-outline-danger py-1 px-2" style="font-size:0.78rem; border-radius:8px;"><i class="fa-solid fa-user-slash me-1"></i>Inativar</button>`;
+
+        tbody.innerHTML += `
+          <tr ${classeLinha}>
+            <td class="text-center fw-bold text-secondary">${aluno.numero || (i + 1)}</td>
+            <td class="text-start fw-bold text-dark ps-3">${aluno.nome}</td>
+            <td>${badgeStatus}</td>
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <button onclick="editarEstudanteCoordHtml(${aluno.linhaPlanilha}, '${aluno.nome.replace(/'/g, "\\'")}')" class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size:0.78rem; border-radius:8px;" title="Editar nome"><i class="fa-solid fa-pencil me-1"></i>Editar</button>
+                ${btnAcaoStatus}
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function filtrarTabelaEstudantesCoord() {
+      let termo = (document.getElementById("filtroEstudanteNomeCoord")?.value || "").toLowerCase().trim();
+      let filtrados = cacheEstudantesTurmaCoord.filter(a => a.nome.toLowerCase().includes(termo));
+      desenharTabelaEstudantesCoord(filtrados);
+    }
+
+    async function editarEstudanteCoordHtml(linha, nomeAtual) {
+      let turma = document.getElementById("cadAlunoTurma")?.value;
+      if (!turma) return;
+      let novoNome = prompt("Digite o novo nome para o estudante:", nomeAtual);
+      if (novoNome === null) return;
+      novoNome = novoNome.trim().toUpperCase();
+      if (!novoNome) {
+        notificar("O nome do estudante não pode ser vazio.", false);
+        return;
+      }
+
+      exibirLoader(true);
+      let res = await chamarServidor("editarEstudante", { turma: turma, linhaPlanilha: linha, novoNome: novoNome });
+      exibirLoader(false);
+
+      if (res) {
+        notificar(res.mensagem, res.sucesso);
+        if (res.sucesso) carregarEstudantesCoordHtml();
+      }
+    }
+
+    async function alternarStatusEstudanteGerenciadorHtml(linha, taxadoAtual) {
+      let turma = document.getElementById("cadAlunoTurma")?.value;
+      if (!turma) return;
+
+      exibirLoader(true);
+      let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !taxadoAtual });
+      exibirLoader(false);
+
+      if (res) {
+        notificar(res.mensagem, res.sucesso);
+        if (res.sucesso) carregarEstudantesCoordHtml();
+      }
+    }
+
     async function executarCadastroEstudante() {
       let turma = document.getElementById("cadAlunoTurma").value;
-      let nome = document.getElementById("cadAlunoNome").value;
+      let nome = document.getElementById("cadAlunoNome").value.trim().toUpperCase();
       if(!turma || !nome) { notificar("Preencha todos os campos!", false); return; }
 
       exibirLoader(true);
@@ -1438,7 +1633,10 @@
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
-        if(res.sucesso) document.getElementById("cadAlunoNome").value = ""; 
+        if(res.sucesso) {
+          document.getElementById("cadAlunoNome").value = "";
+          carregarEstudantesCoordHtml();
+        }
       }
     }
 
@@ -1484,6 +1682,13 @@
 
       if (aba === 'gerenciarProfessores') {
         carregarProfessoresCoordHtml();
+      } else if (aba === 'aluno') {
+        let elCadTurma = document.getElementById("cadAlunoTurma");
+        if (elCadTurma && !elCadTurma.value) {
+          let tCoord = document.getElementById("coordSelectTurma")?.value;
+          if (tCoord) elCadTurma.value = tCoord;
+        }
+        carregarEstudantesCoordHtml();
       }
     }
 
