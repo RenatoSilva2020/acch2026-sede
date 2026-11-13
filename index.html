@@ -4,110 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Escolar Integrado</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    /* Estilos Base e Identidade Visual */
-    body { 
-      background-color: #f4f6fa; 
-      font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+    body {
+      background-color: #f4f6fa;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       color: #1e293b;
+      margin: 0;
     }
-    
-    /* Cartões Modernizados (Bordas e Sombras Suaves) */
-    .card {
-      border-radius: 20px !important;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.03) !important;
-      border: 1px solid #e2e8f0 !important;
+
+    .d-none { display: none !important; }
+
+    .btn-gradient-primary {
+      background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%);
+      border: none;
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(88, 62, 242, 0.2);
+    }
+    .btn-gradient-primary:hover {
+      box-shadow: 0 12px 24px rgba(88, 62, 242, 0.3);
+      opacity: 0.95;
+    }
+
+    .card-modern {
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.03);
+      border: 1px solid #e2e8f0;
       background-color: #ffffff;
       overflow: hidden;
     }
-    
-    .card-login { 
-      max-width: 460px; 
-      padding: 40px 32px !important;
-    }
-    
-    h3, h5, .fw-bold { 
-      color: #0f172a !important; 
-      font-weight: 700 !important;
-      letter-spacing: -0.5px;
-    }
-    
-    .text-muted {
-      color: #64748b !important;
-      font-size: 0.95rem;
-    }
-    
-    .form-label {
-      font-weight: 600;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
-      color: #64748b;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    
-    /* Inputs Estilizados */
-    .form-control, .form-select, .input-group-text { 
-      border-radius: 14px !important; 
-      border: 1px solid #e2e8f0 !important; 
-      background-color: #ffffff;
-      padding: 12px 16px;
-      font-size: 0.95rem;
-      color: #0f172a;
-      box-shadow: none !important;
-      transition: all 0.2s ease;
-    }
-    
-    .form-control:focus, .form-select:focus { 
-      border-color: #583ef2 !important; 
-      box-shadow: 0 0 0 4px rgba(88, 62, 242, 0.08) !important; 
-    }
-    
-    .input-group .form-control {
-      border-top-left-radius: 0 !important;
-      border-bottom-left-radius: 0 !important;
-    }
-    .input-group .input-group-text {
-      border-top-right-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-      background-color: #ffffff;
-      color: #94a3b8;
-    }
-    
-    /* Botões Baseados no Visual Moderno */
-    .btn { 
-      border-radius: 14px !important; 
-      font-weight: 600; 
-      padding: 12px 24px;
-      transition: all 0.2s ease; 
-    }
-    .btn:hover { transform: translateY(-1px); }
-    
-    .btn-primary { 
-      background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important;
-      border: none !important;
-      box-shadow: 0 8px 20px rgba(88, 62, 242, 0.2) !important;
-      color: #ffffff !important;
-    }
-    .btn-primary:hover {
-      box-shadow: 0 12px 24px rgba(88, 62, 242, 0.3) !important;
-      opacity: 0.95;
-    }
-    
-    .btn-dark { background-color: #0f172a !important; border: none !important; color: #fff !important; }
-    .btn-success { background-color: #10b981 !important; border: none !important; color: #fff !important; }
-    .btn-secondary { background-color: #64748b !important; border: none !important; color: #fff !important; }
-    
-    /* Tabelas Limpas */
+
     .table-container-modern {
       border: 1px solid #e2e8f0;
       border-radius: 16px;
@@ -115,668 +49,720 @@
       background: #ffffff;
     }
 
-    .table {
-      margin-bottom: 0 !important;
-    }
-    
-    .table th {
-      background-color: #f8fafc !important;
-      color: #64748b !important;
-      font-weight: 600 !important;
-      font-size: 0.85rem !important;
-      padding: 16px 20px !important;
-      border-bottom: 1px solid #e2e8f0 !important;
-      text-transform: none !important;
-    }
-    
-    .table td {
-      padding: 16px 20px !important;
-      border-bottom: 1px solid #e2e8f0 !important;
-      color: #0f172a;
-      font-size: 0.95rem;
-      vertical-align: middle;
-    }
-    
-    .table tbody tr:last-child td {
-      border-bottom: none !important;
-    }
-
-    .table-auditavel tbody tr { 
-      cursor: pointer; 
-      transition: background-color 0.15s ease; 
-    }
-    .table-auditavel tbody tr:hover { 
-      background-color: #f8fafc !important; 
-    }
-    
-    /* Badges de Status */
-    .badge {
-      font-size: 0.8rem !important;
-      font-weight: 600 !important;
-      padding: 6px 16px !important;
-      border-radius: 50px !important;
-      display: inline-block;
-      min-width: 100px;
-      text-align: center;
-      letter-spacing: 0.1px;
-      box-shadow: none !important;
-    }
-    
-    .bg-success { background-color: #137e54 !important; color: #ffffff !important; }
-    .bg-danger { background-color: #ce2d3a !important; color: #ffffff !important; }
-    .bg-warning { background-color: #f59e0b !important; color: #ffffff !important; }
-
-    .icon-lupa-print {
-      color: #7c3aed !important;
-      font-size: 0.85rem;
-      margin-right: 8px;
-    }
-    
-    /* Abas de Navegação (Pills) */
-    .nav-pills {
-      background-color: #f1f5f9 !important;
-      border-radius: 14px;
-      padding: 4px !important;
-    }
-    
-    .nav-pills .nav-link { 
-      border-radius: 10px !important; 
-      font-weight: 600; 
-      color: #64748b !important;
-      padding: 10px 16px;
-    }
-    
-    .nav-pills .nav-link.active { 
-      background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important;
-      color: #ffffff !important; 
-    }
-    
-    .navbar-brand { font-weight: 700; letter-spacing: -0.5px; }
-    .text-taxado { text-decoration: line-through; color: #94a3b8 !important; opacity: 0.65; }
-    .text-taxado input { background-color: #e2e8f0 !important; pointer-events: none; }
-
-    /* Colunas congeladas na tabela de notas */
     .col-sticky-num {
-      position: sticky !important;
-      left: 0 !important;
-      z-index: 5 !important;
-      width: 50px !important;
-      min-width: 50px !important;
-      max-width: 50px !important;
-      background-color: #ffffff !important;
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      width: 52px;
+      min-width: 52px;
+      max-width: 52px;
+      background-color: #ffffff;
     }
 
     .col-sticky-name {
-      position: sticky !important;
-      left: 50px !important;
-      z-index: 5 !important;
-      min-width: 240px !important;
-      background-color: #ffffff !important;
-      box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.08);
-      border-right: 1px solid #dee2e6 !important;
+      position: sticky;
+      left: 52px;
+      z-index: 10;
+      min-width: 240px;
+      background-color: #ffffff;
+      box-shadow: 4px 0 6px -2px rgba(15, 23, 42, 0.08);
+      border-right: 1px solid #e2e8f0;
     }
 
     thead th.col-sticky-num,
     thead th.col-sticky-name {
-      z-index: 10 !important;
-      background-color: #f8f9fa !important;
+      z-index: 20;
+      background-color: #f8fafc !important;
     }
 
     tbody tr:hover td.col-sticky-num,
     tbody tr:hover td.col-sticky-name {
-      background-color: #f8f9fa !important;
+      background-color: #f8fafc !important;
     }
 
     tbody tr.text-taxado td.col-sticky-num,
     tbody tr.text-taxado td.col-sticky-name {
-      background-color: #f8f9fa !important;
+      background-color: #f8fafc !important;
     }
 
-    /* Loader */
-    #loader {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(244, 246, 250, 0.7); 
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 1050; 
-      display: flex; justify-content: center; align-items: center;
+    @media (max-width: 640px) {
+      .col-sticky-num {
+        width: 38px;
+        min-width: 38px;
+        max-width: 38px;
+        padding-left: 0.35rem !important;
+        padding-right: 0.35rem !important;
+        font-size: 0.72rem;
+      }
+
+      .col-sticky-name {
+        left: 38px;
+        min-width: 140px;
+        max-width: 170px;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        white-space: normal !important;
+        word-break: break-word;
+        line-height: 1.25;
+        font-size: 0.75rem;
+      }
     }
-    .modern-loader { display: flex; gap: 8px; justify-content: center; }
-    .modern-loader div {
-      width: 12px; height: 12px; background-color: #583ef2; border-radius: 50%;
-      animation: bounce 0.5s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
+
+    .text-taxado {
+      text-decoration: line-through;
+      color: #94a3b8 !important;
+      opacity: 0.65;
     }
-    .modern-loader div:nth-child(2) { animation-delay: 0.15s; background-color: #7c3aed;}
-    .modern-loader div:nth-child(3) { animation-delay: 0.3s; background-color: #a124f1;}
-    @keyframes bounce {
+
+    .text-taxado input {
+      background-color: #e2e8f0 !important;
+      pointer-events: none;
+    }
+
+    @keyframes bounceLoader {
       from { transform: translateY(0); }
       to { transform: translateY(-10px); }
     }
+
+    .loader-dot-1 {
+      animation: bounceLoader 0.5s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
+      background-color: #583ef2;
+    }
+
+    .loader-dot-2 {
+      animation: bounceLoader 0.5s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
+      animation-delay: 0.15s;
+      background-color: #7c3aed;
+    }
+
+    .loader-dot-3 {
+      animation: bounceLoader 0.5s alternate infinite cubic-bezier(0.6, 0.05, 0.15, 0.95);
+      animation-delay: 0.3s;
+      background-color: #a124f1;
+    }
   </style>
 </head>
-<body>
+<body class="min-h-screen bg-[#f4f6fa] text-[#1e293b]">
 
-  <div id="loader" class="d-none">
-    <div class="text-center d-flex flex-column align-items-center bg-white p-4 rounded-4 shadow-sm border">
-      <div class="modern-loader mb-3">
-        <div></div><div></div><div></div>
+  <!-- LOADER GLOBAL -->
+  <div id="loader" class="d-none fixed inset-0 bg-[#f4f6fa]/70 backdrop-blur-md z-50 flex items-center justify-center">
+    <div class="text-center flex flex-col items-center bg-white p-6 rounded-2xl shadow-xl border border-slate-200">
+      <div class="flex gap-2 justify-center mb-3">
+        <div class="w-3 h-3 rounded-full loader-dot-1"></div>
+        <div class="w-3 h-3 rounded-full loader-dot-2"></div>
+        <div class="w-3 h-3 rounded-full loader-dot-3"></div>
       </div>
-      <p class="mt-2 mb-0 fw-bold text-primary" style="letter-spacing: 1px; color: #583ef2 !important;">SINCRONIZANDO</p>
+      <p id="loaderTextoHtml" class="mt-2 text-xs font-bold text-[#583ef2] tracking-wider uppercase">SINCRONIZANDO</p>
     </div>
   </div>
 
-  <div id="telaLogin" class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card card-login w-100 bg-white">
-      <div class="text-center mb-4">
-        <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" class="mb-3" style="max-height: 90px; object-fit: contain;">
-        <h3 class="fw-bold m-0">Portal Escolar</h3>
-        <p class="text-muted small mt-2">Selecione seu perfil de acesso para continuar</p>
+  <!-- TELA DE LOGIN -->
+  <div id="telaLogin" class="min-h-screen flex items-center justify-center p-4">
+    <div class="card-modern w-full max-w-[460px] p-6 sm:p-8 md:p-10 bg-white">
+      <div class="text-center mb-6">
+        <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" class="mx-auto mb-3 h-20 object-contain">
+        <h1 class="text-2xl font-bold text-[#0f172a] tracking-tight">Portal Escolar</h1>
+        <p class="text-slate-500 text-sm mt-1">Selecione seu perfil de acesso para continuar</p>
       </div>
 
-      <ul class="nav nav-pills nav-justified mb-4" id="loginTabs" role="tablist">
-        <li class="nav-item">
-          <button class="nav-link active" id="tab-prof-btn" data-bs-toggle="pill" data-bs-target="#loginProf" type="button">
-            <i class="fa-solid fa-chalkboard-user me-2"></i>Professor
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="tab-coord-btn" data-bs-toggle="pill" data-bs-target="#loginCoord" type="button">
-            <i class="fa-solid fa-user-gear me-2"></i>Coordenação
-          </button>
-        </li>
-      </ul>
+      <div class="bg-slate-100 p-1 rounded-xl flex gap-1 mb-6">
+        <button type="button" id="tab-prof-btn" onclick="alternarPerfilLogin('professor')" class="flex-1 py-2.5 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 btn-gradient-primary shadow-sm">
+          <i class="fa-solid fa-chalkboard-user"></i> Professor
+        </button>
+        <button type="button" id="tab-coord-btn" onclick="alternarPerfilLogin('coordenador')" class="flex-1 py-2.5 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+          <i class="fa-solid fa-user-gear"></i> Coordenação
+        </button>
+      </div>
 
-      <div class="tab-content" id="loginTabsContent">
-        <!-- TAB PROFESSOR -->
-        <div class="tab-pane fade show active" id="loginProf">
-          <div class="mb-4">
-            <label class="form-label">Número de MASP</label>
-            <div class="input-group">
-              <span class="input-group-text border-end-0"><i class="fa-solid fa-id-card"></i></span>
-              <input type="text" id="maspInput" class="form-control border-start-0 ps-0" placeholder="Apenas números">
-            </div>
+      <div id="loginProf">
+        <div class="mb-6">
+          <label class="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Número de MASP</label>
+          <div class="flex rounded-xl border border-slate-200 overflow-hidden focus-within:border-[#583ef2] focus-within:ring-4 focus-within:ring-[#583ef2]/10 transition-all">
+            <span class="bg-white text-slate-400 px-3.5 flex items-center border-r border-slate-200"><i class="fa-solid fa-id-card"></i></span>
+            <input type="text" id="maspInput" class="w-full py-3 px-3 text-sm text-slate-900 outline-none bg-white" placeholder="Apenas números" onkeydown="if(event.key==='Enter'){event.preventDefault();efetuarLogin('professor');}">
           </div>
-          <button onclick="efetuarLogin('professor')" class="btn btn-primary w-100">Acessar Portal <i class="fa-solid fa-arrow-right ms-1"></i></button>
         </div>
+        <button type="button" onclick="efetuarLogin('professor')" class="w-full btn-gradient-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2 cursor-pointer">
+          Acessar Portal <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
 
-        <!-- TAB COORDENAÇÃO (SEM CAMPO DE USUÁRIO - APENAS SENHA) -->
-        <div class="tab-pane fade" id="loginCoord">
-          <div class="mb-4">
-            <label class="form-label">Senha de Acesso</label>
-            <input type="password" id="adminPass" class="form-control" placeholder="••••••••">
-          </div>
-          <button onclick="efetuarLogin('coordenador')" class="btn btn-primary w-100">Entrar como Coordenador <i class="fa-solid fa-arrow-right ms-1"></i></button>
+      <div id="loginCoord" class="d-none">
+        <div class="mb-6">
+          <label class="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Senha de Acesso</label>
+          <input type="password" id="adminPass" class="w-full py-3 px-4 rounded-xl border border-slate-200 text-sm text-slate-900 outline-none focus:border-[#583ef2] focus:ring-4 focus:ring-[#583ef2]/10 transition-all bg-white" placeholder="••••••••" onkeydown="if(event.key==='Enter'){event.preventDefault();efetuarLogin('coordenador');}">
         </div>
+        <button type="button" onclick="efetuarLogin('coordenador')" class="w-full btn-gradient-primary py-3 rounded-xl font-semibold flex items-center justify-center gap-2 cursor-pointer">
+          Entrar como Coordenador <i class="fa-solid fa-arrow-right"></i>
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- PAINEL DO SISTEMA -->
   <div id="painelSistema" class="d-none">
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-      <div class="container py-2">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-          <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" style="max-height: 35px; object-fit: contain;">
-          DIÁRIO - ATIVIDADES COMPLEMENTARES
-        </a>
-        <div class="d-flex align-items-center gap-3">
-          <span id="nomeUsuarioLogado" class="text-white small fw-medium opacity-75"></span>
-          <button onclick="tentarLogout()" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fs-7"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</button>
+    <nav class="bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-md">
+      <div class="max-w-7xl mx-auto px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <img src="https://i.ibb.co/TqLqqTbS/logo-eemp.png" alt="Logo EEMP" class="h-8 sm:h-9 object-contain shrink-0">
+          <span class="font-bold tracking-tight text-xs sm:text-sm md:text-base truncate">
+            DIÁRIO - ATIVIDADES COMPLEMENTARES
+          </span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+          <span id="nomeUsuarioLogado" class="text-xs md:text-sm font-medium text-slate-300 hidden md:inline"></span>
+          <button type="button" onclick="tentarLogout()" class="text-[11px] sm:text-xs font-semibold text-slate-200 border border-slate-600 hover:bg-slate-700/50 py-1.5 px-2.5 sm:px-3 rounded-full flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+          </button>
         </div>
       </div>
     </nav>
 
-    <div class="container my-4">
-      
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+
       <!-- INTERFACE PROFESSOR -->
       <div id="interfaceProfessor" class="d-none">
-        <div class="card p-4 mb-4 bg-white">
-          <h5 class="fw-bold mb-3 d-flex align-items-center gap-2"><i class="fa-solid fa-filter text-primary" style="color: #583ef2 !important;"></i> Selecione o Diário de Classe</h5>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Turma</label>
-              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="form-select"></select>
+        <div class="card-modern p-4 sm:p-6 mb-6 bg-white">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-filter text-[#583ef2]"></i> Selecione o Diário de Classe
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Turma</label>
+              <select id="profTurma" onchange="atualizarDisciplinasProfessor()" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] focus:ring-4 focus:ring-[#583ef2]/10"></select>
             </div>
-            <div class="col-md-6">
-              <label class="form-label">Disciplina / Aba</label>
-              <select id="profDisciplina" onchange="carregarListaAlunos()" class="form-select">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Disciplina / Aba</label>
+              <select id="profDisciplina" onchange="carregarListaAlunos()" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] focus:ring-4 focus:ring-[#583ef2]/10">
                 <option value="">Selecione a turma primeiro...</option>
               </select>
             </div>
           </div>
         </div>
 
-        <div id="cardDiario" class="card d-none bg-white">
-          <div class="card-header bg-white border-bottom p-4 d-flex justify-content-between align-items-center">
-            <h5 id="tituloDiario" class="m-0 fw-bold text-dark"></h5>
-            <span class="badge bg-light text-secondary border px-3 py-2 fw-semibold"><i class="fa-solid fa-lock me-1"></i> Cadastro de Alunos exclusivo da Coordenação</span>
+        <div id="cardDiario" class="card-modern d-none bg-white">
+          <div class="border-b border-slate-200 p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="flex items-center flex-wrap gap-2.5">
+              <h3 id="tituloDiario" class="font-bold text-slate-900 text-base sm:text-lg"></h3>
+              <span id="badgeEjaProf" class="d-none px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 inline-flex items-center gap-1">
+                <i class="fa-solid fa-star text-amber-600 text-[10px]"></i> Semestre Único (EJA)
+              </span>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 inline-flex items-center gap-1.5">
+              <i class="fa-solid fa-lock text-slate-400"></i> Cadastro exclusivo da Coordenação
+            </span>
           </div>
 
-          <div class="table-responsive p-0">
-            <table class="table table-hover align-middle m-0 text-nowrap">
-              <thead class="align-middle text-center" id="tabelaHeadDiario">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left border-collapse">
+              <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase font-semibold text-center" id="tabelaHeadDiario">
                 <tr>
-                  <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
-                  <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
-                  <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
-                  <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+                  <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
+                  <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
+                  <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
+                  <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
                 </tr>
                 <tr>
-                  <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-                  <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-                  <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
-                  <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-                  <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-                  <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+                  <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">1° TRIM</th>
+                  <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">2° TRIM</th>
+                  <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">3° TRIM</th>
+                  <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">1° TRIM</th>
+                  <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">2° TRIM</th>
+                  <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">3° TRIM</th>
                 </tr>
               </thead>
-              <tbody id="tabelaAlunosCorpo"></tbody>
+              <tbody id="tabelaAlunosCorpo" class="divide-y divide-slate-200"></tbody>
             </table>
           </div>
-          
-          <div class="card-footer bg-light text-end p-4 border-top">
-            <button onclick="salvarDiario()" class="btn btn-success px-4 py-2"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Alterações</button>
+
+          <div class="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 text-right">
+            <button type="button" onclick="salvarDiario()" class="bg-[#10b981] hover:bg-[#059669] text-white px-6 py-2.5 rounded-xl font-semibold text-sm inline-flex items-center gap-2 shadow-md transition-all cursor-pointer">
+              <i class="fa-solid fa-floppy-disk"></i> Salvar Alterações
+            </button>
           </div>
         </div>
       </div>
 
       <!-- INTERFACE COORDENADOR -->
       <div id="interfaceCoordenador" class="d-none">
-        <div class="row g-4">
-          <!-- MENU LATERAL COM ABAS SEPARADAS PARA MONITORAMENTO E PREENCHIMENTO AUTOMÁTICO -->
-          <div class="col-md-3">
-            <div class="list-group shadow-sm border-0" style="border-radius: 16px; overflow: hidden;">
-              <button onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="list-group-item list-group-item-action active border-0 py-3"><i class="fa-solid fa-chart-pie me-2 w-20px text-center"></i>Status Preenchimento</button>
-              <button onclick="mudarAbaCoord('preenchimento')" id="btn-menu-pree" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-wand-magic-sparkles me-2 w-20px text-center"></i>Preenchimento Automático</button>
-              <button onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-users me-2 w-20px text-center"></i>Gerenciar Estudantes</button>
-              <button onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-tie me-2 w-20px text-center"></i>Vincular Professor</button>
-              <button onclick="mudarAbaCoord('gerenciarProfessores')" id="btn-menu-gerp" class="list-group-item list-group-item-action border-0 py-3 text-dark"><i class="fa-solid fa-user-gear me-2 w-20px text-center"></i>Editar / Alterar Vínculos</button>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
+          <!-- MENU LATERAL RESPONSIVO (HORIZONTAL SCROLL NO MOBILE, VERTICAL NO DESKTOP) -->
+          <div class="md:col-span-1">
+            <div class="card-modern p-2 bg-white flex flex-row md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-visible">
+              <button type="button" onclick="mudarAbaCoord('relatorios')" id="btn-menu-rela" class="shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap btn-gradient-primary shadow-sm cursor-pointer">
+                <i class="fa-solid fa-chart-pie shrink-0 w-4 text-center"></i> Status Preenchimento
+              </button>
+              <button type="button" onclick="mudarAbaCoord('preenchimento')" id="btn-menu-pree" class="shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap text-slate-700 hover:bg-slate-100 cursor-pointer">
+                <i class="fa-solid fa-wand-magic-sparkles shrink-0 w-4 text-center"></i> Preenchimento Automático
+              </button>
+              <button type="button" onclick="mudarAbaCoord('aluno')" id="btn-menu-alun" class="shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap text-slate-700 hover:bg-slate-100 cursor-pointer">
+                <i class="fa-solid fa-users shrink-0 w-4 text-center"></i> Gerenciar Estudantes
+              </button>
+              <button type="button" onclick="mudarAbaCoord('professor')" id="btn-menu-prof" class="shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap text-slate-700 hover:bg-slate-100 cursor-pointer">
+                <i class="fa-solid fa-link shrink-0 w-4 text-center"></i> Vincular Professor
+              </button>
+              <button type="button" onclick="mudarAbaCoord('gerenciarProfessores')" id="btn-menu-gerp" class="shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap text-slate-700 hover:bg-slate-100 cursor-pointer">
+                <i class="fa-solid fa-pen shrink-0 w-4 text-center"></i> Editar / Alterar Vínculos
+              </button>
             </div>
           </div>
 
-          <div class="col-md-9">
-            
+          <div class="md:col-span-3">
+
             <!-- ABA 1: MONITORAMENTO DE PREENCHIMENTO -->
-            <div id="coordAbaRelatorios" class="card p-4 bg-white">
-              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-eye text-primary" style="color: #583ef2 !important;"></i> Monitoramento de Preenchimento</h5>
-              <p class="text-muted small mb-4">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
-              
-              <div class="row g-3 mb-4 p-3 bg-light rounded-4 border">
-                <div class="col-md-12">
-                  <label class="form-label">Selecione a Turma</label>
-                  <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="form-select"></select>
-                </div>
+            <div id="coordAbaRelatorios" class="card-modern p-4 sm:p-6 bg-white">
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-eye text-[#583ef2]"></i> Monitoramento de Preenchimento
+              </h2>
+              <p class="text-slate-500 text-xs mb-5 sm:mb-6">Clique sobre qualquer linha de componente curricular para auditar e preencher os dados.</p>
+
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-5 sm:mb-6">
+                <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Selecione a Turma para Monitorar</label>
+                <select id="coordSelectTurma" onchange="carregarRelatorioPreenchimento()" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]"></select>
               </div>
-              
-              <div class="table-container-modern">
-                <table class="table align-middle text-center table-auditavel">
-                  <thead id="tabelaRelatorioCabecalho">
+
+              <div id="avisoEjaCoordRel" class="d-none mb-4 px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium flex items-center gap-2">
+                <i class="fa-solid fa-star text-amber-600 shrink-0"></i>
+                <span>A turma <strong id="avisoEjaCoordRelTurma"></strong> segue o regime de <strong>Semestre Único (EJA)</strong>. O monitoramento e lançamentos consideram exclusivamente o período semestral.</span>
+              </div>
+
+              <div class="table-container-modern overflow-x-auto">
+                <table class="w-full text-sm text-center min-w-[480px]">
+                  <thead id="tabelaRelatorioCabecalho" class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs font-semibold">
                     <tr>
-                      <th class="text-start py-3 ps-3">Componente Curricular</th>
-                      <th class="py-3">1º Trimestre</th>
-                      <th class="py-3">2º Trimestre</th>
-                      <th class="py-3">3º Trimestre</th>
+                      <th class="py-3 px-4 text-left">Componente Curricular</th>
+                      <th class="py-3 px-2">1º Trimestre</th>
+                      <th class="py-3 px-2">2º Trimestre</th>
+                      <th class="py-3 px-2">3º Trimestre</th>
                     </tr>
                   </thead>
-                  <tbody id="tabelaRelatorioCorpo">
-                    <tr><td colspan="4" class="text-muted py-4">Selecione uma turma para carregar o mapa.</td></tr>
+                  <tbody id="tabelaRelatorioCorpo" class="divide-y divide-slate-200">
+                    <tr><td colspan="4" class="py-8 text-slate-400">Selecione uma turma para carregar o mapa.</td></tr>
                   </tbody>
                 </table>
               </div>
 
               <!-- MODO SUPERVISOR / DIÁRIO AUDITADO -->
-              <div id="cardDiarioCoord" class="card mt-4 bg-white overflow-hidden d-none border-primary border-top border-3" style="border-top-color: #583ef2 !important;">
-                <div class="card-header bg-light p-4 d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="badge bg-primary text-uppercase mb-1" style="background: linear-gradient(90deg, #583ef2 0%, #a124f1 100%) !important; min-width: auto;">Modo Supervisor</span>
-                    <h5 id="tituloDiarioCoord" class="m-0 fw-bold text-dark"></h5>
+              <div id="cardDiarioCoord" class="d-none mt-6 sm:mt-8 card-modern border-t-4 border-[#583ef2] overflow-hidden">
+                <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center gap-3">
+                  <div class="min-w-0">
+                    <div class="flex items-center flex-wrap gap-2 mb-1">
+                      <span class="btn-gradient-primary px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider inline-block">Modo Supervisor</span>
+                      <span id="badgeEjaCoordDiario" class="d-none px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 inline-flex items-center gap-1">
+                        <i class="fa-solid fa-star text-amber-600 text-[9px]"></i> Semestre Único (EJA)
+                      </span>
+                    </div>
+                    <h3 id="tituloDiarioCoord" class="font-bold text-slate-900 text-sm sm:text-base truncate"></h3>
                   </div>
-                  <button onclick="document.getElementById('cardDiarioCoord').classList.add('d-none')" class="btn btn-sm btn-secondary rounded-circle" style="padding: 5px 10px !important;"><i class="fa-solid fa-xmark"></i></button>
+                  <button type="button" onclick="fecharDiarioCoordHtml()" class="text-slate-400 hover:text-slate-600 bg-slate-200/50 hover:bg-slate-200 rounded-full w-8 h-8 flex items-center justify-center shrink-0 transition-all cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
                 </div>
-                <div class="table-responsive p-0">
-                  <table class="table table-hover align-middle m-0 text-nowrap">
-                    <thead class="align-middle text-center" id="tabelaHeadDiarioCoord">
+                <div class="overflow-x-auto">
+                  <table class="w-full text-sm text-left border-collapse">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase font-semibold text-center" id="tabelaHeadDiarioCoord">
                       <tr>
-                        <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
-                        <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
-                        <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
-                        <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
-                        <th rowspan="2" width="10%" class="pb-3">Ações</th>
+                        <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
+                        <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
+                        <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
+                        <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
+                        <th rowspan="2" class="py-3 px-4 w-28">Ações</th>
                       </tr>
                       <tr>
-                        <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-                        <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-                        <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
-                        <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-                        <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-                        <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+                        <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">1° TRIM</th>
+                        <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">2° TRIM</th>
+                        <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">3° TRIM</th>
+                        <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">1° TRIM</th>
+                        <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">2° TRIM</th>
+                        <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">3° TRIM</th>
                       </tr>
                     </thead>
-                    <tbody id="tabelaAlunosCorpoCoord"></tbody>
+                    <tbody id="tabelaAlunosCorpoCoord" class="divide-y divide-slate-200"></tbody>
                   </table>
                 </div>
-                <div class="card-footer bg-light text-end p-4 border-top">
-                  <button onclick="salvarDiarioCoord()" class="btn btn-primary px-4 py-2 shadow-sm"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar como Coordenador</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- ABA 2: PREENCHIMENTO AUTOMÁTICO SEPARADO -->
-            <div id="coordAbaPreenchimento" class="card p-4 d-none bg-white">
-              <h5 class="fw-bold mb-2 d-flex align-items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-primary" style="color: #583ef2 !important;"></i> Preenchimento Automático em Lote</h5>
-              <p class="text-muted small mb-4">Gere notas e frequência automaticamente por MASP do Professor ou por Turma Completa.</p>
-              
-              <div class="p-4 bg-light rounded-4 border mb-4">
-                <!-- SELETOR DE MODO -->
-                <div class="mb-4">
-                  <label class="form-label fw-bold">Modo de Preenchimento:</label>
-                  <div class="d-flex gap-3">
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="modoAutoFill" id="modoAutoMasp" value="masp" checked onchange="alternarModoAutoFill('masp')">
-                      <label class="form-check-label fw-semibold" for="modoAutoMasp">
-                        <i class="fa-solid fa-id-badge text-primary me-1"></i> Por MASP do Professor (Apenas diários do docente)
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="modoAutoFill" id="modoAutoTurma" value="turma" onchange="alternarModoAutoFill('turma')">
-                      <label class="form-check-label fw-semibold" for="modoAutoTurma">
-                        <i class="fa-solid fa-users text-secondary me-1"></i> Por Turma Inteira (Todas as disciplinas)
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row g-3">
-                  <div class="col-12" id="containerAutoMasp">
-                    <label class="form-label fw-bold">1. MASP do Professor & Vínculos Cadastrados</label>
-                    <div class="input-group mb-2">
-                      <input type="text" id="coordMaspAuto" class="form-control" placeholder="Digite o MASP (ex: 123456)" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarVinculosMaspAuto();}">
-                      <button class="btn btn-outline-primary fw-semibold" type="button" onclick="buscarVinculosMaspAuto()">
-                        <i class="fa-solid fa-magnifying-glass me-1"></i> Buscar Vínculos
-                      </button>
-                    </div>
-                    <small class="text-muted d-block mb-2">Clique em "Buscar Vínculos" para carregar e escolher quais turmas/disciplinas deste professor deseja preencher.</small>
-
-                    <!-- CONTAINER DINÂMICO DE VÍNCULOS DE DIÁRIOS -->
-                    <div id="containerVinculosMaspAuto" class="p-3 bg-white rounded-3 border d-none">
-                      <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-                        <div>
-                          <span class="badge bg-primary me-2"><i class="fa-solid fa-user-tie me-1"></i> Docente</span>
-                          <strong id="nomeProfMaspAuto" class="text-dark"></strong>
-                        </div>
-                        <div class="btn-group btn-group-sm">
-                          <button type="button" class="btn btn-sm btn-outline-primary" onclick="marcarTodosVinculosMasp(true)">Selecionar Todas</button>
-                          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="marcarTodosVinculosMasp(false)">Desmarcar Todas</button>
-                        </div>
-                      </div>
-                      <div class="text-muted small mb-2">Marque abaixo as turmas/disciplinas que deseja preencher:</div>
-                      <div id="listaVinculosMaspAuto" class="row g-2"></div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 d-none" id="containerAutoTurma">
-                    <label class="form-label fw-bold">1. Selecione a Turma</label>
-                    <select id="coordSelectTurmaAuto" onchange="ajustarTrimestreAutoTurma()" class="form-select"></select>
-                    <small class="text-muted">Preencherá todas as disciplinas da turma selecionada.</small>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">2. Trimestre de Destino</label>
-                    <select id="coordSelectTrimestreAuto" class="form-select">
-                      <option value="1">1º Trimestre</option>
-                      <option value="2">2º Trimestre</option>
-                      <option value="3">3º Trimestre</option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">Nota Mínima</label>
-                    <input type="number" id="coordNotaMinAuto" class="form-control" step="0.5" min="0" max="100" value="18.0">
-                  </div>
-                  <div class="col-md-4">
-                    <label class="form-label fw-bold">Nota Máxima</label>
-                    <input type="number" id="coordNotaMaxAuto" class="form-control" step="0.5" min="0" max="100" value="21.0">
-                  </div>
-                </div>
-                <div class="mt-4">
-                  <button onclick="executarPreenchimentoAutomatico()" class="btn btn-primary w-100 py-3 fw-bold shadow-sm">
-                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Executar Preenchimento Automático
+                <div class="p-4 bg-slate-50 border-t border-slate-200 text-right">
+                  <button type="button" onclick="salvarDiarioCoord()" class="btn-gradient-primary px-6 py-2.5 rounded-xl font-semibold text-sm inline-flex items-center gap-2 shadow-md cursor-pointer">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar como Coordenador
                   </button>
                 </div>
               </div>
             </div>
 
-            <!-- ABA 3: GERENCIAR ESTUDANTES DAS TURMAS -->
-            <div id="coordAbaAluno" class="card p-4 d-none bg-white">
-              <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
-                <div>
-                  <h5 class="fw-bold mb-1 d-flex align-items-center gap-2"><i class="fa-solid fa-users text-primary" style="color: #583ef2 !important;"></i> Gerenciamento de Estudantes das Turmas</h5>
-                  <p class="text-muted small mb-0">Visualize os estudantes enturmados, edite a grafia de seus nomes, inative ou reative cadastros e cadastre novos estudantes.</p>
-                </div>
-                <div>
-                  <button onclick="toggleFormNovoEstudanteHtml()" class="btn btn-success btn-sm py-2 px-3 fw-bold"><i class="fa-solid fa-user-plus me-1"></i> Novo Estudante</button>
+            <!-- ABA 2: PREENCHIMENTO AUTOMÁTICO -->
+            <div id="coordAbaPreenchimento" class="card-modern p-4 sm:p-6 d-none bg-white">
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Gerar Preenchimento Automático
+              </h2>
+              <p class="text-slate-500 text-xs mb-5 sm:mb-6">Configure os parâmetros abaixo para gerar notas dinâmicas e confirmação de carga horária por MASP específico do professor ou por turma inteira.</p>
+
+              <!-- SELETOR DE MODO -->
+              <div class="mb-5 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                <span class="block text-xs font-bold uppercase text-slate-600 mb-3">Modo de Preenchimento:</span>
+                <input type="radio" name="modoAutoFill" id="modoAutoMasp" value="masp" checked class="d-none">
+                <input type="radio" name="modoAutoFill" id="modoAutoTurma" value="turma" class="d-none">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button type="button" id="btnModoAutoMasp" onclick="alternarModoAutoFill('masp')" class="flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all bg-white border-[#583ef2] shadow-sm ring-2 ring-[#583ef2]/10 text-slate-900 cursor-pointer">
+                    <div class="p-2 rounded-lg bg-[#583ef2]/10 text-[#583ef2] shrink-0">
+                      <i class="fa-solid fa-id-badge text-lg"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold leading-tight">Por MASP do Docente</p>
+                      <p class="text-[11px] text-slate-500 mt-0.5">Preenche somente as disciplinas de um professor</p>
+                    </div>
+                  </button>
+                  <button type="button" id="btnModoAutoTurma" onclick="alternarModoAutoFill('turma')" class="flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all bg-transparent border-slate-200 text-slate-600 hover:bg-white/60 cursor-pointer">
+                    <div class="p-2 rounded-lg bg-slate-200 text-slate-600 shrink-0">
+                      <i class="fa-solid fa-users text-lg"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold leading-tight">Por Turma Inteira</p>
+                      <p class="text-[11px] text-slate-500 mt-0.5">Preenche todas as matérias da turma selecionada</p>
+                    </div>
+                  </button>
                 </div>
               </div>
 
-              <div class="row g-3 mb-4 p-3 bg-light rounded-4 border align-items-center">
-                <div class="col-md-5">
-                  <label class="form-label small fw-bold text-muted text-uppercase mb-1">Selecione a Turma</label>
-                  <select id="cadAlunoTurma" onchange="carregarEstudantesCoordHtml()" class="form-select"></select>
+              <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl mb-6 flex gap-3 items-start">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-600 text-lg shrink-0 mt-0.5"></i>
+                <div class="text-xs text-amber-900 leading-relaxed">
+                  <p class="font-bold mb-1">Como funciona o preenchimento?</p>
+                  <span id="dicaModoAutoFillHtml">Esta opção buscará o cadastro do MASP na base de professores e preencherá automaticamente as notas aleatórias e carga horária <strong>exclusivamente</strong> nas abas e planilhas das turmas em que o docente leciona.</span>
                 </div>
-                <div class="col-md-7">
-                  <div class="row g-2 text-center" id="resumoEstudantesCoord">
-                    <div class="col-4">
-                      <div class="bg-white p-2 rounded-3 border">
-                        <span class="d-block text-muted small" style="font-size: 11px;">TOTAL</span>
-                        <span class="fw-bold fs-6 text-dark" id="qtdTotalEstudantes">0</span>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="md:col-span-2" id="containerAutoMasp">
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">1. MASP do Professor &amp; Vínculos Cadastrados</label>
+                  <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="coordMaspAuto" class="flex-1 py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]" placeholder="Digite o MASP (ex: 123456) e clique em Buscar Vínculos..." onkeydown="if(event.key==='Enter'){event.preventDefault();buscarVinculosMaspAuto();}">
+                    <button type="button" onclick="buscarVinculosMaspAuto()" class="px-4 py-2.5 bg-[#583ef2] hover:bg-[#4830db] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-sm cursor-pointer">
+                      <i class="fa-solid fa-magnifying-glass"></i> Buscar Vínculos
+                    </button>
+                  </div>
+
+                  <div id="containerVinculosMaspAuto" class="d-none mt-4 p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+                    <div class="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-indigo-100/80">
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="px-2.5 py-1 rounded-lg bg-[#583ef2] text-white text-[11px] font-bold uppercase tracking-wider">Docente</span>
+                        <strong id="nomeProfMaspAuto" class="text-xs font-bold text-slate-800"></strong>
+                        <span id="qtdVinculosMaspAuto" class="text-xs text-slate-500 font-medium"></span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <button type="button" onclick="marcarTodosVinculosMasp(true)" class="text-[11px] font-bold text-[#583ef2] hover:underline px-2 py-1 rounded hover:bg-indigo-100/60 cursor-pointer">Selecionar Todas</button>
+                        <span class="text-slate-300">|</span>
+                        <button type="button" onclick="marcarTodosVinculosMasp(false)" class="text-[11px] font-bold text-slate-500 hover:text-slate-700 hover:underline px-2 py-1 rounded hover:bg-slate-200/60 cursor-pointer">Desmarcar Todas</button>
                       </div>
                     </div>
-                    <div class="col-4">
-                      <div class="bg-white p-2 rounded-3 border">
-                        <span class="d-block text-success small" style="font-size: 11px;">ATIVOS</span>
-                        <span class="fw-bold fs-6 text-success" id="qtdAtivosEstudantes">0</span>
-                      </div>
+                    <p class="text-[11px] text-slate-600 mb-3">Marque abaixo quais <strong>turmas e disciplinas</strong> cadastradas deste professor você deseja preencher automaticamente:</p>
+                    <div id="listaVinculosMaspAuto" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"></div>
+                  </div>
+                </div>
+
+                <div class="d-none" id="containerAutoTurma">
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">1. Turma de Destino</label>
+                  <select id="coordSelectTurmaAuto" onchange="ajustarTrimestreAutoTurma()" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]"></select>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">2. Período / Trimestre</label>
+                  <select id="coordSelectTrimestreAuto" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]">
+                    <option value="1">1º Trimestre (Semestre Único para EJA)</option>
+                    <option value="2">2º Trimestre (Apenas Regulares)</option>
+                    <option value="3">3º Trimestre (Apenas Regulares)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Nota Mínima</label>
+                  <input type="number" id="coordNotaMinAuto" step="0.5" min="0" max="100" value="18.0" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Nota Máxima</label>
+                  <input type="number" id="coordNotaMaxAuto" step="0.5" min="0" max="100" value="21.0" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]">
+                </div>
+              </div>
+
+              <button type="button" id="btnExecutarAutoFillHtml" onclick="executarPreenchimentoAutomatico()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3.5 px-6 rounded-xl shadow-md flex items-center justify-center gap-2 transition-all text-sm cursor-pointer">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Executar Preenchimento por MASP
+              </button>
+            </div>
+
+            <!-- ABA 3: GERENCIAR ESTUDANTES DAS TURMAS -->
+            <div id="coordAbaAluno" class="card-modern p-4 sm:p-6 d-none bg-white">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 sm:mb-6">
+                <div>
+                  <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-users text-[#583ef2] shrink-0"></i> Gerenciamento de Estudantes das Turmas
+                  </h2>
+                  <p class="text-slate-500 text-xs mt-1">Visualize os estudantes enturmados, edite a grafia de seus nomes, inative ou reative cadastros e cadastre novos estudantes na matriz.</p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button type="button" id="btnNovoEstudanteToggleHtml" onclick="toggleFormNovoEstudanteHtml()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl flex items-center gap-2 transition-all shadow-sm whitespace-nowrap cursor-pointer">
+                    <i class="fa-solid fa-plus"></i> Novo Estudante
+                  </button>
+                  <button type="button" onclick="carregarEstudantesCoordHtml()" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all shrink-0 cursor-pointer" title="Atualizar lista da turma">
+                    <i class="fa-solid fa-arrows-rotate text-sm"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- SELETOR DE TURMA & ESTATÍSTICAS -->
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                  <div class="md:col-span-1">
+                    <label class="block text-xs font-semibold uppercase text-slate-500 mb-1.5">Selecione a Turma</label>
+                    <select id="cadAlunoTurma" onchange="carregarEstudantesCoordHtml()" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-900 bg-white outline-none focus:border-[#583ef2]"></select>
+                  </div>
+                  <div class="md:col-span-2 grid grid-cols-3 gap-2 sm:gap-3" id="resumoEstudantesCoord">
+                    <div class="bg-white p-2.5 sm:p-3 rounded-xl border border-slate-200 text-center">
+                      <span class="block text-[10px] sm:text-[11px] font-semibold uppercase text-slate-400">Total</span>
+                      <span class="text-sm sm:text-base font-extrabold text-slate-800" id="qtdTotalEstudantes">0</span>
                     </div>
-                    <div class="col-4">
-                      <div class="bg-white p-2 rounded-3 border">
-                        <span class="d-block text-muted small" style="font-size: 11px;">INATIVOS / REMANEJADOS</span>
-                        <span class="fw-bold fs-6 text-secondary" id="qtdInativosEstudantes">0</span>
-                      </div>
+                    <div class="bg-emerald-50/60 p-2.5 sm:p-3 rounded-xl border border-emerald-200 text-center">
+                      <span class="block text-[10px] sm:text-[11px] font-semibold uppercase text-emerald-700">Ativos</span>
+                      <span class="text-sm sm:text-base font-extrabold text-emerald-800" id="qtdAtivosEstudantes">0</span>
+                    </div>
+                    <div class="bg-slate-100 p-2.5 sm:p-3 rounded-xl border border-slate-300 text-center">
+                      <span class="block text-[10px] sm:text-[11px] font-semibold uppercase text-slate-600 leading-tight">Inativos / Remanejados</span>
+                      <span class="text-sm sm:text-base font-extrabold text-slate-700" id="qtdInativosEstudantes">0</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- FORM CADASTRO RÁPIDO NOVO ESTUDANTE -->
-              <div id="boxNovoEstudanteCoord" class="card p-3 mb-4 border-success bg-success bg-opacity-10 d-none" style="border-radius: 14px;">
-                <h6 class="fw-bold text-success mb-2"><i class="fa-solid fa-plus me-1"></i> Cadastrar Novo Estudante na Turma</h6>
-                <div class="input-group">
-                  <input type="text" id="cadAlunoNome" class="form-control text-uppercase" placeholder="Nome completo do estudante" onkeydown="if(event.key==='Enter'){event.preventDefault();executarCadastroEstudante();}">
-                  <button onclick="executarCadastroEstudante()" class="btn btn-success fw-bold px-3"><i class="fa-solid fa-check me-1"></i> Cadastrar</button>
-                  <button onclick="toggleFormNovoEstudanteHtml()" class="btn btn-outline-secondary px-3">Cancelar</button>
+              <div id="boxNovoEstudanteCoord" class="d-none mb-6 p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-3 flex items-center gap-2">
+                  <i class="fa-solid fa-user-plus"></i> Cadastrar Novo Estudante na Turma
+                </h3>
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <input type="text" id="cadAlunoNome" class="flex-1 uppercase py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-emerald-600" placeholder="Digite o nome completo do estudante..." onkeydown="if(event.key==='Enter'){event.preventDefault();executarCadastroEstudante();}">
+                  <div class="flex items-center gap-2">
+                    <button type="button" onclick="executarCadastroEstudante()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-sm shrink-0 cursor-pointer">
+                      <i class="fa-solid fa-check"></i> Cadastrar Estudante
+                    </button>
+                    <button type="button" onclick="toggleFormNovoEstudanteHtml()" class="px-3 py-2.5 text-xs text-slate-600 hover:bg-slate-200/60 rounded-xl transition-all cursor-pointer">Cancelar</button>
+                  </div>
                 </div>
               </div>
 
               <!-- BUSCA RÁPIDA -->
-              <div class="mb-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                  <input type="text" id="filtroEstudanteNomeCoord" class="form-control border-start-0" placeholder="Buscar estudante por nome..." oninput="filtrarTabelaEstudantesCoord()">
-                </div>
+              <div class="mb-4 relative">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input type="text" id="filtroEstudanteNomeCoord" class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 bg-slate-50/50 outline-none focus:border-[#583ef2] focus:bg-white" placeholder="Buscar estudante por nome na turma..." oninput="filtrarTabelaEstudantesCoord()">
               </div>
 
-              <!-- TABELA ESTUDANTES -->
-              <div class="table-responsive rounded-3 border">
-                <table class="table table-hover align-middle mb-0 text-center text-sm" style="font-size: 0.88rem;">
-                  <thead class="table-light text-muted small">
+              <!-- VISÃO MOBILE (CARDS < 640px) -->
+              <div id="listaEstudantesMobileCoord" class="sm:hidden space-y-3"></div>
+
+              <!-- VISÃO DESKTOP / TABLET (TABELA COM AÇÕES EM LINHA ÚNICA) -->
+              <div class="hidden sm:block table-container-modern overflow-x-auto border border-slate-200 rounded-2xl">
+                <table class="w-full text-sm text-left">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs font-semibold">
                     <tr>
-                      <th style="width: 60px;">Nº</th>
-                      <th class="text-start">Nome Completo do Estudante</th>
-                      <th style="width: 170px;">Status</th>
-                      <th style="width: 280px;">Ações</th>
+                      <th class="py-3 px-3 text-center w-14">Nº</th>
+                      <th class="py-3 px-4">Nome Completo do Estudante</th>
+                      <th class="py-3 px-3 text-center w-40">Status</th>
+                      <th class="py-3 px-4 text-center whitespace-nowrap">Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="tabelaEstudantesCorpo">
-                    <tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma para visualizar os estudantes.</td></tr>
+                  <tbody id="tabelaEstudantesCorpo" class="divide-y divide-slate-100">
+                    <tr><td colspan="4" class="py-8 text-center text-slate-400 text-xs">Selecione uma turma para visualizar os estudantes.</td></tr>
                   </tbody>
                 </table>
               </div>
 
               <!-- MODAL REMANEJAMENTO DE ESTUDANTE -->
-              <div class="modal fade" id="modalRemanejarEstudanteCoord" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                  <div class="modal-content rounded-4 border-0 shadow">
-                    <div class="modal-header border-bottom">
-                      <div>
-                        <h5 class="modal-title fw-bold mb-0"><i class="fa-solid fa-right-left text-primary me-2" style="color: #583ef2 !important;"></i>Remanejar Estudante Entre Turmas</h5>
-                        <small class="text-muted">Selecione a turma de destino conforme o ID da planilha</small>
+              <div id="modalRemanejarEstudanteCoord" class="d-none fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+                <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
+                  <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+                    <div class="flex items-center gap-3 min-w-0">
+                      <div class="w-10 h-10 rounded-xl bg-indigo-100 text-[#583ef2] flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-right-left"></i>
                       </div>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                      <div class="p-3 bg-light rounded-3 border mb-3">
-                        <div class="small text-muted text-uppercase fw-bold" style="font-size: 11px;">Estudante Selecionado</div>
-                        <div class="fw-bold text-dark fs-6" id="remNomeEstudanteHtml">-</div>
-                        <div class="small text-muted mt-1">Turma de Origem: <strong id="remTurmaOrigemHtml" class="text-dark"></strong> (<code id="remPlanilhaOrigemIdHtml"></code>)</div>
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Turma de Destino (ordenadas por ID da planilha)</label>
-                        <input type="text" id="remFiltroTurmaHtml" class="form-control mb-2" placeholder="Filtrar turma ou ID da planilha..." oninput="desenharListaTurmasRemanejarHtml()">
-                        <div id="remListaTurmasDestinoHtml" class="list-group" style="max-height: 240px; overflow-y: auto;"></div>
-                      </div>
-                      <div class="p-3 rounded-3 border bg-light small text-muted">
-                        <div class="fw-bold text-dark mb-1">Sequência automática executada ao confirmar:</div>
-                        <div>1º Copia o nome do estudante e cola na última linha da aba <strong>ALUNOS</strong> da planilha de destino.</div>
-                        <div>2º Copia toda a linha do estudante nas demais abas (exceto ALUNOS) a partir da <strong>Coluna B</strong> para a última linha das abas de destino a partir da <strong>Coluna B</strong> (preservando a Coluna A).</div>
-                        <div>3º Após confirmar todas as cópias, inativa o estudante como <strong>INATIVO/REMANEJADO</strong> na planilha de origem.</div>
+                      <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-bold text-slate-900 truncate">Remanejar Estudante Entre Turmas</h3>
+                        <p class="text-xs text-slate-500 truncate">Escolha a turma de destino listada conforme o ID das planilhas</p>
                       </div>
                     </div>
-                    <div class="modal-footer border-top">
-                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                      <button type="button" class="btn btn-primary" id="btnConfirmarRemanejarHtml" onclick="executarRemanejamentoCoordHtml()" disabled>
-                        <i class="fa-solid fa-right-left me-1"></i> Confirmar Remanejamento
-                      </button>
+                    <button type="button" onclick="fecharModalRemanejarCoordHtml()" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 rounded-xl transition-all shrink-0 cursor-pointer">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+
+                  <div class="p-4 sm:p-6 overflow-y-auto space-y-5">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                      <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Estudante &amp; Turma de Origem</div>
+                      <div class="text-sm font-extrabold text-slate-900" id="remNomeEstudanteHtml">-</div>
+                      <div class="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                        <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 font-bold text-slate-800">Origem: <span id="remTurmaOrigemHtml"></span></span>
+                        <span class="font-mono text-[11px] text-slate-500 break-all">ID Planilha: <span id="remPlanilhaOrigemIdHtml"></span></span>
+                      </div>
                     </div>
+
+                    <div>
+                      <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">Selecione a Turma de Destino (por ID da Planilha)</label>
+                      <div class="relative mb-2.5">
+                        <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="remFiltroTurmaHtml" class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-900 bg-white outline-none focus:border-[#583ef2]" placeholder="Buscar por nome da turma ou ID da planilha..." oninput="desenharListaTurmasRemanejarHtml()">
+                      </div>
+                      <div id="remListaTurmasDestinoHtml" class="border border-slate-200 rounded-2xl divide-y divide-slate-100 max-h-60 overflow-y-auto bg-white"></div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 text-xs text-slate-600 space-y-1.5">
+                      <div class="font-bold text-slate-800 mb-1">Ordem de execução garantida no remanejamento:</div>
+                      <div><strong>1º)</strong> Copia o nome do estudante e cola na última linha da aba <strong>ALUNOS</strong> da planilha de destino.</div>
+                      <div><strong>2º)</strong> Copia as linhas do estudante em todas as demais abas (exceto <strong>ALUNOS</strong>) a partir da <strong>Coluna B</strong> e cola na última linha das abas da turma de destino a partir da <strong>Coluna B</strong> (preservando as fórmulas da Coluna A).</div>
+                      <div><strong>3º)</strong> Após garantir que todos os dados foram copiados para o destino, inativa o estudante como <strong>INATIVO/REMANEJADO</strong> na planilha de origem.</div>
+                    </div>
+                  </div>
+
+                  <div class="px-4 sm:px-6 py-4 border-t border-slate-100 bg-slate-50/70 flex items-center justify-end gap-3">
+                    <button type="button" onclick="fecharModalRemanejarCoordHtml()" class="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 transition-all cursor-pointer">Cancelar</button>
+                    <button type="button" id="btnConfirmarRemanejarHtml" onclick="executarRemanejamentoCoordHtml()" disabled class="btn-gradient-primary px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer">
+                      <i class="fa-solid fa-right-left"></i> <span id="txtBtnConfirmarRemanejarHtml">Selecione a Turma de Destino</span>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- ABA 4: VINCULAR PROFESSOR -->
-            <div id="coordAbaProfessor" class="card p-4 d-none bg-white">
-              <h5 class="fw-bold mb-4 d-flex align-items-center gap-2"><i class="fa-solid fa-link text-dark"></i> Vincular Professor ao Diário</h5>
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label">Nome do Docente</label>
-                  <input type="text" id="cadProfNome" class="form-control" placeholder="Nome Completo">
+            <div id="coordAbaProfessor" class="card-modern p-4 sm:p-6 d-none bg-white">
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-5 sm:mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-link text-slate-800"></i> Vincular Professor ao Diário
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Nome do Docente</label>
+                  <input type="text" id="cadProfNome" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]" placeholder="Nome Completo">
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label">MASP</label>
-                  <input type="text" id="cadProfMasp" class="form-control" placeholder="Apenas números">
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">MASP</label>
+                  <input type="text" id="cadProfMasp" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]" placeholder="Apenas números">
                 </div>
               </div>
-              <div class="row g-3 mb-4">
-                <div class="col-md-6">
-                  <label class="form-label">Turma Vinculada</label>
-                  <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="form-select"></select>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Turma Vinculada</label>
+                  <select id="cadProfTurma" onchange="carregarDisciplinasCadastroProf(this.value)" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]"></select>
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label">Atividade Complementar</label>
-                  <select id="cadProfDisciplina" class="form-select">
+                <div>
+                  <label class="block text-xs font-semibold uppercase text-slate-500 mb-2">Atividade Complementar</label>
+                  <select id="cadProfDisciplina" class="w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]">
                     <option value="">Selecione a turma...</option>
                   </select>
                 </div>
               </div>
-              <button onclick="executarCadastroProfessor()" class="btn btn-primary py-2"><i class="fa-solid fa-floppy-disk me-2"></i>Salvar Vínculo</button>
+              <button type="button" onclick="executarCadastroProfessor()" class="btn-gradient-primary font-semibold py-3 px-6 rounded-xl inline-flex items-center gap-2 transition-all text-sm shadow-md cursor-pointer">
+                <i class="fa-solid fa-floppy-disk"></i> Salvar Vínculo
+              </button>
             </div>
 
             <!-- ABA 5: EDITAR / ALTERAR VÍNCULOS DOS PROFESSORES -->
-            <div id="coordAbaGerenciarProfessores" class="card p-4 d-none bg-white">
-              <div class="d-flex justify-content-between align-items-center mb-3">
+            <div id="coordAbaGerenciarProfessores" class="card-modern p-4 sm:p-6 d-none bg-white">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 sm:mb-6">
                 <div>
-                  <h5 class="fw-bold m-0 d-flex align-items-center gap-2"><i class="fa-solid fa-user-gear text-primary" style="color: #583ef2 !important;"></i> Editar e Alterar Vínculos dos Professores</h5>
-                  <p class="text-muted small mb-0 mt-1">Consulte os vínculos cadastrados digitando o MASP do docente (mesma lógica da busca por MASP).</p>
+                  <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-pen text-[#583ef2]"></i> Editar e Alterar Vínculos dos Professores
+                  </h2>
+                  <p class="text-slate-500 text-xs mt-1">Consulte os vínculos cadastrados digitando o MASP do docente (mesma lógica da busca por MASP).</p>
                 </div>
-                <button onclick="carregarProfessoresCoordHtml()" class="btn btn-sm btn-light border"><i class="fa-solid fa-rotate me-1"></i> Atualizar</button>
+                <button type="button" onclick="carregarProfessoresCoordHtml()" class="self-start sm:self-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl inline-flex items-center gap-2 transition-all cursor-pointer">
+                  <i class="fa-solid fa-arrows-rotate"></i> Atualizar Lista
+                </button>
               </div>
 
-              <!-- BUSCA POR MASP DO DOCENTE -->
-              <div class="p-3 bg-light rounded-4 border mb-4">
-                <label class="form-label small fw-bold text-uppercase text-dark">1. Consultar Vínculos por MASP do Professor</label>
-                <div class="input-group mb-2">
-                  <input type="text" id="coordMaspGerenciarInput" class="form-control" placeholder="Digite o MASP (ex: 13247499)" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarVinculosMaspGerenciarHtml();}">
-                  <button class="btn btn-primary fw-semibold" type="button" onclick="buscarVinculosMaspGerenciarHtml()">
-                    <i class="fa-solid fa-magnifying-glass me-1"></i> Buscar Vínculos
+              <!-- BUSCA POR MASP -->
+              <div class="mb-6 p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+                <label class="block text-xs font-bold uppercase text-indigo-950 mb-2">1. Consultar Vínculos por MASP do Professor</label>
+                <div class="flex flex-col sm:flex-row gap-2">
+                  <input type="text" id="coordMaspGerenciarInput" class="flex-1 py-2.5 px-3.5 rounded-xl border border-indigo-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] font-mono" placeholder="Digite o MASP (ex: 13247499)..." onkeydown="if(event.key==='Enter'){event.preventDefault();buscarVinculosMaspGerenciarHtml();}">
+                  <button type="button" onclick="buscarVinculosMaspGerenciarHtml()" class="px-5 py-2.5 bg-[#583ef2] hover:bg-[#4830db] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-sm cursor-pointer">
+                    <i class="fa-solid fa-magnifying-glass"></i> Buscar Vínculos
                   </button>
                 </div>
-                <div id="infoDocenteGerenciarHtml" class="d-none mt-2 pt-2 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
-                  <div>
-                    <span class="badge bg-primary me-2"><i class="fa-solid fa-user-tie me-1"></i> Docente</span>
-                    <strong id="nomeDocenteGerenciarHtml" class="text-dark"></strong>
-                    <span id="maspDocenteGerenciarBadge" class="badge bg-light text-dark border ms-2"></span>
+                <div id="infoDocenteGerenciarHtml" class="d-none mt-3.5 pt-3 border-t border-indigo-100/80 flex flex-wrap items-center justify-between gap-3">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="px-2.5 py-1 rounded-lg bg-[#583ef2] text-white text-[11px] font-bold uppercase tracking-wider">Docente Localizado</span>
+                    <strong id="nomeDocenteGerenciarHtml" class="text-xs font-bold text-indigo-950"></strong>
+                    <span id="maspDocenteGerenciarBadge" class="text-xs font-mono text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200"></span>
                   </div>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="limparBuscaMaspGerenciarHtml()">Limpar Busca</button>
+                  <button type="button" onclick="limparBuscaMaspGerenciarHtml()" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-600 text-xs font-semibold rounded-lg border border-slate-200 transition-all cursor-pointer">Limpar Busca</button>
                 </div>
               </div>
 
               <!-- CARD DE EDIÇÃO ATIVA -->
-              <div id="cardEdicaoProfCoord" class="card p-3 mb-4 bg-light border-primary d-none" style="border-radius: 14px; border: 2px solid rgba(88,62,242,0.3) !important;">
-                <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-pencil me-1"></i> Editando Vínculo do Docente</h6>
+              <div id="cardEdicaoProfCoord" class="d-none mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-indigo-50/80 via-purple-50/50 to-white border-2 border-[#583ef2]/30 shadow-sm">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-indigo-100">
+                  <div class="flex items-center gap-2">
+                    <div class="p-2 rounded-lg bg-[#583ef2] text-white">
+                      <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <div>
+                      <h3 class="text-sm font-bold text-slate-900">Editando Vínculo do Docente</h3>
+                      <p class="text-[11px] text-slate-500">Altere os dados abaixo e clique em Salvar Alterações.</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="cancelarEdicaoProfHtml()" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-white/80 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                </div>
                 <input type="hidden" id="editProfLinha" value="">
                 <input type="hidden" id="editProfMaspAntigo" value="">
                 <input type="hidden" id="editProfTurmaAntiga" value="">
                 <input type="hidden" id="editProfDisciplinaAntiga" value="">
-                
-                <div class="row g-3 mb-3">
-                  <div class="col-md-6">
-                    <label class="form-label small fw-bold">Nome do Docente</label>
-                    <input type="text" id="editProfNome" class="form-control form-control-sm">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1.5">Nome Completo do Docente</label>
+                    <input type="text" id="editProfNome" class="w-full py-2 px-3 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] uppercase font-medium">
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-label small fw-bold">MASP</label>
-                    <input type="text" id="editProfMasp" class="form-control form-control-sm">
+                  <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1.5">MASP do Professor</label>
+                    <input type="text" id="editProfMasp" class="w-full py-2 px-3 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] font-mono font-medium">
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-label small fw-bold">Turma Vinculada</label>
-                    <select id="editProfTurma" onchange="carregarDisciplinasEdicaoProf(this.value)" class="form-select form-select-sm"></select>
+                  <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1.5">Turma Vinculada</label>
+                    <select id="editProfTurma" onchange="carregarDisciplinasEdicaoProf(this.value)" class="w-full py-2 px-3 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] font-semibold"></select>
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-label small fw-bold">Disciplina / Componente</label>
-                    <select id="editProfDisciplina" class="form-select form-select-sm">
+                  <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-600 mb-1.5">Componente Curricular / Disciplina</label>
+                    <select id="editProfDisciplina" class="w-full py-2 px-3 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2] font-semibold">
                       <option value="">Selecione a turma primeiro...</option>
                     </select>
                   </div>
                 </div>
-                <div class="text-end">
-                  <button onclick="cancelarEdicaoProfHtml()" class="btn btn-sm btn-secondary me-2">Cancelar</button>
-                  <button onclick="salvarEdicaoProfHtml()" class="btn btn-sm btn-primary"><i class="fa-solid fa-floppy-disk me-1"></i> Salvar Alterações</button>
+                <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+                  <button type="button" onclick="cancelarEdicaoProfHtml()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 cursor-pointer">Cancelar</button>
+                  <button type="button" onclick="salvarEdicaoProfHtml()" class="btn-gradient-primary px-5 py-2 rounded-xl text-xs font-semibold shadow-md inline-flex items-center gap-1.5 cursor-pointer"><i class="fa-solid fa-floppy-disk"></i> Salvar Alterações</button>
                 </div>
               </div>
 
               <!-- BARRA DE BUSCA -->
-              <div class="row g-2 mb-3">
-                <div class="col-md-7">
-                  <input type="text" id="filtroProfTexto" onkeyup="filtrarProfessoresHtml()" placeholder="Filtrar por Nome, MASP ou Disciplina..." class="form-control form-control-sm">
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div class="sm:col-span-7 relative">
+                  <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3 top-1/2 -translate-y-1/2"></i>
+                  <input type="text" id="filtroProfTexto" onkeyup="filtrarProfessoresHtml()" placeholder="Filtrar por Nome, MASP ou Disciplina..." class="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-slate-200 bg-white text-slate-900 outline-none focus:border-[#583ef2]">
                 </div>
-                <div class="col-md-5">
-                  <select id="filtroProfTurma" onchange="filtrarProfessoresHtml()" class="form-select form-select-sm">
+                <div class="sm:col-span-5">
+                  <select id="filtroProfTurma" onchange="filtrarProfessoresHtml()" class="w-full py-2 px-3 text-xs rounded-lg border border-slate-200 bg-white text-slate-900 outline-none focus:border-[#583ef2]">
                     <option value="">Todas as Turmas</option>
                   </select>
                 </div>
               </div>
 
               <!-- TABELA DE VÍNCULOS -->
-              <div class="table-responsive">
-                <table class="table table-hover align-middle small text-nowrap">
-                  <thead class="bg-light">
-                    <tr>
-                      <th class="py-2">Docente</th>
-                      <th class="py-2 text-center">MASP</th>
-                      <th class="py-2 text-center">Turma</th>
-                      <th class="py-2">Disciplina</th>
-                      <th class="py-2 text-center" width="130">Ações</th>
+              <div class="rounded-xl border border-slate-200 overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse min-w-[620px]">
+                  <thead>
+                    <tr class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200 uppercase text-[11px]">
+                      <th class="py-3 px-4">Docente</th>
+                      <th class="py-3 px-3 text-center">MASP</th>
+                      <th class="py-3 px-3 text-center">Turma</th>
+                      <th class="py-3 px-4">Disciplina / Atividade</th>
+                      <th class="py-3 px-4 text-center w-36">Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="tabelaProfessoresCorpo">
-                    <tr><td colspan="5" class="text-center text-muted py-4">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>
+                  <tbody id="tabelaProfessoresCorpo" class="divide-y divide-slate-100 bg-white">
+                    <tr><td colspan="5" class="text-center text-slate-400 py-6">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -836,6 +822,25 @@
     let disciplinaAuditadaAtual = "";
     let listaProfessoresCadastrados = [];
 
+    function alternarPerfilLogin(perfil) {
+      let btnProf = document.getElementById("tab-prof-btn");
+      let btnCoord = document.getElementById("tab-coord-btn");
+      let paneProf = document.getElementById("loginProf");
+      let paneCoord = document.getElementById("loginCoord");
+
+      if (perfil === "professor") {
+        btnProf.className = "flex-1 py-2.5 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 btn-gradient-primary shadow-sm";
+        btnCoord.className = "flex-1 py-2.5 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+        paneProf.classList.remove("d-none");
+        paneCoord.classList.add("d-none");
+      } else {
+        btnCoord.className = "flex-1 py-2.5 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 btn-gradient-primary shadow-sm";
+        btnProf.className = "flex-1 py-2.5 px-3 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+        paneCoord.classList.remove("d-none");
+        paneProf.classList.add("d-none");
+      }
+    }
+
     function isTurmaEja(turma) {
       if (!turma) return false;
       var nome = String(turma).toUpperCase().trim();
@@ -848,8 +853,12 @@
       if (!selTrim) return;
       if (isTurmaEja(turma)) {
         selTrim.innerHTML = '<option value="1" selected>Semestre Único (EJA)</option>';
+        selTrim.disabled = true;
+        selTrim.className = "w-full py-2.5 px-3.5 rounded-xl border border-amber-300 bg-amber-50 text-sm font-semibold text-amber-900 outline-none cursor-not-allowed";
       } else {
-        selTrim.innerHTML = '<option value="1">1º Trimestre</option><option value="2">2º Trimestre</option><option value="3">3º Trimestre</option>';
+        selTrim.disabled = false;
+        selTrim.className = "w-full py-2.5 px-3.5 rounded-xl border border-slate-200 text-sm text-slate-900 bg-white outline-none focus:border-[#583ef2]";
+        selTrim.innerHTML = '<option value="1">1º Trimestre (Semestre Único para EJA)</option><option value="2">2º Trimestre (Apenas Regulares)</option><option value="3">3º Trimestre (Apenas Regulares)</option>';
       }
     }
 
@@ -867,6 +876,33 @@
         }
       }
       return false;
+    }
+
+    function fecharDiarioCoordHtml() {
+      if (verificarAlteracoesNaoSalvas()) {
+        Swal.fire({
+          title: 'Alterações não salvas!',
+          text: 'Você possui alterações não salvas no diário auditado. Deseja fechar sem salvar?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ef4444',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Sim, fechar sem salvar',
+          cancelButtonText: 'Continuar editando',
+          reverseButtons: true,
+          customClass: { popup: 'rounded-4' }
+        }).then(function(res) {
+          if (res.isConfirmed) {
+            document.getElementById("cardDiarioCoord").classList.add("d-none");
+            cacheAlunosCoord = [];
+            cacheAlunosOriginaisCoord = "[]";
+          }
+        });
+        return;
+      }
+      document.getElementById("cardDiarioCoord").classList.add("d-none");
+      cacheAlunosCoord = [];
+      cacheAlunosOriginaisCoord = "[]";
     }
 
     // Interceptação de histórico para botão Voltar (navegador e mobile)
@@ -908,7 +944,6 @@
         return;
       }
 
-      // Se não há alterações não salvas mas um diário está aberto:
       if (dadosUsuarioLogado.papel === 'professor') {
         let cardDiario = document.getElementById("cardDiario");
         if (cardDiario && !cardDiario.classList.contains("d-none")) {
@@ -930,7 +965,6 @@
         }
       }
 
-      // Tela inicial / principal
       Swal.fire({
         title: 'Sair do Sistema?',
         text: usuarioLogado ? 'Deseja realmente sair do sistema e encerrar sua sessão?' : 'Deseja realmente sair do sistema?',
@@ -975,13 +1009,13 @@
       if(perfil === 'professor' && !usuario) { notificar("Por favor, preencha o MASP.", false); return; }
       if(perfil === 'coordenador' && !senha) { notificar("Por favor, preencha a senha.", false); return; }
 
-      exibirLoader(true);
+      exibirLoader(true, "AUTENTICANDO");
       let res = await chamarServidor("autenticarLogin", { perfil: perfil, usuario: usuario, senha: senha });
       exibirLoader(false);
 
       if (res && res.sucesso) {
         dadosUsuarioLogado = { papel: perfil, nome: res.nome, turmas: res.turmasVinculadas || {} };
-        
+
         document.getElementById("telaLogin").classList.add("d-none");
         document.getElementById("painelSistema").classList.remove("d-none");
         document.getElementById("nomeUsuarioLogado").innerText = `Olá, ${res.nome} (${perfil.toUpperCase()})`;
@@ -993,7 +1027,7 @@
         } else {
           document.getElementById("interfaceCoordenador").classList.remove("d-none");
           document.getElementById("interfaceProfessor").classList.add("d-none");
-          exibirLoader(true);
+          exibirLoader(true, "CARREGANDO TURMAS");
           let [listaTurmas, listaTurmasPlanilhas] = await Promise.all([
             chamarServidor("getTurmas"),
             chamarServidor("getTurmasPlanilhas")
@@ -1019,7 +1053,7 @@
       let turmaSel = document.getElementById("profTurma").value;
       let selectDisc = document.getElementById("profDisciplina");
       selectDisc.innerHTML = '<option value="">Selecione...</option>';
-      
+
       if (!turmaSel) return;
       let disciplinas = dadosUsuarioLogado.turmas[turmaSel] || [];
       disciplinas.forEach(d => {
@@ -1034,53 +1068,59 @@
       if (!turma || !disciplina) return;
 
       let isEja = isTurmaEja(turma);
+      let badgeEja = document.getElementById("badgeEjaProf");
+      if (badgeEja) {
+        if (isEja) badgeEja.classList.remove("d-none");
+        else badgeEja.classList.add("d-none");
+      }
+
       let thead = document.getElementById("tabelaHeadDiario");
       if (thead) {
         if (isEja) {
           thead.innerHTML = `
             <tr>
-              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
-              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
-              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
-              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+              <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
+              <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
+              <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
             </tr>
             <tr>
-              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">SEMESTRE</th>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">TOTAL</th>
-              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH SEMEST.</th>
-              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH TOTAL</th>
+              <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">SEMESTRE</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[70px] font-bold">TOTAL</th>
+              <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">CH SEMEST.</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[80px] font-bold">CH TOTAL</th>
             </tr>
           `;
         } else {
           thead.innerHTML = `
             <tr>
-              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
-              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
-              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
-              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
+              <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
+              <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
+              <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
             </tr>
             <tr>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
-              <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-              <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-              <th width="8%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">1° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">2° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">3° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">1° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">2° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">3° TRIM</th>
             </tr>
           `;
         }
       }
 
-      exibirLoader(true);
+      exibirLoader(true, "BUSCANDO ALUNOS");
       let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
       exibirLoader(false);
 
       if (lista && Array.isArray(lista)) {
         lista.sort((a, b) => {
-          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
-          return a.taxado ? 1 : -1; 
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR');
+          return a.taxado ? 1 : -1;
         });
-        
+
         cacheAlunosAtuais = lista;
         cacheAlunosOriginaisProf = JSON.stringify(lista);
         desenharTabelaDiario();
@@ -1096,45 +1136,45 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosAtuais.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isEja ? 6 : 8}" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isEja ? 6 : 8}" class="py-8 text-center text-slate-400">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
         return;
       }
 
       cacheAlunosAtuais.forEach((aluno, i) => {
-        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let classeLinha = aluno.taxado ? 'class="group text-taxado"' : 'class="group hover:bg-slate-50"';
         let disabledInput = aluno.taxado ? 'disabled' : '';
-        
+
         if (isEja) {
           tbody.innerHTML += `
             <tr ${classeLinha}>
-              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
-              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
-              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td><div class="bg-light border text-center p-1 mx-auto fw-bold text-secondary" style="max-width:70px; border-radius: 10px !important; font-size: 13px;">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td><div class="bg-light border text-center p-1 mx-auto text-secondary font-monospace" style="max-width:85px; border-radius: 10px !important; font-size: 12px;">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
+              <td class="py-3 px-3 text-center font-bold text-slate-400 col-sticky-num">${i + 1}</td>
+              <td class="py-3 px-4 font-bold text-slate-800 col-sticky-name">${aluno.nome}</td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><div class="w-16 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-xs font-bold text-slate-700 text-center mx-auto select-none">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-2 text-center"><div class="w-20 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-[11px] font-mono font-medium text-slate-600 text-center mx-auto select-none">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
             </tr>
           `;
         } else {
           tbody.innerHTML += `
             <tr ${classeLinha}>
-              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
-              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
-              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value, this)" onblur="atualizarCacheNota(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value, this)" onblur="atualizarCacheNota(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
+              <td class="py-3 px-3 text-center font-bold text-slate-400 col-sticky-num">${i + 1}</td>
+              <td class="py-3 px-4 font-bold text-slate-800 col-sticky-name">${aluno.nome}</td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNota(${i}, 2, this.value, this)" onblur="atualizarCacheNota(${i}, 2, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNota(${i}, 3, this.value, this)" onblur="atualizarCacheNota(${i}, 3, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 2, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 3, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
             </tr>
           `;
         }
       });
     }
 
-    function atualizarCacheNota(index, trimestre, valor, el) { 
+    function atualizarCacheNota(index, trimestre, valor, el) {
       let fmt = formatarNotaVal(valor);
-      cacheAlunosAtuais[index]['nota' + trimestre] = fmt; 
+      cacheAlunosAtuais[index]['nota' + trimestre] = fmt;
       if (el && fmt !== "" && el.value !== fmt) el.value = fmt;
     }
     function atualizarCacheCH(index, trimestre, checked) { cacheAlunosAtuais[index]['ch' + trimestre] = checked; }
@@ -1142,8 +1182,8 @@
     async function salvarDiario() {
       let turma = document.getElementById("profTurma").value;
       let disciplina = document.getElementById("profDisciplina").value;
-      
-      exibirLoader(true);
+
+      exibirLoader(true, "SALVANDO DIÁRIO");
       let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosAtuais });
       exibirLoader(false);
       if(res) {
@@ -1153,10 +1193,10 @@
     }
 
     function popularSelectsCoordenador(turmas) {
-      ['coordSelectTurma', 'coordSelectTurmaAuto', 'cadAlunoTurma', 'cadProfTurma'].forEach(id => {
+      ['coordSelectTurma', 'coordSelectTurmaAuto', 'cadAlunoTurma', 'cadProfTurma', 'filtroProfTurma'].forEach(id => {
         let el = document.getElementById(id);
         if (el) {
-          el.innerHTML = '<option value="">Selecione...</option>';
+          el.innerHTML = id === 'filtroProfTurma' ? '<option value="">Todas as Turmas</option>' : '<option value="">Selecione...</option>';
           turmas.forEach(t => el.innerHTML += `<option value="${t}">${t}</option>`);
         }
       });
@@ -1166,57 +1206,69 @@
       let turma = document.getElementById("coordSelectTurma").value;
       let tbody = document.getElementById("tabelaRelatorioCorpo");
       let thead = document.getElementById("tabelaRelatorioCabecalho");
-      document.getElementById("cardDiarioCoord").classList.add("d-none"); 
-      
+      document.getElementById("cardDiarioCoord").classList.add("d-none");
+
       let isEja = isTurmaEja(turma);
+      let avisoEja = document.getElementById("avisoEjaCoordRel");
+      let avisoEjaTurma = document.getElementById("avisoEjaCoordRelTurma");
+      if (avisoEja) {
+        if (turma && isEja) {
+          if (avisoEjaTurma) avisoEjaTurma.innerText = turma;
+          avisoEja.classList.remove("d-none");
+        } else {
+          avisoEja.classList.add("d-none");
+        }
+      }
+
       if (thead) {
         if (isEja) {
           thead.innerHTML = `
             <tr>
-              <th class="text-start py-3 ps-3">Componente Curricular</th>
-              <th class="py-3">Semestre Único</th>
+              <th class="py-3 px-4 text-left">Componente Curricular</th>
+              <th class="py-3 px-2">Semestre Único</th>
             </tr>
           `;
         } else {
           thead.innerHTML = `
             <tr>
-              <th class="text-start py-3 ps-3">Componente Curricular</th>
-              <th class="py-3">1º Trimestre</th>
-              <th class="py-3">2º Trimestre</th>
-              <th class="py-3">3º Trimestre</th>
+              <th class="py-3 px-4 text-left">Componente Curricular</th>
+              <th class="py-3 px-2">1º Trimestre</th>
+              <th class="py-3 px-2">2º Trimestre</th>
+              <th class="py-3 px-2">3º Trimestre</th>
             </tr>
           `;
         }
       }
 
-      if(!turma) { tbody.innerHTML = `<tr><td colspan="${isEja ? 2 : 4}" class="text-center text-muted py-4">Selecione uma turma.</td></tr>`; return; }
+      if(!turma) { tbody.innerHTML = `<tr><td colspan="${isEja ? 2 : 4}" class="py-8 text-slate-400">Selecione uma turma para carregar o mapa.</td></tr>`; return; }
 
-      exibirLoader(true);
+      exibirLoader(true, "CARREGANDO STATUS");
       let dados = await chamarServidor("getStatusPreenchimento", { turma: turma });
       exibirLoader(false);
 
       if(dados && Array.isArray(dados)) {
         tbody.innerHTML = "";
-        let badgeColor = (st) => st === "Concluído" ? "bg-success" : (st === "Parcial" ? "bg-warning" : "bg-danger");
+        let badgeColor = (st) => st === "Concluído" ? "bg-[#137e54] text-white" : (st === "Parcial" ? "bg-[#f59e0b] text-white" : "bg-[#ce2d3a] text-white");
         dados.forEach(linha => {
+          let discEsc = String(linha.disciplina).replace(/'/g, "\\'");
           if (isEja) {
             tbody.innerHTML += `
-              <tr onclick="auditarDisciplina('${linha.disciplina}')">
-                <td class="fw-bold text-start text-dark py-3 ps-3">
-                  <i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>${linha.disciplina.toUpperCase()}
+              <tr onclick="auditarDisciplina('${discEsc}')" class="hover:bg-slate-50 cursor-pointer transition-all">
+                <td class="py-3.5 px-4 text-left font-bold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-magnifying-glass text-purple-600 text-xs"></i>${linha.disciplina.toUpperCase()}
                 </td>
-                <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+                <td class="py-3.5 px-2"><span class="inline-block px-3 py-1 rounded-full text-xs font-bold ${badgeColor(linha.t1)}">${linha.t1}</span></td>
               </tr>
             `;
           } else {
             tbody.innerHTML += `
-              <tr onclick="auditarDisciplina('${linha.disciplina}')">
-                <td class="fw-bold text-start text-dark py-3 ps-3">
-                  <i class="fa-solid fa-magnifying-glass icon-lupa-print"></i>${linha.disciplina.toUpperCase()}
+              <tr onclick="auditarDisciplina('${discEsc}')" class="hover:bg-slate-50 cursor-pointer transition-all">
+                <td class="py-3.5 px-4 text-left font-bold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-magnifying-glass text-purple-600 text-xs"></i>${linha.disciplina.toUpperCase()}
                 </td>
-                <td><span class="badge ${badgeColor(linha.t1)}">${linha.t1}</span></td>
-                <td><span class="badge ${badgeColor(linha.t2)}">${linha.t2}</span></td>
-                <td><span class="badge ${badgeColor(linha.t3)}">${linha.t3}</span></td>
+                <td class="py-3.5 px-2"><span class="inline-block px-3 py-1 rounded-full text-xs font-bold ${badgeColor(linha.t1)}">${linha.t1}</span></td>
+                <td class="py-3.5 px-2"><span class="inline-block px-3 py-1 rounded-full text-xs font-bold ${badgeColor(linha.t2)}">${linha.t2}</span></td>
+                <td class="py-3.5 px-2"><span class="inline-block px-3 py-1 rounded-full text-xs font-bold ${badgeColor(linha.t3)}">${linha.t3}</span></td>
               </tr>
             `;
           }
@@ -1232,7 +1284,7 @@
         notificar("Informe o MASP do professor para buscar os vínculos.", false);
         return;
       }
-      exibirLoader(true);
+      exibirLoader(true, "BUSCANDO VÍNCULOS");
       let res = await chamarServidor("autenticarLogin", { perfil: "professor", usuario: masp });
       exibirLoader(false);
 
@@ -1244,16 +1296,20 @@
           res.turmasVinculadas[turma].forEach(function(disc) {
             let idCheck = "chk_masp_" + turma.replace(/[^a-zA-Z0-9]/g, '_') + "_" + disc.replace(/[^a-zA-Z0-9]/g, '_');
             vinculosMaspCarregados.push({ turma: turma, disciplina: disc, idCheck: idCheck });
-            html += '<div class="col-md-6">' +
-              '<div class="form-check p-2 bg-light rounded-3 border d-flex align-items-center">' +
-                '<input class="form-check-input me-2 mt-0" type="checkbox" id="' + idCheck + '" checked data-turma="' + turma + '" data-disciplina="' + disc + '">' +
-                '<label class="form-check-label small fw-semibold text-dark cursor-pointer flex-grow-1" for="' + idCheck + '">' +
-                  '<span class="badge bg-secondary me-1">' + turma + '</span> ' + disc +
-                '</label>' +
+            html += '<label for="' + idCheck + '" class="p-3 rounded-xl border bg-white border-[#583ef2]/40 hover:border-[#583ef2] shadow-sm text-slate-900 flex items-center gap-2.5 cursor-pointer select-none">' +
+              '<input class="w-4 h-4 accent-[#583ef2] rounded shrink-0" type="checkbox" id="' + idCheck + '" checked data-turma="' + turma + '" data-disciplina="' + disc + '">' +
+              '<div class="min-w-0">' +
+                '<div class="flex items-center gap-1.5 flex-wrap">' +
+                  '<span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono text-[10px] font-bold">' + turma + '</span>' +
+                  (isTurmaEja(turma) ? '<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">Semestre Único</span>' : '') +
+                '</div>' +
+                '<p class="text-xs font-bold truncate mt-0.5 text-slate-800">' + disc + '</p>' +
               '</div>' +
-            '</div>';
+            '</label>';
           });
         });
+        let qtdEl = document.getElementById("qtdVinculosMaspAuto");
+        if (qtdEl) qtdEl.textContent = "(" + vinculosMaspCarregados.length + " vínculo(s))";
         document.getElementById("listaVinculosMaspAuto").innerHTML = html;
         document.getElementById("containerVinculosMaspAuto").classList.remove("d-none");
         notificar(vinculosMaspCarregados.length + " vínculo(s) encontrado(s) para " + res.nome, true);
@@ -1272,12 +1328,29 @@
     }
 
     function alternarModoAutoFill(modo) {
+      let radioMasp = document.getElementById("modoAutoMasp");
+      let radioTurma = document.getElementById("modoAutoTurma");
+      let btnMasp = document.getElementById("btnModoAutoMasp");
+      let btnTurma = document.getElementById("btnModoAutoTurma");
+      let dica = document.getElementById("dicaModoAutoFillHtml");
+      let btnExec = document.getElementById("btnExecutarAutoFillHtml");
+
       if (modo === 'masp') {
+        if (radioMasp) radioMasp.checked = true;
         document.getElementById("containerAutoMasp").classList.remove("d-none");
         document.getElementById("containerAutoTurma").classList.add("d-none");
+        if (btnMasp) btnMasp.className = "flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all bg-white border-[#583ef2] shadow-sm ring-2 ring-[#583ef2]/10 text-slate-900 cursor-pointer";
+        if (btnTurma) btnTurma.className = "flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all bg-transparent border-slate-200 text-slate-600 hover:bg-white/60 cursor-pointer";
+        if (dica) dica.innerHTML = 'Esta opção buscará o cadastro do MASP na base de professores e preencherá automaticamente as notas aleatórias e carga horária <strong>exclusivamente</strong> nas abas e planilhas das turmas em que o docente leciona.';
+        if (btnExec) btnExec.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Executar Preenchimento por MASP';
       } else {
+        if (radioTurma) radioTurma.checked = true;
         document.getElementById("containerAutoMasp").classList.add("d-none");
         document.getElementById("containerAutoTurma").classList.remove("d-none");
+        if (btnTurma) btnTurma.className = "flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all bg-white border-[#583ef2] shadow-sm ring-2 ring-[#583ef2]/10 text-slate-900 cursor-pointer";
+        if (btnMasp) btnMasp.className = "flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all bg-transparent border-slate-200 text-slate-600 hover:bg-white/60 cursor-pointer";
+        if (dica) dica.innerHTML = 'Esta opção preenche automaticamente a confirmação de carga horária e notas aleatórias para todos os alunos de <strong>todas as disciplinas</strong> da turma selecionada.';
+        if (btnExec) btnExec.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Executar Preenchimento por Turma';
       }
     }
 
@@ -1326,9 +1399,9 @@
           customClass: { popup: 'rounded-4' }
         }).then(async (result) => {
           if (result.isConfirmed) {
-            exibirLoader(true);
-            let res = await chamarServidor("preencherAutomaticoMasp", { 
-              masp: masp, 
+            exibirLoader(true, "PREENCHENDO POR MASP");
+            let res = await chamarServidor("preencherAutomaticoMasp", {
+              masp: masp,
               trimestre: trimestre,
               notaMin: notaMin,
               notaMax: notaMax,
@@ -1356,9 +1429,9 @@
           customClass: { popup: 'rounded-4' }
         }).then(async (result) => {
           if (result.isConfirmed) {
-            exibirLoader(true);
-            let res = await chamarServidor("preencherAutomaticoTurma", { 
-              turma: turma, 
+            exibirLoader(true, "PROCESSANDO LOTE");
+            let res = await chamarServidor("preencherAutomaticoTurma", {
+              turma: turma,
               trimestre: trimestre,
               notaMin: notaMin,
               notaMax: notaMax
@@ -1378,60 +1451,66 @@
       disciplinaAuditadaAtual = disciplina;
 
       let isEja = isTurmaEja(turma);
+      let badgeEja = document.getElementById("badgeEjaCoordDiario");
+      if (badgeEja) {
+        if (isEja) badgeEja.classList.remove("d-none");
+        else badgeEja.classList.add("d-none");
+      }
+
       let thead = document.getElementById("tabelaHeadDiarioCoord");
       if (thead) {
         if (isEja) {
           thead.innerHTML = `
             <tr>
-              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
-              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
-              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
-              <th colspan="2" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
-              <th rowspan="2" width="10%" class="pb-3">Ações</th>
+              <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
+              <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
+              <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
+              <th rowspan="2" class="py-3 px-4 w-28">Ações</th>
             </tr>
             <tr>
-              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">SEMESTRE</th>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">TOTAL</th>
-              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH SEMEST.</th>
-              <th width="12%" class="pt-0 pb-2 text-center text-muted small fw-semibold">CH TOTAL</th>
+              <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">SEMESTRE</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[70px] font-bold">TOTAL</th>
+              <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">CH SEMEST.</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[80px] font-bold">CH TOTAL</th>
             </tr>
           `;
         } else {
           thead.innerHTML = `
             <tr>
-              <th rowspan="2" class="pb-3 col-sticky-num">Nº</th>
-              <th rowspan="2" class="text-start pb-3 col-sticky-name">Nome Completo do Estudante</th>
-              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-star-half-stroke me-1"></i> NOTAS</th>
-              <th colspan="3" class="pb-1 pt-3 text-center"><i class="fa-solid fa-clock me-1"></i> CARGA HORÁRIA</th>
-              <th rowspan="2" width="10%" class="pb-3">Ações</th>
+              <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
+              <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
+              <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
+              <th colspan="3" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
+              <th rowspan="2" class="py-3 px-4 w-28">Ações</th>
             </tr>
             <tr>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-              <th width="10%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
-              <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">1° TRIM</th>
-              <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">2° TRIM</th>
-              <th width="7%" class="pt-0 pb-2 text-center text-muted small fw-semibold">3° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">1° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">2° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[76px]">3° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">1° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">2° TRIM</th>
+              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[64px]">3° TRIM</th>
             </tr>
           `;
         }
       }
 
-      exibirLoader(true);
+      exibirLoader(true, "AUDITANDO COMPONENTE");
       let lista = await chamarServidor("getDadosDisciplina", { turma: turma, disciplina: disciplina });
       exibirLoader(false);
 
       if (lista && Array.isArray(lista)) {
         lista.sort((a, b) => {
-          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR'); 
-          return a.taxado ? 1 : -1; 
+          if (a.taxado === b.taxado) return a.nome.localeCompare(b.nome, 'pt-BR');
+          return a.taxado ? 1 : -1;
         });
-        
+
         cacheAlunosCoord = lista;
         cacheAlunosOriginaisCoord = JSON.stringify(lista);
         desenharTabelaDiarioCoord();
         document.getElementById("tituloDiarioCoord").innerText = `${disciplina} — Turma ${turma}`;
-        
+
         let painelCoord = document.getElementById("cardDiarioCoord");
         painelCoord.classList.remove("d-none");
         painelCoord.scrollIntoView({ behavior: 'smooth' });
@@ -1445,26 +1524,32 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosCoord.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isEja ? 7 : 9}" class="text-center text-muted py-4">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isEja ? 7 : 9}" class="py-8 text-center text-slate-400">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
         return;
       }
 
       cacheAlunosCoord.forEach((aluno, i) => {
-        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
+        let classeLinha = aluno.taxado ? 'class="group text-taxado"' : 'class="group hover:bg-slate-50"';
         let disabledInput = aluno.taxado ? 'disabled' : '';
-        
+        let btnClass = aluno.taxado
+          ? 'border-emerald-500 text-emerald-600 hover:bg-emerald-50'
+          : 'border-rose-500 text-rose-600 hover:bg-rose-50';
+        let btnContent = aluno.taxado
+          ? '<i class="fa-solid fa-user-check"></i> Ativar'
+          : '<i class="fa-solid fa-user-slash"></i> Desativar';
+
         if (isEja) {
           tbody.innerHTML += `
             <tr ${classeLinha}>
-              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
-              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
-              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td><div class="bg-light border text-center p-1 mx-auto fw-bold text-secondary" style="max-width:70px; border-radius: 10px !important; font-size: 13px;">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td><div class="bg-light border text-center p-1 mx-auto text-secondary font-monospace" style="max-width:85px; border-radius: 10px !important; font-size: 12px;">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
-              <td class="text-center">
-                <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
-                  ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              <td class="py-3 px-3 text-center font-bold text-slate-400 col-sticky-num">${i + 1}</td>
+              <td class="py-3 px-4 font-bold text-slate-800 col-sticky-name">${aluno.nome}</td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><div class="w-16 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-xs font-bold text-slate-700 text-center mx-auto select-none">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-2 text-center"><div class="w-20 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-[11px] font-mono font-medium text-slate-600 text-center mx-auto select-none">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
+              <td class="py-2 px-4 text-center">
+                <button type="button" onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="px-3 py-1 rounded-lg text-xs font-semibold border inline-flex items-center justify-center gap-1 mx-auto transition-all cursor-pointer ${btnClass}">
+                  ${btnContent}
                 </button>
               </td>
             </tr>
@@ -1472,17 +1557,17 @@
         } else {
           tbody.innerHTML += `
             <tr ${classeLinha}>
-              <td class="text-center fw-bold text-secondary col-sticky-num">${i + 1}</td>
-              <td class="fw-bold text-dark col-sticky-name">${aluno.nome}</td>
-              <td><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 2, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 3, this.value, this)" class="form-control bg-light border-0 text-center p-1 mx-auto" style="max-width:70px; border-radius: 10px !important; padding: 6px !important;"></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td class="text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="form-check-input mt-1" style="transform: scale(1.15);"></td>
-              <td class="text-center">
-                <button onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="btn btn-sm ${aluno.taxado ? 'btn-outline-success' : 'btn-outline-danger'} py-1 px-2 small" style="border-radius: 10px !important; font-size: 0.8rem; padding: 6px 12px !important;">
-                  ${aluno.taxado ? '<i class="fa-solid fa-user-check"></i> Ativar' : '<i class="fa-solid fa-user-slash"></i> Desativar'}
+              <td class="py-3 px-3 text-center font-bold text-slate-400 col-sticky-num">${i + 1}</td>
+              <td class="py-3 px-4 font-bold text-slate-800 col-sticky-name">${aluno.nome}</td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota2}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 2, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 2, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota3}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 3, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 3, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch2 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 2, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch3 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 3, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
+              <td class="py-2 px-4 text-center">
+                <button type="button" onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="px-3 py-1 rounded-lg text-xs font-semibold border inline-flex items-center justify-center gap-1 mx-auto transition-all cursor-pointer ${btnClass}">
+                  ${btnContent}
                 </button>
               </td>
             </tr>
@@ -1502,7 +1587,7 @@
       let turma = document.getElementById("coordSelectTurma").value;
       let disciplina = disciplinaAuditadaAtual;
       
-      exibirLoader(true);
+      exibirLoader(true, "SALVANDO COMO COORDENADOR");
       let res = await chamarServidor("salvarDados", { turma: turma, disciplina: disciplina, dados: cacheAlunosCoord });
       exibirLoader(false);
       if(res) {
@@ -1514,7 +1599,7 @@
 
     async function alternarStatusEstudanteCoord(linha, statusTaxado) {
       let turma = document.getElementById("coordSelectTurma").value;
-      exibirLoader(true);
+      exibirLoader(true, "ALTERANDO STATUS");
       let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !statusTaxado });
       exibirLoader(false);
       if(res) { 
@@ -1535,12 +1620,28 @@
     }
 
     let cacheEstudantesTurmaCoord = [];
+    let linhaEmEdicaoCoordHtml = null;
+
+    function escapeHtmlText(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
 
     function toggleFormNovoEstudanteHtml() {
       let box = document.getElementById("boxNovoEstudanteCoord");
+      let btn = document.getElementById("btnNovoEstudanteToggleHtml");
       if (box) {
         box.classList.toggle("d-none");
-        if (!box.classList.contains("d-none")) {
+        let aberto = !box.classList.contains("d-none");
+        if (btn) {
+          btn.innerHTML = aberto
+            ? '<i class="fa-solid fa-xmark"></i> Fechar Cadastro'
+            : '<i class="fa-solid fa-plus"></i> Novo Estudante';
+        }
+        if (aberto) {
           document.getElementById("cadAlunoNome")?.focus();
         }
       }
@@ -1549,12 +1650,16 @@
     async function carregarEstudantesCoordHtml() {
       let turma = document.getElementById("cadAlunoTurma")?.value;
       let tbody = document.getElementById("tabelaEstudantesCorpo");
+      let mobList = document.getElementById("listaEstudantesMobileCoord");
       let totalEl = document.getElementById("qtdTotalEstudantes");
       let ativosEl = document.getElementById("qtdAtivosEstudantes");
       let inativosEl = document.getElementById("qtdInativosEstudantes");
 
+      linhaEmEdicaoCoordHtml = null;
+
       if (!turma) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Selecione uma turma para visualizar os estudantes.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400 text-xs">Selecione uma turma para visualizar os estudantes.</td></tr>';
+        if (mobList) mobList.innerHTML = '<div class="py-8 text-center text-slate-400 text-xs border border-slate-200 rounded-2xl">Selecione uma turma para visualizar os estudantes.</div>';
         if (totalEl) totalEl.innerText = "0";
         if (ativosEl) ativosEl.innerText = "0";
         if (inativosEl) inativosEl.innerText = "0";
@@ -1562,9 +1667,10 @@
         return;
       }
 
-      if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>Carregando estudantes da turma...</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400 text-xs"><i class="fa-solid fa-spinner fa-spin mr-2 text-[#583ef2]"></i>Carregando estudantes da turma...</td></tr>';
+      if (mobList) mobList.innerHTML = '<div class="py-8 text-center text-slate-400 text-xs"><i class="fa-solid fa-spinner fa-spin mr-2 text-[#583ef2]"></i>Carregando estudantes da turma...</div>';
       
-      exibirLoader(true);
+      exibirLoader(true, "CARREGANDO ESTUDANTES");
       let res = await chamarServidor("getEstudantesTurma", { turma: turma });
       exibirLoader(false);
 
@@ -1574,7 +1680,7 @@
         cacheEstudantesTurmaCoord = [];
       }
 
-      desenharTabelaEstudantesCoord(cacheEstudantesTurmaCoord);
+      filtrarTabelaEstudantesCoord();
     }
 
     let cacheTurmasPlanilhasCoord = [];
@@ -1583,6 +1689,7 @@
 
     function desenharTabelaEstudantesCoord(lista) {
       let tbody = document.getElementById("tabelaEstudantesCorpo");
+      let mobList = document.getElementById("listaEstudantesMobileCoord");
       let totalEl = document.getElementById("qtdTotalEstudantes");
       let ativosEl = document.getElementById("qtdAtivosEstudantes");
       let inativosEl = document.getElementById("qtdInativosEstudantes");
@@ -1595,50 +1702,150 @@
       if (ativosEl) ativosEl.innerText = ativos;
       if (inativosEl) inativosEl.innerText = inativos;
 
-      if (!tbody) return;
-      tbody.innerHTML = "";
+      if (tbody) tbody.innerHTML = "";
+      if (mobList) mobList.innerHTML = "";
 
       if (lista.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-4">Nenhum estudante encontrado.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="py-8 text-center text-slate-400 text-xs">Nenhum estudante encontrado.</td></tr>';
+        if (mobList) mobList.innerHTML = '<div class="py-8 text-center text-slate-400 text-xs border border-slate-200 rounded-2xl">Nenhum estudante encontrado.</div>';
         return;
       }
 
       lista.forEach((aluno, i) => {
-        let classeLinha = aluno.taxado ? 'class="text-taxado"' : '';
-        let badgeStatus = aluno.taxado
-          ? '<span class="badge bg-secondary">INATIVO/REMANEJADO</span>'
-          : '<span class="badge bg-success">Ativo</span>';
+        let num = aluno.numero || (i + 1);
+        let nomeSafe = escapeHtmlText(aluno.nome);
+        let isEditando = linhaEmEdicaoCoordHtml === aluno.linhaPlanilha;
 
-        let btnAcaoStatus = aluno.taxado
-          ? `<button onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, true)" class="btn btn-sm btn-outline-success py-1 px-2" style="font-size:0.78rem; border-radius:8px;"><i class="fa-solid fa-user-check me-1"></i>Ativar</button>`
-          : `<button onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, false)" class="btn btn-sm btn-outline-danger py-1 px-2" style="font-size:0.78rem; border-radius:8px;"><i class="fa-solid fa-user-slash me-1"></i>Inativar</button>`;
+        let badgeStatusDesk = aluno.taxado
+          ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-200 text-slate-700 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> INATIVO/REMANEJADO</span>'
+          : '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Ativo</span>';
 
-        let nomeEscapado = aluno.nome.replace(/'/g, "\\'");
-        let btnRemanejar = `<button onclick="abrirModalRemanejarCoordHtml(${aluno.linhaPlanilha}, '${nomeEscapado}')" ${aluno.taxado ? 'disabled' : ''} class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size:0.78rem; border-radius:8px; border-color:#583ef2; color:#583ef2;" title="${aluno.taxado ? 'Estudante inativo/remanejado' : 'Remanejar estudante para outra turma'}"><i class="fa-solid fa-right-left me-1"></i>Remanejar</button>`;
+        let badgeStatusMob = aluno.taxado
+          ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-200 text-slate-700 whitespace-nowrap shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> INATIVO/REMANEJADO</span>'
+          : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Ativo</span>';
 
-        tbody.innerHTML += `
-          <tr ${classeLinha}>
-            <td class="text-center fw-bold text-secondary">${aluno.numero || (i + 1)}</td>
-            <td class="text-start fw-bold text-dark ps-3">${aluno.nome}</td>
-            <td>${badgeStatus}</td>
-            <td>
-              <div class="d-flex justify-content-center gap-1 flex-wrap">
-                <button onclick="editarEstudanteCoordHtml(${aluno.linhaPlanilha}, '${nomeEscapado}')" class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size:0.78rem; border-radius:8px;" title="Editar nome"><i class="fa-solid fa-pencil me-1"></i>Editar</button>
-                ${btnRemanejar}
-                ${btnAcaoStatus}
+        if (tbody) {
+          let nomeCelulaDesk = isEditando
+            ? `
+              <div class="flex items-center gap-2 max-w-lg">
+                <input type="text" id="inputEditAlunoDeskHtml" value="${nomeSafe}" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarEdicaoEstudanteCoordHtml('inputEditAlunoDeskHtml');}else if(event.key==='Escape'){cancelarEdicaoEstudanteCoordHtml();}" class="flex-1 uppercase text-xs py-1.5 px-3 rounded-lg border border-[#583ef2] bg-white text-slate-900 outline-none shadow-sm">
+                <button type="button" onclick="salvarEdicaoEstudanteCoordHtml('inputEditAlunoDeskHtml')" class="p-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-all cursor-pointer" title="Salvar alteração de nome"><i class="fa-solid fa-check"></i></button>
+                <button type="button" onclick="cancelarEdicaoEstudanteCoordHtml()" class="p-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg transition-all cursor-pointer" title="Cancelar edição"><i class="fa-solid fa-xmark"></i></button>
               </div>
-            </td>
-          </tr>
-        `;
+            `
+            : `<div class="flex items-center gap-2"><span class="font-semibold text-slate-900 text-xs sm:text-sm">${nomeSafe}</span></div>`;
+
+          let btnEditarDesk = !isEditando
+            ? `<button type="button" onclick="iniciarEdicaoEstudanteCoordHtml(${aluno.linhaPlanilha})" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 flex items-center gap-1 transition-all whitespace-nowrap cursor-pointer" title="Editar nome deste estudante"><i class="fa-solid fa-pen"></i> <span>Editar</span></button>`
+            : '';
+
+          let btnRemanejarDesk = `<button type="button" onclick="abrirModalRemanejarCoordHtml(${aluno.linhaPlanilha})" ${aluno.taxado ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-[#583ef2] hover:bg-indigo-100 disabled:opacity-40 disabled:cursor-not-allowed border border-indigo-200 flex items-center gap-1 transition-all whitespace-nowrap cursor-pointer" title="${aluno.taxado ? 'Estudante inativo/remanejado' : 'Remanejar estudante para outra turma'}"><i class="fa-solid fa-right-left"></i> <span>Remanejar</span></button>`;
+
+          let btnStatusDesk = aluno.taxado
+            ? `<button type="button" onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, true)" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all whitespace-nowrap bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 cursor-pointer" title="Reativar estudante"><i class="fa-solid fa-user-check"></i> <span>Ativar</span></button>`
+            : `<button type="button" onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, false)" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all whitespace-nowrap bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 cursor-pointer" title="Inativar estudante"><i class="fa-solid fa-user-slash"></i> <span>Inativar</span></button>`;
+
+          tbody.innerHTML += `
+            <tr class="transition-colors ${aluno.taxado ? 'text-taxado bg-slate-50/50' : 'hover:bg-slate-50/80'}">
+              <td class="py-3 px-3 text-center font-bold text-slate-400 text-xs">${num}</td>
+              <td class="py-3 px-4">${nomeCelulaDesk}</td>
+              <td class="py-3 px-3 text-center">${badgeStatusDesk}</td>
+              <td class="py-3 px-4 text-center whitespace-nowrap">
+                <div class="inline-flex items-center justify-center gap-1.5 flex-nowrap">
+                  ${btnEditarDesk}
+                  ${btnRemanejarDesk}
+                  ${btnStatusDesk}
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+
+        if (mobList) {
+          let nomeBlocoMob = isEditando
+            ? `
+              <div class="flex items-center gap-1.5">
+                <input type="text" id="inputEditAlunoMobHtml" value="${nomeSafe}" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarEdicaoEstudanteCoordHtml('inputEditAlunoMobHtml');}else if(event.key==='Escape'){cancelarEdicaoEstudanteCoordHtml();}" class="flex-1 min-w-0 uppercase text-xs py-1.5 px-2.5 rounded-lg border border-[#583ef2] bg-white text-slate-900 outline-none shadow-sm">
+                <button type="button" onclick="salvarEdicaoEstudanteCoordHtml('inputEditAlunoMobHtml')" class="p-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shrink-0 cursor-pointer" title="Salvar"><i class="fa-solid fa-check text-xs"></i></button>
+                <button type="button" onclick="cancelarEdicaoEstudanteCoordHtml()" class="p-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg shrink-0 cursor-pointer" title="Cancelar"><i class="fa-solid fa-xmark text-xs"></i></button>
+              </div>
+            `
+            : `<p class="font-bold text-xs text-slate-900 break-words leading-snug ${aluno.taxado ? 'line-through text-slate-400' : ''}">${nomeSafe}</p>`;
+
+          let btnStatusMob = aluno.taxado
+            ? `<button type="button" onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, true)" class="py-2 px-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1 transition-all bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 cursor-pointer"><i class="fa-solid fa-user-check"></i> <span>Ativar</span></button>`
+            : `<button type="button" onclick="alternarStatusEstudanteGerenciadorHtml(${aluno.linhaPlanilha}, false)" class="py-2 px-2 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1 transition-all bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 cursor-pointer"><i class="fa-solid fa-user-slash"></i> <span>Inativar</span></button>`;
+
+          mobList.innerHTML += `
+            <div class="p-3.5 rounded-2xl border border-slate-200 transition-colors ${aluno.taxado ? 'bg-slate-50/80 opacity-80' : 'bg-white'}">
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div class="flex items-start gap-2.5 min-w-0 flex-1">
+                  <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center shrink-0">${num}</span>
+                  <div class="min-w-0 flex-1">${nomeBlocoMob}</div>
+                </div>
+                ${badgeStatusMob}
+              </div>
+              <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+                <button type="button" onclick="iniciarEdicaoEstudanteCoordHtml(${aluno.linhaPlanilha})" ${isEditando ? 'disabled' : ''} class="py-2 px-2 rounded-xl text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 flex items-center justify-center gap-1 transition-all cursor-pointer"><i class="fa-solid fa-pen"></i> <span>Editar</span></button>
+                <button type="button" onclick="abrirModalRemanejarCoordHtml(${aluno.linhaPlanilha})" ${aluno.taxado ? 'disabled' : ''} class="py-2 px-2 rounded-xl text-[11px] font-semibold bg-indigo-50 text-[#583ef2] hover:bg-indigo-100 disabled:opacity-40 disabled:cursor-not-allowed border border-indigo-200 flex items-center justify-center gap-1 transition-all cursor-pointer"><i class="fa-solid fa-right-left"></i> <span>Remanejar</span></button>
+                ${btnStatusMob}
+              </div>
+            </div>
+          `;
+        }
       });
     }
 
-    async function abrirModalRemanejarCoordHtml(linha, nomeAluno) {
+    function iniciarEdicaoEstudanteCoordHtml(linha) {
+      linhaEmEdicaoCoordHtml = linha;
+      filtrarTabelaEstudantesCoord();
+      setTimeout(() => {
+        let inputDesk = document.getElementById("inputEditAlunoDeskHtml");
+        let inputMob = document.getElementById("inputEditAlunoMobHtml");
+        if (inputDesk && inputDesk.offsetParent !== null) inputDesk.focus();
+        else if (inputMob) inputMob.focus();
+      }, 20);
+    }
+
+    function cancelarEdicaoEstudanteCoordHtml() {
+      linhaEmEdicaoCoordHtml = null;
+      filtrarTabelaEstudantesCoord();
+    }
+
+    async function salvarEdicaoEstudanteCoordHtml(inputId) {
+      let turma = document.getElementById("cadAlunoTurma")?.value;
+      if (!turma || linhaEmEdicaoCoordHtml === null) return;
+      let el = document.getElementById(inputId);
+      let novoNome = (el ? el.value : "").trim().toUpperCase();
+      if (!novoNome) {
+        notificar("O nome do estudante não pode ficar vazio!", false);
+        return;
+      }
+
+      exibirLoader(true, "ATUALIZANDO NOME");
+      let res = await chamarServidor("editarEstudante", { turma: turma, linhaPlanilha: linhaEmEdicaoCoordHtml, novoNome: novoNome });
+      exibirLoader(false);
+
+      if (res) {
+        notificar(res.mensagem, res.sucesso);
+        if (res.sucesso) {
+          cacheEstudantesTurmaCoord = cacheEstudantesTurmaCoord.map(a =>
+            a.linhaPlanilha === linhaEmEdicaoCoordHtml ? Object.assign({}, a, { nome: novoNome }) : a
+          );
+          linhaEmEdicaoCoordHtml = null;
+          filtrarTabelaEstudantesCoord();
+        }
+      }
+    }
+
+    async function abrirModalRemanejarCoordHtml(linha) {
       let turmaOrigem = document.getElementById("cadAlunoTurma")?.value;
       if (!turmaOrigem) return;
+      let aluno = cacheEstudantesTurmaCoord.find(a => a.linhaPlanilha === linha);
+      if (!aluno) return;
 
       if (!Array.isArray(cacheTurmasPlanilhasCoord) || cacheTurmasPlanilhasCoord.length === 0) {
-        exibirLoader(true);
+        exibirLoader(true, "CARREGANDO TURMAS");
         let resPlanilhas = await chamarServidor("getTurmasPlanilhas");
         exibirLoader(false);
         if (Array.isArray(resPlanilhas)) {
@@ -1646,21 +1853,24 @@
         }
       }
 
-      alunoSelecionadoRemanejarHtml = { linhaPlanilha: linha, nome: nomeAluno, turmaOrigem: turmaOrigem };
+      alunoSelecionadoRemanejarHtml = { linhaPlanilha: aluno.linhaPlanilha, nome: aluno.nome, turmaOrigem: turmaOrigem };
       turmaDestinoSelecionadaRemanejarHtml = "";
 
       let infoOrigem = cacheTurmasPlanilhasCoord.find(t => t.turma === turmaOrigem);
-      document.getElementById("remNomeEstudanteHtml").innerText = nomeAluno;
+      document.getElementById("remNomeEstudanteHtml").innerText = aluno.nome;
       document.getElementById("remTurmaOrigemHtml").innerText = turmaOrigem;
       document.getElementById("remPlanilhaOrigemIdHtml").innerText = infoOrigem ? infoOrigem.planilhaId : "-";
       document.getElementById("remFiltroTurmaHtml").value = "";
       document.getElementById("btnConfirmarRemanejarHtml").disabled = true;
+      let txtBtn = document.getElementById("txtBtnConfirmarRemanejarHtml");
+      if (txtBtn) txtBtn.innerText = "Selecione a Turma de Destino";
 
       desenharListaTurmasRemanejarHtml();
-      let modalEl = document.getElementById("modalRemanejarEstudanteCoord");
-      if (modalEl && typeof bootstrap !== "undefined") {
-        bootstrap.Modal.getOrCreateInstance(modalEl).show();
-      }
+      document.getElementById("modalRemanejarEstudanteCoord")?.classList.remove("d-none");
+    }
+
+    function fecharModalRemanejarCoordHtml() {
+      document.getElementById("modalRemanejarEstudanteCoord")?.classList.add("d-none");
     }
 
     function desenharListaTurmasRemanejarHtml() {
@@ -1674,23 +1884,25 @@
         .filter(item => !filtro || item.turma.toLowerCase().includes(filtro) || item.planilhaId.toLowerCase().includes(filtro));
 
       if (candidatas.length === 0) {
-        container.innerHTML = '<div class="text-center text-muted py-3 small">Nenhuma turma de destino encontrada.</div>';
+        container.innerHTML = '<div class="py-6 text-center text-xs text-slate-400">Nenhuma turma de destino encontrada para o filtro informado.</div>';
         return;
       }
 
       container.innerHTML = "";
       candidatas.forEach(item => {
-        let selecionado = turmaDestinoSelecionadaRemanejarHtml === item.turma;
+        let selecionada = turmaDestinoSelecionadaRemanejarHtml === item.turma;
         let btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "list-group-item list-group-item-action d-flex justify-content-between align-items-center " + (selecionado ? "active" : "");
+        btn.className = "w-full text-left px-4 py-3 flex items-center justify-between gap-3 transition-all cursor-pointer " + (selecionada ? "bg-indigo-50/90 border-l-4 border-l-[#583ef2]" : "hover:bg-slate-50");
         btn.onclick = function() { selecionarTurmaDestinoRemanejarHtml(item.turma); };
         btn.innerHTML = `
-          <div>
-            <div class="fw-bold">${item.turma}</div>
-            <div class="small ${selecionado ? 'text-white-50' : 'text-muted'}" style="font-family: monospace; font-size: 11px;">ID Planilha: ${item.planilhaId}</div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-extrabold ${selecionada ? 'text-[#583ef2]' : 'text-slate-900'}">${item.turma}</span>
+            </div>
+            <div class="text-[11px] font-mono text-slate-500 truncate mt-0.5">ID: ${item.planilhaId}</div>
           </div>
-          <span class="badge ${selecionado ? 'bg-light text-dark' : 'bg-light text-secondary border'}">${selecionado ? 'Selecionada' : 'Escolher'}</span>
+          <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold shrink-0 ${selecionada ? 'bg-[#583ef2] text-white' : 'bg-slate-100 text-slate-600'}">${selecionada ? 'Selecionada' : 'Selecionar'}</span>
         `;
         container.appendChild(btn);
       });
@@ -1700,12 +1912,14 @@
       turmaDestinoSelecionadaRemanejarHtml = turmaDestino;
       let btnConfirmar = document.getElementById("btnConfirmarRemanejarHtml");
       if (btnConfirmar) btnConfirmar.disabled = !turmaDestino;
+      let txtBtn = document.getElementById("txtBtnConfirmarRemanejarHtml");
+      if (txtBtn) txtBtn.innerText = turmaDestino ? `Confirmar para ${turmaDestino}` : "Selecione a Turma de Destino";
       desenharListaTurmasRemanejarHtml();
     }
 
     async function executarRemanejamentoCoordHtml() {
       if (!alunoSelecionadoRemanejarHtml || !turmaDestinoSelecionadaRemanejarHtml) return;
-      exibirLoader(true);
+      exibirLoader(true, "REMANEJANDO ESTUDANTE");
       let res = await chamarServidor("remanejarEstudante", {
         turmaOrigem: alunoSelecionadoRemanejarHtml.turmaOrigem,
         turmaDestino: turmaDestinoSelecionadaRemanejarHtml,
@@ -1716,10 +1930,7 @@
       if (res) {
         notificar(res.mensagem, res.sucesso);
         if (res.sucesso) {
-          let modalEl = document.getElementById("modalRemanejarEstudanteCoord");
-          if (modalEl && typeof bootstrap !== "undefined") {
-            bootstrap.Modal.getOrCreateInstance(modalEl).hide();
-          }
+          fecharModalRemanejarCoordHtml();
           alunoSelecionadoRemanejarHtml = null;
           turmaDestinoSelecionadaRemanejarHtml = "";
           carregarEstudantesCoordHtml();
@@ -1733,32 +1944,11 @@
       desenharTabelaEstudantesCoord(filtrados);
     }
 
-    async function editarEstudanteCoordHtml(linha, nomeAtual) {
-      let turma = document.getElementById("cadAlunoTurma")?.value;
-      if (!turma) return;
-      let novoNome = prompt("Digite o novo nome para o estudante:", nomeAtual);
-      if (novoNome === null) return;
-      novoNome = novoNome.trim().toUpperCase();
-      if (!novoNome) {
-        notificar("O nome do estudante não pode ser vazio.", false);
-        return;
-      }
-
-      exibirLoader(true);
-      let res = await chamarServidor("editarEstudante", { turma: turma, linhaPlanilha: linha, novoNome: novoNome });
-      exibirLoader(false);
-
-      if (res) {
-        notificar(res.mensagem, res.sucesso);
-        if (res.sucesso) carregarEstudantesCoordHtml();
-      }
-    }
-
     async function alternarStatusEstudanteGerenciadorHtml(linha, taxadoAtual) {
       let turma = document.getElementById("cadAlunoTurma")?.value;
       if (!turma) return;
 
-      exibirLoader(true);
+      exibirLoader(true, taxadoAtual ? "REATIVANDO ESTUDANTE" : "INATIVANDO ESTUDANTE");
       let res = await chamarServidor("alterarStatusAluno", { turma: turma, linhaPlanilha: linha, excluir: !taxadoAtual });
       exibirLoader(false);
 
@@ -1773,13 +1963,14 @@
       let nome = document.getElementById("cadAlunoNome").value.trim().toUpperCase();
       if(!turma || !nome) { notificar("Preencha todos os campos!", false); return; }
 
-      exibirLoader(true);
+      exibirLoader(true, "INSERINDO ESTUDANTE");
       let res = await chamarServidor("cadastrarEstudante", { turma: turma, nomeEstudante: nome });
       exibirLoader(false);
       if(res) { 
         notificar(res.mensagem, res.sucesso); 
         if(res.sucesso) {
           document.getElementById("cadAlunoNome").value = "";
+          toggleFormNovoEstudanteHtml();
           carregarEstudantesCoordHtml();
         }
       }
@@ -1810,8 +2001,7 @@
         if (el) el.classList.add("d-none");
         let btn = document.getElementById(`btn-menu-${a.substring(0,4)}`);
         if (btn) {
-          btn.classList.remove("active");
-          btn.classList.add("text-dark");
+          btn.className = "shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap text-slate-700 hover:bg-slate-100 cursor-pointer";
         }
       });
       document.getElementById("cardDiarioCoord").classList.add("d-none");
@@ -1821,8 +2011,7 @@
       
       let activeBtn = document.getElementById(`btn-menu-${aba.substring(0,4)}`);
       if (activeBtn) {
-        activeBtn.classList.add("active");
-        activeBtn.classList.remove("text-dark");
+        activeBtn.className = "shrink-0 md:w-full py-2.5 md:py-3 px-3.5 md:px-4 rounded-xl font-semibold text-xs sm:text-sm text-left flex items-center gap-2.5 md:gap-3 transition-all whitespace-nowrap btn-gradient-primary shadow-sm cursor-pointer";
       }
 
       if (aba === 'gerenciarProfessores') {
@@ -1838,16 +2027,16 @@
     }
 
     async function buscarVinculosMaspGerenciarHtml() {
-      let masp = (document.getElementById("coordMaspGerenciarInput")?.value || "").trim().replace(/D/g, "");
+      let masp = (document.getElementById("coordMaspGerenciarInput")?.value || "").trim().replace(/\D/g, "");
       if (!masp) {
         notificar("Informe o MASP do docente para buscar os vínculos.", false);
         return;
       }
 
       let tbody = document.getElementById("tabelaProfessoresCorpo");
-      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>Buscando vínculos do docente no banco central...</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-slate-400 py-8"><i class="fa-solid fa-spinner fa-spin mr-2 text-[#583ef2]"></i>Buscando vínculos do docente no banco central...</td></tr>';
       
-      exibirLoader(true);
+      exibirLoader(true, "BUSCANDO VÍNCULOS");
       let res = await chamarServidor("autenticarLogin", { perfil: "professor", usuario: masp });
       exibirLoader(false);
 
@@ -1881,7 +2070,7 @@
       } else {
         listaProfessoresCadastrados = [];
         document.getElementById("infoDocenteGerenciarHtml")?.classList.add("d-none");
-        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Nenhum vínculo encontrado para o MASP ' + masp + '.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-slate-400 py-8">Nenhum vínculo encontrado para o MASP ' + masp + '.</td></tr>';
         notificar(res?.mensagem || ("Nenhum vínculo encontrado para o MASP " + masp), false);
       }
     }
@@ -1902,14 +2091,14 @@
       }
 
       let tbody = document.getElementById("tabelaProfessoresCorpo");
-      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Carregando vínculos...</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-slate-400 py-8"><i class="fa-solid fa-spinner fa-spin mr-2 text-[#583ef2]"></i>Consultando vínculos no Banco de Professores...</td></tr>';
       
       let res = await chamarServidor("getProfessoresCadastrados");
       if (Array.isArray(res) && res.length > 0) {
         listaProfessoresCadastrados = res;
         desenharTabelaProfessoresHtml();
       } else {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-slate-400 py-8">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>';
       }
     }
 
@@ -1930,21 +2119,35 @@
       });
 
       if (filtrados.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">Nenhum vínculo encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-slate-400 text-xs">Nenhum vínculo encontrado.</td></tr>';
         return;
       }
 
       tbody.innerHTML = "";
       filtrados.forEach((item, idx) => {
+        let linhaKey = item.linha || idx;
         tbody.innerHTML += `
-          <tr>
-            <td class="fw-bold text-dark"><i class="fa-solid fa-user-tie text-primary me-2"></i>${item.nome}</td>
-            <td class="text-center font-monospace">${item.masp}</td>
-            <td class="text-center"><span class="badge bg-light text-primary border">${item.turma}</span></td>
-            <td>${item.disciplina}</td>
-            <td class="text-center">
-              <button onclick="abrirEdicaoProfHtml(${item.linha || idx})" class="btn btn-sm btn-outline-primary py-0 px-2 me-1" style="font-size:0.75rem;"><i class="fa-solid fa-pencil"></i> Editar</button>
-              <button onclick="excluirVinculoProfHtml('${item.linha}', '${item.masp}', '${item.turma}', '${item.disciplina}', '${item.nome}')" class="btn btn-sm btn-outline-danger py-0 px-2" style="font-size:0.75rem;"><i class="fa-solid fa-trash"></i> Excluir</button>
+          <tr class="hover:bg-slate-50/80 transition-all">
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#583ef2]/10 text-[#583ef2] flex items-center justify-center font-bold text-xs shrink-0">
+                  <i class="fa-solid fa-chalkboard-user"></i>
+                </div>
+                <span class="font-bold text-slate-800 uppercase tracking-tight">${escapeHtmlText(item.nome)}</span>
+              </div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="font-mono font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px] border border-slate-200">${escapeHtmlText(item.masp)}</span>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <span class="font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md text-[11px] border border-indigo-100 inline-block">${escapeHtmlText(item.turma)}</span>
+            </td>
+            <td class="py-3 px-4 font-semibold text-slate-700">${escapeHtmlText(item.disciplina)}</td>
+            <td class="py-3 px-4 text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <button type="button" onclick="abrirEdicaoProfHtml(${linhaKey})" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-[#583ef2] rounded-lg font-semibold text-xs inline-flex items-center gap-1 transition-all cursor-pointer" title="Editar dados ou reatribuir turma/disciplina"><i class="fa-solid fa-pen"></i> Editar</button>
+                <button type="button" onclick="excluirVinculoProfPorLinhaHtml(${linhaKey})" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg font-semibold text-xs inline-flex items-center gap-1 transition-all cursor-pointer" title="Remover este vínculo"><i class="fa-solid fa-trash"></i> Excluir</button>
+              </div>
             </td>
           </tr>
         `;
@@ -2009,7 +2212,7 @@
         return;
       }
 
-      exibirLoader(true);
+      exibirLoader(true, "ATUALIZANDO VÍNCULO");
       let res = await chamarServidor("atualizarVinculoProfessor", {
         linha: linha,
         nomeProf: nome,
@@ -2031,6 +2234,12 @@
       }
     }
 
+    function excluirVinculoProfPorLinhaHtml(linhaOuIdx) {
+      let item = listaProfessoresCadastrados.find(p => p.linha === Number(linhaOuIdx)) || listaProfessoresCadastrados[linhaOuIdx];
+      if (!item) return;
+      excluirVinculoProfHtml(item.linha, item.masp, item.turma, item.disciplina, item.nome);
+    }
+
     async function excluirVinculoProfHtml(linha, masp, turma, disciplina, nome) {
       Swal.fire({
         title: 'Excluir Vínculo?',
@@ -2045,7 +2254,7 @@
         customClass: { popup: 'rounded-4' }
       }).then(async function(result) {
         if (result.isConfirmed) {
-          exibirLoader(true);
+          exibirLoader(true, "REMOVENDO VÍNCULO");
           let res = await chamarServidor("excluirVinculoProfessor", { linha: linha, masp: masp, turma: turma, disciplina: disciplina });
           exibirLoader(false);
           if (res) {
@@ -2056,8 +2265,10 @@
       });
     }
 
-    function exibirLoader(mostrar) {
+    function exibirLoader(mostrar, texto = "SINCRONIZANDO") {
       let l = document.getElementById("loader");
+      let t = document.getElementById("loaderTextoHtml");
+      if (t && texto) t.innerText = texto;
       if(mostrar) {
         if (l) l.classList.remove("d-none");
       } else {
@@ -2112,7 +2323,5 @@
       });
     }
   </script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
