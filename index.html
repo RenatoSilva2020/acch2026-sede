@@ -740,12 +740,15 @@
               <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
                 <div class="sm:col-span-7 relative">
                   <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3 top-1/2 -translate-y-1/2"></i>
-                  <input type="text" id="filtroProfTexto" onkeyup="filtrarProfessoresHtml()" placeholder="Filtrar por Nome, MASP ou Disciplina..." class="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-slate-200 bg-white text-slate-900 outline-none focus:border-[#583ef2]">
+                  <input type="text" id="filtroProfTexto" oninput="filtrarProfessoresHtml()" placeholder="Filtrar por Nome, MASP ou Disciplina..." class="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-slate-200 bg-white text-slate-900 outline-none focus:border-[#583ef2]">
                 </div>
-                <div class="sm:col-span-5">
+                <div class="sm:col-span-3">
                   <select id="filtroProfTurma" onchange="filtrarProfessoresHtml()" class="w-full py-2 px-3 text-xs rounded-lg border border-slate-200 bg-white text-slate-900 outline-none focus:border-[#583ef2]">
                     <option value="">Todas as Turmas</option>
                   </select>
+                </div>
+                <div class="sm:col-span-2 flex items-center justify-end">
+                  <span id="qtdVinculosProfHtml" class="text-[11px] font-semibold text-slate-500 bg-white px-3 py-2 rounded-lg border border-slate-200 w-full text-center">0 vínculos</span>
                 </div>
               </div>
 
@@ -1033,7 +1036,10 @@
             chamarServidor("getTurmasPlanilhas")
           ]);
           exibirLoader(false);
-          if(listaTurmas && Array.isArray(listaTurmas)) popularSelectsCoordenador(listaTurmas);
+          let turmasValidas = (listaTurmas && Array.isArray(listaTurmas) && listaTurmas.length > 0)
+            ? listaTurmas
+            : ["3EJA-MORADA", "1REG01", "1REG02", "1REG03", "2REG01", "2REG02", "3REG01", "3REG02", "3EJA-SEDE", "1REG05", "1REG06", "1REG07", "1REG08", "2REG08", "2REG09", "2REG10", "3REG07", "3REG08", "3REG09"];
+          popularSelectsCoordenador(turmasValidas);
           if(listaTurmasPlanilhas && Array.isArray(listaTurmasPlanilhas)) cacheTurmasPlanilhasCoord = listaTurmasPlanilhas;
         }
       } else {
@@ -1082,13 +1088,12 @@
               <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
               <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
               <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
-              <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
+              <th colspan="1" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
             </tr>
             <tr>
               <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">SEMESTRE</th>
               <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[70px] font-bold">TOTAL</th>
               <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">CH SEMEST.</th>
-              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[80px] font-bold">CH TOTAL</th>
             </tr>
           `;
         } else {
@@ -1136,7 +1141,7 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosAtuais.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isEja ? 6 : 8}" class="py-8 text-center text-slate-400">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isEja ? 5 : 8}" class="py-8 text-center text-slate-400">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
         return;
       }
 
@@ -1152,7 +1157,6 @@
               <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNota(${i}, 1, this.value, this)" onblur="atualizarCacheNota(${i}, 1, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
               <td class="py-2 px-2 text-center"><div class="w-16 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-xs font-bold text-slate-700 text-center mx-auto select-none">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
               <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCH(${i}, 1, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
-              <td class="py-2 px-2 text-center"><div class="w-20 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-[11px] font-mono font-medium text-slate-600 text-center mx-auto select-none">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
             </tr>
           `;
         } else {
@@ -1193,6 +1197,7 @@
     }
 
     function popularSelectsCoordenador(turmas) {
+      window.TURMAS_GLOB = turmas;
       ['coordSelectTurma', 'coordSelectTurmaAuto', 'cadAlunoTurma', 'cadProfTurma', 'filtroProfTurma'].forEach(id => {
         let el = document.getElementById(id);
         if (el) {
@@ -1465,14 +1470,13 @@
               <th rowspan="2" class="py-3 px-3 text-center col-sticky-num">Nº</th>
               <th rowspan="2" class="py-3 px-4 text-left col-sticky-name">Nome Completo do Estudante</th>
               <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> NOTAS</th>
-              <th colspan="2" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
+              <th colspan="1" class="py-2 border-b border-slate-200"><i class="fa-solid fa-clock text-blue-500 mr-1"></i> CARGA HORÁRIA</th>
               <th rowspan="2" class="py-3 px-4 w-28">Ações</th>
             </tr>
             <tr>
               <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">SEMESTRE</th>
               <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[70px] font-bold">TOTAL</th>
               <th class="py-2 px-2 text-slate-700 text-[11px] min-w-[76px] font-bold">CH SEMEST.</th>
-              <th class="py-2 px-2 text-slate-500 text-[11px] min-w-[80px] font-bold">CH TOTAL</th>
             </tr>
           `;
         } else {
@@ -1524,7 +1528,7 @@
       tbody.innerHTML = "";
 
       if(cacheAlunosCoord.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="${isEja ? 7 : 9}" class="py-8 text-center text-slate-400">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${isEja ? 6 : 9}" class="py-8 text-center text-slate-400">Nenhum estudante cadastrado nesta disciplina.</td></tr>`;
         return;
       }
 
@@ -1546,7 +1550,6 @@
               <td class="py-2 px-2 text-center"><input type="number" step="0.1" value="${aluno.nota1}" ${disabledInput} onchange="atualizarCacheNotaCoord(${i}, 1, this.value, this)" onblur="atualizarCacheNotaCoord(${i}, 1, this.value, this)" placeholder="0.0" class="w-16 text-center py-1 bg-slate-100 rounded-lg text-xs font-semibold outline-none focus:bg-white border border-transparent focus:border-[#583ef2]"></td>
               <td class="py-2 px-2 text-center"><div class="w-16 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-xs font-bold text-slate-700 text-center mx-auto select-none">${aluno.nota1 !== "" && aluno.nota1 !== null && aluno.nota1 !== undefined ? formatarNotaVal(aluno.nota1) : (aluno.totalNota || "0")}</div></td>
               <td class="py-2 px-2 text-center"><input type="checkbox" ${aluno.ch1 ? 'checked' : ''} ${disabledInput} onchange="atualizarCacheCHCoord(${i}, 1, this.checked)" class="w-4 h-4 accent-[#583ef2] rounded cursor-pointer"></td>
-              <td class="py-2 px-2 text-center"><div class="w-20 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-[11px] font-mono font-medium text-slate-600 text-center mx-auto select-none">${aluno.ch1 ? (aluno.chTotal && aluno.chTotal !== '0:00:00' ? aluno.chTotal : '40:00:00') : '0:00:00'}</div></td>
               <td class="py-2 px-4 text-center">
                 <button type="button" onclick="alternarStatusEstudanteCoord(${aluno.linhaPlanilha}, ${aluno.taxado})" class="px-3 py-1 rounded-lg text-xs font-semibold border inline-flex items-center justify-center gap-1 mx-auto transition-all cursor-pointer ${btnClass}">
                   ${btnContent}
@@ -2078,14 +2081,17 @@
     function limparBuscaMaspGerenciarHtml() {
       let input = document.getElementById("coordMaspGerenciarInput");
       if (input) input.value = "";
+      let filtroTxt = document.getElementById("filtroProfTexto");
+      if (filtroTxt) filtroTxt.value = "";
+      let filtroTurma = document.getElementById("filtroProfTurma");
+      if (filtroTurma) filtroTurma.value = "";
       document.getElementById("infoDocenteGerenciarHtml")?.classList.add("d-none");
-      listaProfessoresCadastrados = [];
-      desenharTabelaProfessoresHtml();
+      carregarProfessoresCoordHtml(true);
     }
 
-    async function carregarProfessoresCoordHtml() {
+    async function carregarProfessoresCoordHtml(forcarTodos = false) {
       let maspInput = document.getElementById("coordMaspGerenciarInput")?.value || "";
-      if (maspInput.trim()) {
+      if (!forcarTodos && maspInput.trim()) {
         buscarVinculosMaspGerenciarHtml();
         return;
       }
@@ -2098,28 +2104,47 @@
         listaProfessoresCadastrados = res;
         desenharTabelaProfessoresHtml();
       } else {
+        listaProfessoresCadastrados = [];
+        let qtdEl = document.getElementById("qtdVinculosProfHtml");
+        if (qtdEl) qtdEl.innerText = "0 vínculos";
         if (tbody) tbody.innerHTML = '<tr><td colspan="5" class="text-center text-slate-400 py-8">Digite o MASP acima e clique em "Buscar Vínculos" para listar os registros.</td></tr>';
       }
+    }
+
+    function normalizarTextoFiltroHtml(str) {
+      return String(str || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
     }
 
     function desenharTabelaProfessoresHtml() {
       let tbody = document.getElementById("tabelaProfessoresCorpo");
       if (!tbody) return;
       
-      let fTexto = (document.getElementById("filtroProfTexto")?.value || "").toLowerCase();
-      let fTurma = document.getElementById("filtroProfTurma")?.value || "";
+      let fTextoRaw = (document.getElementById("filtroProfTexto")?.value || "").trim();
+      let fTextoNorm = normalizarTextoFiltroHtml(fTextoRaw);
+      let fDigitos = fTextoRaw.replace(/\D/g, "");
+      let fTurma = (document.getElementById("filtroProfTurma")?.value || "").trim().toUpperCase();
 
       let filtrados = listaProfessoresCadastrados.filter(p => {
-        let matchTexto = !fTexto || 
-          p.nome.toLowerCase().includes(fTexto) || 
-          p.masp.includes(fTexto.replace(/\D/g, '')) || 
-          p.disciplina.toLowerCase().includes(fTexto);
-        let matchTurma = !fTurma || p.turma === fTurma;
+        let pMasp = String(p.masp || "").trim();
+        let matchTexto = !fTextoNorm || 
+          normalizarTextoFiltroHtml(p.nome).includes(fTextoNorm) || 
+          normalizarTextoFiltroHtml(p.disciplina).includes(fTextoNorm) ||
+          normalizarTextoFiltroHtml(p.turma).includes(fTextoNorm) ||
+          pMasp.toLowerCase().includes(fTextoNorm) ||
+          (fDigitos.length > 0 && pMasp.includes(fDigitos));
+        let matchTurma = !fTurma || String(p.turma || "").trim().toUpperCase() === fTurma;
         return matchTexto && matchTurma;
       });
 
+      let qtdEl = document.getElementById("qtdVinculosProfHtml");
+      if (qtdEl) qtdEl.innerText = filtrados.length + (filtrados.length === 1 ? " vínculo" : " vínculos");
+
       if (filtrados.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-slate-400 text-xs">Nenhum vínculo encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-slate-400 text-xs">Nenhum vínculo encontrado para o filtro selecionado.</td></tr>';
         return;
       }
 
