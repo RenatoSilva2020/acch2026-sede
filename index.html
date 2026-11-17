@@ -12,6 +12,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
   <style>
     body {
@@ -248,9 +250,14 @@
                 <i class="fa-solid fa-star text-amber-600 text-[10px]"></i> Semestre Único (EJA)
               </span>
             </div>
-            <span class="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 inline-flex items-center gap-1.5">
-              <i class="fa-solid fa-lock text-slate-400"></i> Cadastro exclusivo da Coordenação
-            </span>
+            <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-between sm:justify-end">
+              <span class="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 inline-flex items-center gap-1.5">
+                <i class="fa-solid fa-lock text-slate-400"></i> Cadastro exclusivo da Coordenação
+              </span>
+              <button type="button" id="btnGerarPdfProf" onclick="gerarRelatorioPdfProf()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 sm:px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm inline-flex items-center gap-2 shadow-sm transition-all cursor-pointer">
+                <i class="fa-solid fa-file-pdf"></i> Gerar Relatório PDF
+              </button>
+            </div>
           </div>
 
           <div class="overflow-x-auto">
@@ -1193,6 +1200,343 @@
       if(res) {
         if(res.sucesso) cacheAlunosOriginaisProf = JSON.stringify(cacheAlunosAtuais);
         notificar(res.mensagem, res.sucesso);
+      }
+    }
+
+    function parseNotaNumPdf(val) {
+      if (val === "" || val === null || val === undefined) return null;
+      let cleaned = String(val).trim().replace(",", ".");
+      if (cleaned === "") return null;
+      let num = parseFloat(cleaned);
+      return isNaN(num) ? null : num;
+    }
+
+    function decodeHtmlEntitiesPdf(text) {
+      if (!text) return "";
+      return String(text)
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&#39;/g, "'");
+    }
+
+    function sanitizeFilenamePdf(str) {
+      return String(str || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9_-]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+    }
+
+    function gerarRelatorioPdfProf() {
+      let turma = document.getElementById("profTurma").value;
+      let disciplina = document.getElementById("profDisciplina").value;
+      if (!turma || !disciplina) return;
+      if (!cacheAlunosAtuais || cacheAlunosAtuais.length === 0) {
+        notificar("Não há estudantes carregados nesta disciplina para gerar o relatório.", false);
+        return;
+      }
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        notificar("Biblioteca de PDF ainda não carregou. Verifique sua conexão e tente novamente.", false);
+        return;
+      }
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const isEja = isTurmaEja(turma);
+        const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const marginX = 12;
+        const contentWidth = pageWidth - marginX * 2;
+        const professorNome = (dadosUsuarioLogado && dadosUsuarioLogado.nome) ? dadosUsuarioLogado.nome : "Docente";
+
+        const agora = new Date();
+        const dataFormatada = agora.toLocaleDateString("pt-BR");
+        const horaFormatada = agora.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+        const alunosAtivos = cacheAlunosAtuais.filter(a => !a.taxado);
+        const totalEstudantes = cacheAlunosAtuais.length;
+        const totalAtivos = alunosAtivos.length;
+        const totalInativos = totalEstudantes - totalAtivos;
+
+        const somatoriasAtivos = [];
+        let ch1Count = 0;
+        let ch2Count = 0;
+        let ch3Count = 0;
+
+        alunosAtivos.forEach(a => {
+          const n1 = parseNotaNumPdf(a.nota1);
+          const n2 = parseNotaNumPdf(a.nota2);
+          const n3 = parseNotaNumPdf(a.nota3);
+          if (isEja) {
+            const notaTotalFallback = parseNotaNumPdf(a.totalNota);
+            if (n1 !== null || notaTotalFallback !== null) {
+              somatoriasAtivos.push(n1 !== null ? n1 : (notaTotalFallback || 0));
+            }
+            if (a.ch1) ch1Count++;
+          } else {
+            if (n1 !== null || n2 !== null || n3 !== null) {
+              somatoriasAtivos.push((n1 || 0) + (n2 || 0) + (n3 || 0));
+            }
+            if (a.ch1) ch1Count++;
+            if (a.ch2) ch2Count++;
+            if (a.ch3) ch3Count++;
+          }
+        });
+
+        const mediaSomatoria = somatoriasAtivos.length > 0
+          ? (somatoriasAtivos.reduce((acc, v) => acc + v, 0) / somatoriasAtivos.length).toFixed(1)
+          : "-";
+        const maiorSomatoria = somatoriasAtivos.length > 0 ? Math.max(...somatoriasAtivos).toFixed(1) : "-";
+        const menorSomatoria = somatoriasAtivos.length > 0 ? Math.min(...somatoriasAtivos).toFixed(1) : "-";
+
+        // Banner superior
+        doc.setFillColor(88, 62, 242);
+        doc.rect(0, 0, pageWidth, 24, "F");
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text("PORTAL ESCOLAR INTEGRADO", marginX, 10.5);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9.5);
+        doc.text("Relatório de Notas, Somatória e Registro de Carga Horária", marginX, 16.5);
+
+        doc.setFontSize(8.5);
+        doc.text(`Emitido em ${dataFormatada} às ${horaFormatada}`, pageWidth - marginX, 16.5, { align: "right" });
+
+        // Bloco de metadados
+        const metaY = 29;
+        const metaHeight = 23;
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(226, 232, 240);
+        doc.roundedRect(marginX, metaY, contentWidth, metaHeight, 2.5, 2.5, "FD");
+
+        doc.setTextColor(71, 85, 105);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.5);
+        doc.text("PROFESSOR(A):", marginX + 4, metaY + 6.5);
+        doc.text("TURMA:", marginX + 4, metaY + 13);
+        doc.text("ESTUDANTES:", marginX + 4, metaY + 19.5);
+
+        doc.text("DISCIPLINA:", marginX + contentWidth * 0.52, metaY + 6.5);
+        doc.text("MODALIDADE:", marginX + contentWidth * 0.52, metaY + 13);
+        doc.text("CARGA HORÁRIA:", marginX + contentWidth * 0.52, metaY + 19.5);
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "normal");
+        doc.text(decodeHtmlEntitiesPdf(professorNome).slice(0, 42), marginX + 30, metaY + 6.5);
+        doc.text(turma, marginX + 18, metaY + 13);
+        doc.text(`${totalEstudantes} total (${totalAtivos} ativos, ${totalInativos} inativos)`, marginX + 27, metaY + 19.5);
+
+        doc.text(decodeHtmlEntitiesPdf(disciplina).slice(0, 40), marginX + contentWidth * 0.52 + 21, metaY + 6.5);
+        doc.text(isEja ? "Semestre Único (EJA)" : "Ensino Regular (Trimestral)", marginX + contentWidth * 0.52 + 23, metaY + 13);
+        const resumoChCabecalho = isEja
+          ? `Semestral: ${ch1Count}/${totalAtivos} reg.`
+          : `1º: ${ch1Count}/${totalAtivos} | 2º: ${ch2Count}/${totalAtivos} | 3º: ${ch3Count}/${totalAtivos}`;
+        doc.text(resumoChCabecalho, marginX + contentWidth * 0.52 + 28, metaY + 19.5);
+
+        const startTableY = metaY + metaHeight + 5;
+
+        if (isEja) {
+          const head = [["Nº", "Nome Completo do Estudante", "Nota Sem.", "Somatória", "CH Semestral", "Situação"]];
+          const body = cacheAlunosAtuais.map((aluno, idx) => {
+            const n1 = parseNotaNumPdf(aluno.nota1);
+            const totalFallback = parseNotaNumPdf(aluno.totalNota);
+            const notaSemStr = n1 !== null ? n1.toFixed(1) : "-";
+            const somatoriaStr = n1 !== null
+              ? n1.toFixed(1)
+              : (aluno.taxado ? "-" : (totalFallback !== null ? totalFallback.toFixed(1) : "0.0"));
+            const chStr = aluno.taxado ? (aluno.ch1 ? "Registrada" : "-") : (aluno.ch1 ? "Registrada" : "Pendente");
+            const nomeLimpo = decodeHtmlEntitiesPdf(aluno.nome);
+            const situacao = aluno.taxado ? "Inativo/Reman." : "Ativo";
+            return [String(idx + 1), nomeLimpo, notaSemStr, somatoriaStr, chStr, situacao];
+          });
+
+          doc.autoTable({
+            startY: startTableY,
+            head: head,
+            body: body,
+            margin: { left: marginX, right: marginX, bottom: 16 },
+            theme: "grid",
+            showHead: "everyPage",
+            styles: {
+              font: "helvetica",
+              fontSize: 8,
+              cellPadding: { top: 2.2, right: 2.2, bottom: 2.2, left: 2.2 },
+              textColor: [30, 41, 59],
+              lineColor: [226, 232, 240],
+              lineWidth: 0.2,
+              valign: "middle"
+            },
+            headStyles: {
+              fillColor: [30, 41, 59],
+              textColor: [255, 255, 255],
+              fontStyle: "bold",
+              halign: "center",
+              fontSize: 7.8
+            },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
+            columnStyles: {
+              0: { cellWidth: 10, halign: "center", fontStyle: "bold", textColor: [100, 116, 139] },
+              1: { cellWidth: "auto", halign: "left", fontStyle: "bold" },
+              2: { cellWidth: 22, halign: "center" },
+              3: { cellWidth: 22, halign: "center", fontStyle: "bold", fillColor: [238, 242, 255], textColor: [67, 56, 202] },
+              4: { cellWidth: 25, halign: "center", fontStyle: "bold" },
+              5: { cellWidth: 24, halign: "center" }
+            },
+            didParseCell: function(data) {
+              if (data.section === "body") {
+                const aluno = cacheAlunosAtuais[data.row.index];
+                if (aluno && aluno.taxado) {
+                  data.cell.styles.textColor = [148, 163, 184];
+                  if (data.column.index === 3) data.cell.styles.fillColor = [241, 245, 249];
+                } else if (data.column.index === 4) {
+                  data.cell.styles.textColor = (aluno && aluno.ch1) ? [4, 120, 87] : [180, 83, 9];
+                } else if (data.column.index === 5) {
+                  data.cell.styles.textColor = [4, 120, 87];
+                }
+              }
+            }
+          });
+        } else {
+          const head = [["Nº", "Nome Completo do Estudante", "1º Trim", "2º Trim", "3º Trim", "Somatória", "CH 1º", "CH 2º", "CH 3º", "Reg. CH"]];
+          const body = cacheAlunosAtuais.map((aluno, idx) => {
+            const n1 = parseNotaNumPdf(aluno.nota1);
+            const n2 = parseNotaNumPdf(aluno.nota2);
+            const n3 = parseNotaNumPdf(aluno.nota3);
+            const temNota = n1 !== null || n2 !== null || n3 !== null;
+            const soma = (n1 || 0) + (n2 || 0) + (n3 || 0);
+            const qtdCh = (aluno.ch1 ? 1 : 0) + (aluno.ch2 ? 1 : 0) + (aluno.ch3 ? 1 : 0);
+            const nomeLimpo = decodeHtmlEntitiesPdf(aluno.nome) + (aluno.taxado ? " (Inativo)" : "");
+            return [
+              String(idx + 1),
+              nomeLimpo,
+              n1 !== null ? n1.toFixed(1) : "-",
+              n2 !== null ? n2.toFixed(1) : "-",
+              n3 !== null ? n3.toFixed(1) : "-",
+              temNota ? soma.toFixed(1) : (aluno.taxado ? "-" : "0.0"),
+              aluno.ch1 ? "Sim" : (aluno.taxado ? "-" : "Não"),
+              aluno.ch2 ? "Sim" : (aluno.taxado ? "-" : "Não"),
+              aluno.ch3 ? "Sim" : (aluno.taxado ? "-" : "Não"),
+              aluno.taxado ? "Inativo" : `${qtdCh}/3`
+            ];
+          });
+
+          doc.autoTable({
+            startY: startTableY,
+            head: head,
+            body: body,
+            margin: { left: marginX, right: marginX, bottom: 16 },
+            theme: "grid",
+            showHead: "everyPage",
+            styles: {
+              font: "helvetica",
+              fontSize: 7.8,
+              cellPadding: { top: 2, right: 1.6, bottom: 2, left: 1.6 },
+              textColor: [30, 41, 59],
+              lineColor: [226, 232, 240],
+              lineWidth: 0.2,
+              valign: "middle"
+            },
+            headStyles: {
+              fillColor: [30, 41, 59],
+              textColor: [255, 255, 255],
+              fontStyle: "bold",
+              halign: "center",
+              fontSize: 7.4
+            },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
+            columnStyles: {
+              0: { cellWidth: 9, halign: "center", fontStyle: "bold", textColor: [100, 116, 139] },
+              1: { cellWidth: "auto", halign: "left", fontStyle: "bold" },
+              2: { cellWidth: 14.5, halign: "center" },
+              3: { cellWidth: 14.5, halign: "center" },
+              4: { cellWidth: 14.5, halign: "center" },
+              5: { cellWidth: 18.5, halign: "center", fontStyle: "bold", fillColor: [238, 242, 255], textColor: [67, 56, 202] },
+              6: { cellWidth: 11.5, halign: "center", fontStyle: "bold" },
+              7: { cellWidth: 11.5, halign: "center", fontStyle: "bold" },
+              8: { cellWidth: 11.5, halign: "center", fontStyle: "bold" },
+              9: { cellWidth: 14.5, halign: "center", fontStyle: "bold" }
+            },
+            didParseCell: function(data) {
+              if (data.section === "body") {
+                const aluno = cacheAlunosAtuais[data.row.index];
+                if (aluno && aluno.taxado) {
+                  data.cell.styles.textColor = [148, 163, 184];
+                  if (data.column.index === 5) data.cell.styles.fillColor = [241, 245, 249];
+                } else if (data.column.index === 6) {
+                  data.cell.styles.textColor = (aluno && aluno.ch1) ? [4, 120, 87] : [180, 83, 9];
+                } else if (data.column.index === 7) {
+                  data.cell.styles.textColor = (aluno && aluno.ch2) ? [4, 120, 87] : [180, 83, 9];
+                } else if (data.column.index === 8) {
+                  data.cell.styles.textColor = (aluno && aluno.ch3) ? [4, 120, 87] : [180, 83, 9];
+                }
+              }
+            }
+          });
+        }
+
+        let finalY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : startTableY) + 7;
+        if (finalY + 42 > pageHeight - 14) {
+          doc.addPage();
+          finalY = 18;
+        }
+
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(226, 232, 240);
+        doc.roundedRect(marginX, finalY, contentWidth, 20, 2.5, 2.5, "FD");
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.2);
+        doc.setTextColor(51, 65, 85);
+        doc.text("RESUMO CONSOLIDADO DA TURMA (ESTUDANTES ATIVOS)", marginX + 4, finalY + 6);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(30, 41, 59);
+        doc.text(
+          `Média das Somatórias: ${mediaSomatoria}   |   Maior Somatória: ${maiorSomatoria}   |   Menor Somatória: ${menorSomatoria}   |   Com nota lançada: ${somatoriasAtivos.length}/${totalAtivos}`,
+          marginX + 4,
+          finalY + 11.5
+        );
+        const textoChResumo = isEja
+          ? `Registro de Carga Horária (Semestre Único): ${ch1Count} de ${totalAtivos} estudante(s) ativo(s) com CH registrada.`
+          : `Registro de Carga Horária: 1º Trim (${ch1Count}/${totalAtivos})  |  2º Trim (${ch2Count}/${totalAtivos})  |  3º Trim (${ch3Count}/${totalAtivos}) estudantes ativos registrados.`;
+        doc.text(textoChResumo, marginX + 4, finalY + 16.5);
+
+        const sigY = finalY + 34;
+        doc.setDrawColor(148, 163, 184);
+        doc.line(pageWidth / 2 - 42, sigY, pageWidth / 2 + 42, sigY);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8);
+        doc.setTextColor(51, 65, 85);
+        doc.text(decodeHtmlEntitiesPdf(professorNome), pageWidth / 2, sigY + 4.5, { align: "center" });
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text("Assinatura do(a) Professor(a)", pageWidth / 2, sigY + 8.5, { align: "center" });
+
+        const totalPages = doc.getNumberOfPages();
+        for (let p = 1; p <= totalPages; p++) {
+          doc.setPage(p);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(7.5);
+          doc.setTextColor(148, 163, 184);
+          doc.text("Portal Escolar Integrado - Relatório emitido pelo Painel do Professor", marginX, pageHeight - 7);
+          doc.text(`Página ${p} de ${totalPages}`, pageWidth - marginX, pageHeight - 7, { align: "right" });
+        }
+
+        const nomeArquivo = `Relatorio_Notas_CH_${sanitizeFilenamePdf(turma)}_${sanitizeFilenamePdf(disciplina)}.pdf`;
+        doc.save(nomeArquivo);
+        notificar("Relatório em PDF gerado com sucesso!", true);
+      } catch (erro) {
+        console.error("Erro ao gerar PDF:", erro);
+        notificar("Não foi possível gerar o relatório em PDF.", false);
       }
     }
 
